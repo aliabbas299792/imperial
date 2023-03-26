@@ -138,7 +138,7 @@ export default {
       const pc_values = {};
 
       let overall_total = 0;
-      let overall_so_far_marks = 0;
+      let weighted_overall_so_far_marks = 0;
       let overall_so_far_weight = 0;
 
       let examinable_pass = true;
@@ -150,10 +150,11 @@ export default {
       for (const component of this.grade_data) {
         const component_name = component["name"];
         pc_values[component_name] = {}
+        
         const parts = Object.entries(component["parts"]);
         let total_component_frac = 0;
         let so_far_part_weight = 0;
-        let so_far_marks_component = 0;
+        let weighted_so_far_marks_component = 0;
 
         for (const [part_name, part_data] of parts) {
           if (!this.is_selected_module(part_name)) {
@@ -165,7 +166,7 @@ export default {
 
           let total_weight = 0;
           let so_far_weight = 0;
-          let user_total = 0;
+          let weighted_user_total_marks = 0;
 
           const coursework_multiplier = part_data["coursework_weight"];
           const exam_multiplier = 1 - coursework_multiplier;
@@ -175,9 +176,9 @@ export default {
             const cw_weight = coursework_multiplier * data["weight"] * component["weight"] * part_data["weight"];
             if (!isNaN(val)) {
               if ("marks" in data) {
-                user_total += val / data["marks"] * cw_weight;
+                weighted_user_total_marks += val / data["marks"] * cw_weight;
               } else {
-                user_total += (val / 100) * cw_weight;
+                weighted_user_total_marks += (val / 100) * cw_weight;
               }
               total_weight += cw_weight;
               so_far_weight += cw_weight;
@@ -191,9 +192,9 @@ export default {
             const ex_weight = exam_multiplier * data["weight"] * component["weight"] * part_data["weight"];
             if (!isNaN(val)) {
               if ("marks" in data) {
-                user_total += val / data["marks"] * ex_weight;
+                weighted_user_total_marks += val / data["marks"] * ex_weight;
               } else {
-                user_total += (val / 100) * ex_weight;
+                weighted_user_total_marks += (val / 100) * ex_weight;
               }
               total_weight += ex_weight;
               so_far_weight += ex_weight;
@@ -202,14 +203,13 @@ export default {
             }
           }
 
-          const total_frac = user_total / total_weight;
+          const total_frac = weighted_user_total_marks / total_weight;
           const total_pc = this.getPC(total_frac);
           const total_grade = this.get_grade(total_frac);
 
-          let so_far_frac = user_total / so_far_weight;
+          let so_far_frac = weighted_user_total_marks / so_far_weight;
           if (so_far_weight == 0) {
             // to avoid divide by zero NaN - in this case the user total should be 0 as well so this shouldn't matter
-            // 2 other instances of same procedure in outer scopes
             so_far_frac = 0;
           } else {
             so_far_part_weight += so_far_weight;
@@ -224,18 +224,18 @@ export default {
           }
 
           total_component_frac += total_frac * part_data["weight"];
-          so_far_marks_component += user_total;
+          weighted_so_far_marks_component += weighted_user_total_marks;
 
           pc_values[component_name][part_name] = { total_pc, total_grade, so_far_pc, so_far_grade };
         }
 
-        if(so_far_part_weight == 0) {
+        if (so_far_part_weight == 0) {
           so_far_part_weight = 1;
         } else {
           overall_so_far_weight += so_far_part_weight;
         }
 
-        const so_far_frac = so_far_marks_component / so_far_part_weight;
+        const so_far_frac = weighted_so_far_marks_component / so_far_part_weight;
 
         const total_pc = this.getPC(total_component_frac);
         const total_grade = this.get_grade(total_component_frac);
@@ -248,16 +248,18 @@ export default {
         }
 
         overall_total += total_component_frac * component["weight"];
-        overall_so_far_marks += so_far_marks_component;
+        weighted_overall_so_far_marks += weighted_so_far_marks_component;
 
         pc_values[component_name]["__TOTAL__"] = { total_pc, total_grade, so_far_pc, so_far_grade };
       }
 
-      if(overall_so_far_weight == 0) {
+      if (overall_so_far_weight == 0) {
         overall_so_far_weight = 1;
       }
 
-      const so_far_frac = overall_so_far_marks / overall_so_far_weight; // only use component weight of components which have been used so far
+      const so_far_frac = weighted_overall_so_far_marks / overall_so_far_weight;
+      // since "so far" weights are calculated using the "overall weighting", divides
+      // the weighted total marks by this to get the fraction of all marks achieved (i.e the so far fraction)
 
       const total_pc = this.getPC(overall_total);
       const total_grade = this.get_grade(overall_total);
