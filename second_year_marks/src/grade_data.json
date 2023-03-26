@@ -320,31 +320,31 @@
         "coursework_weight": 0.15,
         "courseworks": {
           "Probability 2": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 40
           },
           "Probability 3": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           },
           "Probability 4": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           },
           "Probability 5": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           },
           "Statistics 1": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           },
           "Statistics 2": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           },
           "Statistics 3": {
-            "weight": 0.125,
+            "weight": 0.142857,
             "marks": 20
           }
         },

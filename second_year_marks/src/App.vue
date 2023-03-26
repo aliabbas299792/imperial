@@ -1,6 +1,8 @@
 <script>
 import grade_data from './grade_data.json'
 
+/* eslint-disable */
+
 function examinable_module_pass(examinable_module_frac) {
   return examinable_module_frac >= 0.4;
 }
@@ -136,7 +138,8 @@ export default {
       const pc_values = {};
 
       let overall_total = 0;
-      let overall_so_far = 0;
+      let overall_so_far_marks = 0;
+      let overall_so_far_weight = 0;
 
       let examinable_pass = true;
       let examinable_pass_so_far = true;
@@ -149,7 +152,8 @@ export default {
         pc_values[component_name] = {}
         const parts = Object.entries(component["parts"]);
         let total_component_frac = 0;
-        let so_far_component_frac = 0;
+        let so_far_part_weight = 0;
+        let so_far_marks_component = 0;
 
         for (const [part_name, part_data] of parts) {
           if (!this.is_selected_module(part_name)) {
@@ -168,7 +172,7 @@ export default {
 
           for (const [name, data] of courseworks) {
             const val = parseFloat(this.user_data[component_name][part_name][name]);
-            const cw_weight = data["weight"] * coursework_multiplier;
+            const cw_weight = coursework_multiplier * data["weight"] * component["weight"] * part_data["weight"];
             if (!isNaN(val)) {
               if ("marks" in data) {
                 user_total += val / data["marks"] * cw_weight;
@@ -184,17 +188,17 @@ export default {
 
           for (const [name, data] of exams) {
             const val = parseFloat(this.user_data[component_name][part_name][name]);
-            const ex_weight = data["weight"] * exam_multiplier;
+            const ex_weight = exam_multiplier * data["weight"] * component["weight"] * part_data["weight"];
             if (!isNaN(val)) {
               if ("marks" in data) {
-                user_total += val / data["marks"] * data["weight"] * ex_weight;
+                user_total += val / data["marks"] * ex_weight;
               } else {
-                user_total += (val / 100) * data["weight"] * ex_weight;
+                user_total += (val / 100) * ex_weight;
               }
-              total_weight += data["weight"] * ex_weight;
-              so_far_weight += data["weight"] * ex_weight;
+              total_weight += ex_weight;
+              so_far_weight += ex_weight;
             } else {
-              total_weight += data["weight"] * ex_weight;
+              total_weight += ex_weight;
             }
           }
 
@@ -204,7 +208,11 @@ export default {
 
           let so_far_frac = user_total / so_far_weight;
           if (so_far_weight == 0) {
-            so_far_frac = 1;
+            // to avoid divide by zero NaN - in this case the user total should be 0 as well so this shouldn't matter
+            // 2 other instances of same procedure in outer scopes
+            so_far_frac = 0;
+          } else {
+            so_far_part_weight += so_far_weight;
           }
 
           const so_far_pc = this.getPC(so_far_frac);
@@ -216,37 +224,51 @@ export default {
           }
 
           total_component_frac += total_frac * part_data["weight"];
-          so_far_component_frac += so_far_frac * part_data["weight"];
+          so_far_marks_component += user_total;
 
           pc_values[component_name][part_name] = { total_pc, total_grade, so_far_pc, so_far_grade };
         }
 
+        if(so_far_part_weight == 0) {
+          so_far_part_weight = 1;
+        } else {
+          overall_so_far_weight += so_far_part_weight;
+        }
+
+        const so_far_frac = so_far_marks_component / so_far_part_weight;
+
         const total_pc = this.getPC(total_component_frac);
         const total_grade = this.get_grade(total_component_frac);
-        const so_far_pc = this.getPC(so_far_component_frac);
-        const so_far_grade = this.get_grade(so_far_component_frac);
+        const so_far_pc = this.getPC(so_far_frac);
+        const so_far_grade = this.get_grade(so_far_frac);
 
         if (component["type"] == 'laboratory') {
           lab_pass &= laboratory_component_pass(total_component_frac);
-          lab_pass_so_far &= laboratory_component_pass(so_far_component_frac);
+          lab_pass_so_far &= laboratory_component_pass(so_far_frac);
         }
 
         overall_total += total_component_frac * component["weight"];
-        overall_so_far += so_far_component_frac * component["weight"];
+        overall_so_far_marks += so_far_marks_component;
 
         pc_values[component_name]["__TOTAL__"] = { total_pc, total_grade, so_far_pc, so_far_grade };
       }
 
+      if(overall_so_far_weight == 0) {
+        overall_so_far_weight = 1;
+      }
+
+      const so_far_frac = overall_so_far_marks / overall_so_far_weight; // only use component weight of components which have been used so far
+
       const total_pc = this.getPC(overall_total);
       const total_grade = this.get_grade(overall_total);
-      const so_far_pc = this.getPC(overall_so_far);
-      const so_far_grade = this.get_grade(overall_so_far);
+      const so_far_pc = this.getPC(so_far_frac);
+      const so_far_grade = this.get_grade(so_far_frac);
 
       const overall_pass_year = overall_pass(overall_total);
-      const overall_pass_year_so_far = overall_pass(overall_so_far);
+      const overall_pass_year_so_far = overall_pass(so_far_frac);
 
       const progress_MEng = progress_to_MEng(overall_total);
-      const progress_MEng_so_far = progress_to_MEng(overall_so_far);
+      const progress_MEng_so_far = progress_to_MEng(so_far_frac);
 
       pc_values["__TOTAL__"] = {
         total_pc, total_grade, so_far_pc, so_far_grade, overall_pass_year, overall_pass_year_so_far, progress_MEng,
