@@ -1,6 +1,4 @@
 <script>
-/* eslint-disable */
-
 import grade_data from './grade_data.json'
 
 function examinable_module_pass(examinable_module_frac) {
@@ -25,27 +23,27 @@ function format_booleans(bool) {
 
 const default_text_formatter = (a) => a;
 
-function gen_user_data(data) {
+function gen_user_data(components) {
   const local_data = localStorage.getItem('user_data');
   if (local_data) {
     return JSON.parse(local_data);
   } else {
     const user_data = {};
-    user_data["optional"] = get_optional_map(data, true);
+    user_data["optional"] = get_optional_map(components, true);
 
-    for (const d of data) {
-      const component_name = d["name"];
+    for (const component of components) {
+      const component_name = component["name"];
       user_data[component_name] = {}
-      const ps = Object.entries(d["parts"]);
-      for (const [p_name, p] of ps) {
-        user_data[component_name][p_name] = {}
-        const cs = Object.entries(p["courseworks"] ? p["courseworks"] : {})
-        const es = Object.entries(p["exams"] ? p["exams"] : {})
-        for (const [c_name, c] of cs) {
-          user_data[component_name][p_name][c_name] = 'n/a'
+      const parts = Object.entries(component["parts"]);
+      for (const [part_name, part_data] of parts) {
+        user_data[component_name][part_name] = {}
+        const courseworks = Object.entries(part_data["courseworks"] ? part_data["courseworks"] : {})
+        const exams = Object.entries(part_data["exams"] ? part_data["exams"] : {})
+        for (const [coursework_name] of courseworks) {
+          user_data[component_name][part_name][coursework_name] = 'n/a'
         }
-        for (const [e_name, e] of es) {
-          user_data[component_name][p_name][e_name] = 'n/a'
+        for (const [exam_name] of exams) {
+          user_data[component_name][part_name][exam_name] = 'n/a'
         }
       }
     }
@@ -55,10 +53,10 @@ function gen_user_data(data) {
 
 const PRECISION = 3;
 
-function get_optional_map(data, first_selected_default) {
-  for (const d of data) {
-    if (d.type == "optional") {
-      const entries = Object.keys(d.parts).map(o => [o, false]);
+function get_optional_map(components, first_selected_default) {
+  for (const component of components) {
+    if (component.type == "optional") {
+      const entries = Object.keys(component.parts).map(part_name => [part_name, false]);
       entries[0][1] = first_selected_default;
       return Object.fromEntries(entries);
     }
@@ -95,6 +93,18 @@ export default {
     },
     format_overall_grade_output() {
       return this.format_so_far_output("total_grade", "so_far_grade")
+    },
+    format_component_percentage_output(component_name) {
+      return this.format_so_far_output("total_pc", "so_far_pc", default_text_formatter, this.calculated_grade_values[component_name]["__TOTAL__"])
+    },
+    format_component_grade_output(component_name) {
+      return this.format_so_far_output("total_grade", "so_far_grade", default_text_formatter, this.calculated_grade_values[component_name]["__TOTAL__"])
+    },
+    format_part_percentage_output(component_name, part_name) {
+      return this.format_so_far_output("total_pc", "so_far_pc", default_text_formatter, this.calculated_grade_values[component_name][part_name])
+    },
+    format_part_grade_output(component_name, part_name) {
+      return this.format_so_far_output("total_grade", "so_far_grade", default_text_formatter, this.calculated_grade_values[component_name][part_name])
     },
     format_pass_output() {
       return this.format_so_far_output("overall_pass_year", "overall_pass_year_so_far", format_booleans)
@@ -154,7 +164,7 @@ export default {
           let user_total = 0;
 
           const coursework_multiplier = part_data["coursework_weight"];
-          const exam_multiplier =  1 - coursework_multiplier;
+          const exam_multiplier = 1 - coursework_multiplier;
 
           for (const [name, data] of courseworks) {
             const val = parseFloat(this.user_data[component_name][part_name][name]);
@@ -191,9 +201,9 @@ export default {
           const total_frac = user_total / total_weight;
           const total_pc = this.getPC(total_frac);
           const total_grade = this.get_grade(total_frac);
-          
+
           let so_far_frac = user_total / so_far_weight;
-          if(so_far_weight == 0) {
+          if (so_far_weight == 0) {
             so_far_frac = 1;
           }
 
@@ -448,14 +458,12 @@ table td {
             <tr class="part-grade">
               <td></td>
               <td>Percentage:</td>
-              <td colspan="3">{{ format_so_far_output("total_pc", "so_far_pc", default_text_formatter,
-                calculated_grade_values[component['name']][part_name]) }}</td>
+              <td colspan="3">{{ format_part_percentage_output(component['name'], part_name) }}</td>
             </tr>
             <tr class="part-grade">
               <td></td>
               <td>Grade:</td>
-              <td colspan="3">{{ format_so_far_output("total_grade", "so_far_grade", default_text_formatter,
-                calculated_grade_values[component['name']][part_name]) }}</td>
+              <td colspan="3">{{ format_part_grade_output(component['name'], part_name) }}</td>
             </tr>
           </template>
         </template>
@@ -464,13 +472,11 @@ table td {
         </tr>
         <tr class="component-grade">
           <td><b>{{ component.name }}</b> Percentage:</td>
-              <td colspan="3">{{ format_so_far_output("total_pc", "so_far_pc", default_text_formatter,
-                calculated_grade_values[component['name']]["__TOTAL__"]) }}</td>
+          <td colspan="3">{{ format_component_percentage_output(component['name']) }}</td>
         </tr>
         <tr class="component-grade">
           <td><b>{{ component.name }}</b> Grade:</td>
-              <td colspan="3">{{ format_so_far_output("total_grade", "so_far_grade", default_text_formatter,
-                calculated_grade_values[component['name']]["__TOTAL__"]) }}</td>
+          <td colspan="3">{{ format_component_grade_output(component['name']) }}</td>
         </tr>
       </tbody>
       <tr>
