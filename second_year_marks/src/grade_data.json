@@ -1,0 +1,360 @@
+[
+  {
+    "weight": 0.25,
+    "name": "Practical Component",
+    "type": "laboratory",
+    "parts": {
+      "50007.1 Laboratory 2": {
+        "weight": 0.61,
+        "coursework_weight": 1,
+        "courseworks": {
+          "Pintos - Task 0 (Codebase Preview)": {
+            "weight": 0.07,
+            "marks": 40
+          },
+          "Pintos - Task 1 (Scheduling)": {
+            "weight": 0.14,
+            "marks": 20
+          },
+          "Pintos - Task 2 (User Programs)": {
+            "weight": 0.21,
+            "marks": 20
+          },
+          "Linkload": {
+            "weight": 0.03,
+            "marks": 25
+          },
+          "DevOps - Continuous Delivery": {
+            "weight": 0.05,
+            "is_percent": true
+          },
+          "WACC - Front-End": {
+            "weight": 0.25,
+            "marks": 100
+          },
+          "WACC - Back-End": {
+            "weight": 0.25,
+            "marks": 100
+          }
+        }
+      },
+      "50007.2 Introduction to Prolog": {
+        "weight": 0.06,
+        "coursework_weight": 1,
+        "courseworks": {
+          "Coursework": {
+            "weight": 1,
+            "is_percent": true
+          }
+        }
+      },
+      "50007.3 Advanced Laboratory 2": {
+        "weight": 0.33,
+        "coursework_weight": 1,
+        "courseworks": {
+          "Pintos - Task 3 (Virtual Memory)": {
+            "weight": 0.5,
+            "marks": 20
+          },
+          "True Concurrency": {
+            "weight": 0.27,
+            "is_percent": true
+          },
+          "WACC - Extensions": {
+            "weight": 0.23,
+            "marks": 100
+          }
+        }
+      }
+    }
+  },
+  {
+    "weight": 0.08333,
+    "name": "Group Projects",
+    "type": "normal",
+    "parts": {
+      "Designing for Real People (DRP) Project": {
+        "weight": 1,
+        "coursework_weight": 1,
+        "courseworks": {
+          "Project Milestones 1": {
+            "weight": 0.05,
+            "is_percent": true
+          },
+          "Project Milestones 2": {
+            "weight": 0.1,
+            "is_percent": true
+          },
+          "Project Milestones 3": {
+            "weight": 0.1,
+            "is_percent": true
+          },
+          "Project Milestones 4": {
+            "weight": 0.05,
+            "is_percent": true
+          },
+          "Project Documentation": {
+            "weight": 0.1,
+            "is_percent": true
+          },
+          "Project Presentation/Demonstration": {
+            "weight": 0.5,
+            "is_percent": true
+          },
+          "Law Case Study": {
+            "weight": 0.1,
+            "is_percent": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "weight": 0.08333,
+    "name": "Optional Modules",
+    "type": "optional",
+    "max_select": 2,
+    "mutually_exclusive": {},
+    "parts": {
+      "50009": {
+        "weight": 1,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Coursework 1 - SAT and SMT": {
+            "weight": 0.5,
+            "marks": 20
+          },
+          "Coursework 2 - LP and ASP": {
+            "weight": 0.5,
+            "marks": 30
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50011": {
+        "weight": 1,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Coursework I": {
+            "weight": 0.5,
+            "marks": 20
+          },
+          "Coursework II": {
+            "weight": 0.5,
+            "marks": 20
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      }
+    }
+  },
+  {
+    "weight": 0.5834,
+    "type": "normal",
+    "name": "Core Modules",
+    "parts": {
+      "50001": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "CW1": {
+            "weight": 0.5,
+            "is_percent": true
+          },
+          "CW2": {
+            "weight": 0.5,
+            "is_percent": true
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50002": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Test Driven Development": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Mock Objects": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Re-use and Extensibility": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Creation and Dependency": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Concurrency": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Interactive Applications": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "System Integration": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Sample Exam Question": {
+            "weight": 0.1111,
+            "marks": 20
+          },
+          "Reflection and Rotation": {
+            "weight": 0.1111,
+            "marks": 10
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50003": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Models of Computation -- part I": {
+            "weight": 0.5,
+            "marks": 55
+          },
+          "Models of Computation -- part II": {
+            "weight": 0.5,
+            "marks": 100
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50004": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Pintos Task 0 Design Document": {
+            "weight": 0.25,
+            "marks": 10
+          },
+          "Pintos Task 1 Design Document": {
+            "weight": 0.25,
+            "marks": 30
+          },
+          "Pintos Task 2 Design Document": {
+            "weight": 0.25,
+            "marks": 40
+          },
+          "Pintos Task 3 Design Document": {
+            "weight": 0.25,
+            "marks": 30
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50005": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "The Coursework": {
+            "weight": 1,
+            "marks": 100
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50006": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "WACC Language Specification": {
+            "weight": 0.5,
+            "marks": 100
+          },
+          "Haskell Functions": {
+            "weight": 0.5,
+            "marks": 20
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      },
+      "50008": {
+        "weight": 0.142857,
+        "coursework_weight": 0.15,
+        "courseworks": {
+          "Probability 2": {
+            "weight": 0.125,
+            "marks": 40
+          },
+          "Probability 3": {
+            "weight": 0.125,
+            "marks": 20
+          },
+          "Probability 4": {
+            "weight": 0.125,
+            "marks": 20
+          },
+          "Probability 5": {
+            "weight": 0.125,
+            "marks": 20
+          },
+          "Statistics 1": {
+            "weight": 0.125,
+            "marks": 20
+          },
+          "Statistics 2": {
+            "weight": 0.125,
+            "marks": 20
+          },
+          "Statistics 3": {
+            "weight": 0.125,
+            "marks": 20
+          }
+        },
+        "exams": {
+          "Final Exam": {
+            "weight": 1,
+            "marks": 100
+          }
+        }
+      }
+    }
+  }
+]

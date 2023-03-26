@@ -1,0 +1,650 @@
+<!-- hacked together lazily some time ago, misjudged how messy it'd get -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>First Year Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+  <div id="main">
+    <style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,300&display=swap');
+
+html {
+  overflow-x: hidden;
+}
+
+
+
+* {
+  word-wrap: anywhere !important;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  box-sizing: border-box;
+  padding: 10px 0px;
+  margin: 0;
+}
+
+input[type='checkbox'] {
+  cursor: pointer !important;
+  margin: 5px;
+  transform: scale(1.4);
+}
+
+.mark-input {
+  width: 100%;
+  border: 1px solid rgb(176, 204, 255);
+  border-radius: 3px;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+#main {
+  margin: auto;
+  max-width: 900px;
+}
+
+.space {
+  border: white !important;
+}
+
+      table th {
+        border: 1px solid black;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        font-size: large;
+        font-weight: bold;
+        text-align: left;
+        text-decoration: underline;
+        vertical-align: top;
+        margin: 0;
+      }
+      
+      table td {
+        font-size: small;
+        padding: 10px 5px;
+        border: 1px black solid;
+      }
+      
+    </style>
+    <h2 style="color: #808080;font-family: arial;font-size: 120%;">If you actually got 0 in a test, put down 'fail' in
+      the mark section, 0s get filtered out</h2>
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-q6li">Module</th>
+          <th class="tg-q6li">Your mark</th>
+          <th class="tg-q6li">Total mark</th>
+          <th class="tg-q6li">Overall weighting</th>
+          <th class="tg-q6li">Component weighting</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-1wig" colspan="5" style="border:white"></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky" colspan="5"><span style="font-weight:bold">Computing Practical</span></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Haskell Interim</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">1.67%</td>
+          <td class="tg-0lax">5%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Haskell Final</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">30</td>
+          <td class="tg-0lax">8.33%</td>
+          <td class="tg-0lax">25%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Ethics Project</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">1.67%</td>
+          <td class="tg-0lax">5%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Ethics Report</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">90</td>
+          <td class="tg-0lax">1.67%</td>
+          <td class="tg-0lax">5%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Java Interim</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">1.67%</td>
+          <td class="tg-0lax">5%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">Java Final</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">11.7%</td>
+          <td class="tg-0lax">35%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">C Group Project</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">120</td>
+          <td class="tg-0lax">2.67%</td>
+          <td class="tg-0lax">8%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">C Main Test</td>
+          <td class="tg-0lax mark-holder practical"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">4%</td>
+          <td class="tg-0lax">12%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" colspan="5" style="border:white;"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Computing practical percentage:</td>
+          <td class="tg-1wig" colspan="4" id="practicalPC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Computing practical grade:</td>
+          <td class="tg-1wig" colspan="4" id="practicalGrade"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" colspan="5" style="border:white"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" colspan="5">Exams</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40018: PL CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">60</td>
+          <td class="tg-0lax">0.8334%</td>
+          <td class="tg-0lax">0.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40018: PL checking validity CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">55</td>
+          <td class="tg-0lax">0.8334%</td>
+          <td class="tg-0lax">0.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40018: FOL CW3</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">30</td>
+          <td class="tg-0lax">0.8334%</td>
+          <td class="tg-0lax">0.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40018: Discrete Mathematics Part 1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40018: Discrete Mathematics Part 2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40018 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40018PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40018 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40018Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40005: Datapaths CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">0.625%</td>
+          <td class="tg-0lax">0.9375%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40005: Bomb Lab CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">70</td>
+          <td class="tg-0lax">0.625%</td>
+          <td class="tg-0lax">0.9375%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40005: Introduction to Computer Architecture</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40005 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40005PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40005 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40005Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40007: CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">0.625%</td>
+          <td class="tg-0lax">0.9375%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40007: CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">0.625%</td>
+          <td class="tg-0lax">0.9375%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40007: Introduction to Databases</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40007 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40007PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40007 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40007Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40008: CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">1.25%</td>
+          <td class="tg-0lax">1.875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40008: Graphs and Algorithms</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40008 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40008PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40008 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40008Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40016: CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40016: CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40016: CW3</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40016: CW4</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40016: Calculus</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40016 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40016PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40016 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40016Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40017: CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40017: CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40017: CW3</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40017: CW4</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">0.3125%</td>
+          <td class="tg-0lax">0.46875%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40017: Linear Algebra</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40017 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40017PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40017 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40017Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40001: Number Representations CW1</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">60</td>
+          <td class="tg-0lax">0.25%</td>
+          <td class="tg-0lax">0.375%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40001: Combinatorial Circuits CW2</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">0.5%</td>
+          <td class="tg-0lax">0.75%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax cw-title">COMP40001: Register Design CW3</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">60</td>
+          <td class="tg-0lax">0.5%</td>
+          <td class="tg-0lax">0.75%</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">COMP40001: Introduction to Computer Systems</td>
+          <td class="tg-0lax mark-holder exams"><input size="2" value="0" class="mark" type="text"></td>
+          <td class="tg-0lax">100</td>
+          <td class="tg-0lax">7.083%</td>
+          <td class="tg-0lax">10.625%</td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40001 percentage:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40001PC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" style="border:white"></td>
+          <td class="tg-0lax module-data">COMP40001 grade:</td>
+          <td class="tg-1wig module-data" colspan="3" id="COMP40001Grade"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig" colspan="5" style="border:white;"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Exams percentage:</td>
+          <td class="tg-1wig" colspan="4" id="examsPC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Exams grade:</td>
+          <td class="tg-1wig" colspan="4" id="examsGrade"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Year percentage:</td>
+          <td class="tg-1wig" colspan="4" id="yearPC"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Year grade:</td>
+          <td class="tg-1wig" colspan="4" id="yearGrade"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Passing exams:</td>
+          <td class="tg-1wig" colspan="4" id="passingOrNotExams"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Passing practical:</td>
+          <td class="tg-1wig" colspan="4" id="passingOrNotPractical"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Passing all parts:</td>
+          <td class="tg-1wig" colspan="4" id="passingOrNotAll"></td>
+        </tr>
+        <tr>
+          <td class="tg-1wig">Passing the year:</td>
+          <td class="tg-1wig" colspan="4" id="passingOrNot"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+<script>
+  const PRECISION = 3;
+
+  const practicalPCEl = document.getElementById("practicalPC");
+  const practicalGradeEl = document.getElementById("practicalGrade");
+  const examsPCEl = document.getElementById("examsPC");
+  const examsGradeEl = document.getElementById("examsGrade");
+  const yearPCEl = document.getElementById("yearPC");
+  const yearGradeEl = document.getElementById("yearGrade");
+
+  const passingOrNotExamsEl = document.getElementById("passingOrNotExams");
+  const passingOrNotPracticalEl = document.getElementById("passingOrNotPractical");
+  const passingOrNotAllEl = document.getElementById("passingOrNotAll");
+  const passingOrNotEl = document.getElementById("passingOrNot");
+
+  const valueOr0 = val => isNaN(val) ? 0 : val;
+
+  function getMarks(component) {
+    const moduleMarks = {};
+
+    const marks = [...document.getElementsByClassName(component)]
+      .map(item => {
+        const valueOr0F = value => {
+          value = parseFloat(value)
+          return isNaN(value) ? 0 : value;
+        }
+        const valueOr0 = value => {
+          if (value == 'fail') return 'fail';
+          value = parseInt(value);
+          if (isNaN(value)) return 0;
+          return value;
+        }
+
+        const mark = valueOr0(item.firstChild.value);
+
+        const markEl = item.nextElementSibling
+        const maxMark = valueOr0(parseInt(markEl.innerText));
+
+        const overallWeightingEl = markEl.nextElementSibling;
+        const overallWeighting = valueOr0F(parseFloat(overallWeightingEl.innerText));
+
+        const componentWeightingEl = overallWeightingEl.nextElementSibling;
+        const componentWeighting = valueOr0F(parseFloat(componentWeightingEl.innerText));
+
+        const componentProportion = mark == 'fail' ? 'fail' : valueOr0F(mark / maxMark) * componentWeighting;
+        const overallProportion = mark == 'fail' ? 'fail' : valueOr0F(mark / maxMark) * overallWeighting;
+
+        if (component == 'exams') {
+          const module = item.previousElementSibling.innerText.split(":")[0]; // assumes everything is prefixed with module ID
+          if (!moduleMarks[module]) moduleMarks[module] = [];
+          moduleMarks[module].push([componentProportion, componentWeighting]);
+        }
+
+        return [
+          [overallProportion, overallWeighting],
+          [componentProportion, componentWeighting]
+        ];
+      })
+
+    return [marks, moduleMarks];
+  }
+
+  function computeMarks() {
+    const nonZeroExams = arr => arr
+      .filter(([[overall, maxOverall], [component, maxcomponent]]) => overall != 0 && component != 0);
+    const removeFails = arr => arr
+      .map(([[overall, maxOverall], [component, maxcomponent]]) => {
+        return [[overall == 'fail' ? 0 : overall, maxOverall], [component == 'fail' ? 0 : component, maxcomponent]]
+      });
+    const sumMaxesAndMarks = arr => arr.reduce(
+      (
+        [
+          [overall_p, maxOverall_p], [component_p, maxcomponent_p]],
+        [[overall, maxOverall], [component, maxcomponent]
+        ]) =>
+        [
+          [overall_p + overall, maxOverall_p + maxOverall],
+          [component_p + component, maxcomponent_p + maxcomponent]
+        ],
+      [[0, 0], [0, 0]]
+    )
+
+    const [practicalMarks, _] = getMarks('practical')
+    practicalMarks.reverse();
+    const practicalMarksSoFar = removeFails(nonZeroExams(practicalMarks));
+    const [examMarks, moduleMarks] = getMarks('exams')
+    examMarks.reverse();
+    const examMarksSoFar = removeFails(nonZeroExams(examMarks));
+    const fixedExamMarks = removeFails(examMarks);
+    const fixedPracticalMarks = removeFails(practicalMarks);
+
+    const [
+      [[overallExamsSoFar, overallExamsSoFarMax], [componentExamsSoFar, componentExamsSoFarMax]],
+      [[overallPracticalSoFar, overallPracticalSoFarMax], [componentPracticalSoFar, componentPracticalSoFarMax]]] = [
+        sumMaxesAndMarks(examMarksSoFar),
+        sumMaxesAndMarks(practicalMarksSoFar)
+      ];
+
+    const [
+      [[overallExams, overallExamsMax], [componentExams, componentExamsMax]],
+      [[overallPractical, overallPracticalMax], [componentPractical, componentPracticalMax]]] = [
+        sumMaxesAndMarks(fixedExamMarks),
+        sumMaxesAndMarks(fixedPracticalMarks)
+      ];
+
+    const overallPCsoFar = ((overallExamsSoFar + overallPracticalSoFar) / (overallExamsSoFarMax + overallPracticalSoFarMax) * 100).toPrecision(PRECISION);
+    const practicalPCsoFar = ((overallPracticalSoFar / overallPracticalSoFarMax) * 100).toPrecision(PRECISION);
+    const examsPCsoFar = ((overallExamsSoFar) / (overallExamsSoFarMax) * 100).toPrecision(PRECISION);
+    const overallPC = ((overallExams + overallPractical) / (overallExamsMax + overallPracticalMax) * 100).toPrecision(PRECISION);
+    const practicalPC = ((overallPractical / overallPracticalMax) * 100).toPrecision(PRECISION);
+    const examsPC = ((overallExams) / (overallExamsMax) * 100).toPrecision(PRECISION);
+
+    practicalPCEl.innerText = `${practicalPC}% (${valueOr0(practicalPCsoFar)}% so far)`;
+    practicalGradeEl.innerText = `${getGrade(practicalPC)} (${getGrade(practicalPCsoFar)} so far)`;
+    examsPCEl.innerText = `${examsPC}% (${valueOr0(examsPCsoFar)}% so far)`;
+    examsGradeEl.innerText = `${getGrade(examsPC)} (${getGrade(examsPCsoFar)} so far)`;
+    yearPCEl.innerText = `${overallPC}% (${valueOr0(overallPCsoFar)}% so far)`;
+    yearGradeEl.innerText = `${getGrade(overallPC)} (${getGrade(overallPCsoFar)} so far)`;
+
+    let passingExams = true;
+    let passingExamsSoFar = true;
+    Object.entries(moduleMarks).forEach(item => {
+      const sumMarksMaxs2Items = arr => arr.reduce(([mark_p, max_p], [mark, max]) => [mark_p + mark, max_p + max], [0, 0]);
+      const toPC = pair => pair.reduce((acc, curr) => acc /= curr) * 100;
+      const removeFails = arr => arr.map(([mark, max]) => mark == 'fail' ? [0, max] : [mark, max]);
+
+      const [module, marks] = item;
+      marks.reverse();
+      const marksAll = removeFails(marks);
+      const marksSoFar = removeFails(marks.filter(([mark, _]) => mark != 0));
+      const PCsoFar = toPC(sumMarksMaxs2Items(marksSoFar)).toPrecision(PRECISION);
+      const PCforModule = toPC(sumMarksMaxs2Items(marksAll)).toPrecision(PRECISION);
+
+      passingExams &= PCforModule >= 40;
+      passingExamsSoFar &= PCsoFar >= 40;
+
+      document.getElementById(module + "PC").innerText = `${PCforModule}% (${valueOr0(PCsoFar)}% so far)`;
+      document.getElementById(module + "Grade").innerText = `${getGrade(PCforModule)} (${getGrade(PCsoFar)} so far)`;
+    })
+
+    const passingPractical = practicalPC >= 50;
+    const passingPracticalSoFar = practicalPCsoFar >= 50;
+    const passingYear = overallPC >= 50;
+    const passingYearSoFar = overallPCsoFar >= 50;
+
+    passingOrNotExamsEl.innerText = `${passingExams ? "Yes" : "No"} (${passingExamsSoFar ? "Yes" : "No"} so far)`;
+    passingOrNotPracticalEl.innerText = `${passingPractical ? "Yes" : "No"} (${passingPracticalSoFar ? "Yes" : "No"} so far)`;
+    passingOrNotAllEl.innerText = `${passingYear ? "Yes" : "No"} (${passingYearSoFar ? "Yes" : "No"} so far)`;
+    passingOrNotEl.innerText = `${passingExams && passingPractical && passingYear ? "Yes" : "No"} (${passingExamsSoFar && passingPracticalSoFar && passingYearSoFar ? "Yes" : "No"} so far)`;
+  }
+
+  function getGrade(percentage) {
+    if (percentage >= 80) return 'A*';
+    if (percentage >= 70) return 'A';
+    if (percentage >= 60) return 'B';
+    if (percentage >= 50) return 'C';
+    if (percentage >= 40) return 'D';
+    if (percentage >= 30) return 'E';
+    return 'F';
+  }
+
+  function saveValues() {
+    localStorage.setItem('inputs', [...document.getElementsByTagName('input')].map(el => el.value));
+  }
+
+  document.addEventListener('change', () => {
+    saveValues()
+    computeMarks()
+  });
+
+  window.addEventListener('load', () => {
+    const inputItems = localStorage.getItem('inputs').split(",");
+
+    [...document.getElementsByTagName('input')].forEach((el, idx) => {
+      el.value = inputItems[idx] ? inputItems[idx] : 0;
+    })
+
+    computeMarks()
+  })
+</script>
+
+</html>
