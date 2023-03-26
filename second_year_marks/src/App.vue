@@ -1,8 +1,6 @@
 <script>
 import grade_data from './grade_data.json'
 
-/* eslint-disable */
-
 function examinable_module_pass(examinable_module_frac) {
   return examinable_module_frac >= 0.4;
 }
