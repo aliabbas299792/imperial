@@ -1,28 +1,50 @@
 from common import CLEAN_DATASET_PATH, NOISY_DATASET_PATH
 import numpy as np
 
-def rot180(array: np.array) -> np.array:
-  return np.rot90(np.rot90(array))
+LabelDataTuple = tuple[np.array, np.array]
+NoisyCleanTuple = tuple[LabelDataTuple, LabelDataTuple]
 
-def splitRoomWifiData(array: np.array) -> np.array:
+def splitRoomWifiData(ldTuple: LabelDataTuple) -> dict:
+  """
+  Groups the WiFi signal data by the room numbers attached to it
+  """
+
   # assumes each row is structured as such:
   # [s1, s2, s3, s4, s5, s6, s7, roomNum] where
   grouped = {}
-  for d in array:
-    label = int(d[7])
-    if not label in grouped:
-      grouped[label] = []
-    grouped[label].append(d[:7])
+  label, data = ldTuple
+  for l, d in zip(label, data):
+    roomNum = l[0]
+    if not roomNum in grouped:
+      grouped[roomNum] = []
+    grouped[roomNum].append(d)
 
   for g in grouped:
     grouped[g] = np.array(grouped[g])
   return grouped
 
-def loadData():
-  clean = np.loadtxt(CLEAN_DATASET_PATH)
-  noisy = np.loadtxt(NOISY_DATASET_PATH)
-  return clean, noisy
+def loadRawData() -> tuple[np.array, np.array]:
+  """
+  Loads the raw data from the text file
+  """
+  return np.loadtxt(CLEAN_DATASET_PATH), np.loadtxt(NOISY_DATASET_PATH)
 
-def groupedData():
-  clean, noisy = loadData()
+def loadSplitData() -> NoisyCleanTuple:
+  """
+  Splits the datasets into tuples of the label column, and the data columns
+  """
+  def splitDataset(data: np.array) -> LabelDataTuple:
+    """
+    Partitions the data as in the comment above
+    """
+    return (data[:, 7:].astype(int), data[:, :7])
+
+  clean, noisy = loadRawData()
+  return splitDataset(clean), splitDataset(noisy)
+
+def groupedData() -> tuple[dict, dict]:
+  """
+  Groups both datasets by room number
+  """
+  clean, noisy = loadSplitData()
   return splitRoomWifiData(clean), splitRoomWifiData(noisy)
