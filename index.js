@@ -3,17 +3,168 @@ const fs = require("fs");
 const { promisify } = require('util');
 const exec_cmd = promisify(require('child_process').exec)
 
-async function exec(cmd) { return (await exec_cmd(cmd)).stdout.slice(0, -1); }
-async function get(url) { return (await axios.get(url)).data; }
-async function post(url, data) { return (await axios.post(url, data)).data; }
+const MsInDay = 24*3600*1000;
+const OpeningOffset = 7*3600*1000;
+const locale = 'en-GB';
 
 let rooms_to_dates_and_free_times = [];
 
-const queries = ["HXLY", "SHER", "BLKT", "SAF", "SKEM"]
+const queries = ["HXLY"/*, "SHER", "BLKT", "SAF", "SKEM"*/]
 const seconds_in_day = 60 * 60 * 24;
 const day_start = 60 * 60 * 9;
 const day_end = 60 * 60 * 24 - 1;
-const days_ahead = 10;
+const days_ahead = 1;
+
+function transformToUTCString(dateStr) {
+  // https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)
+  // Z used to indicate Zulu time i.e UTC time (mentioned in bit above)
+  return dateStr += "Z";
+}
+
+function floorDay(date) {
+  return new Date(date - (date % MsInDay));
+}
+
+function ceilDay(date) {
+  return new Date(floorDay(date).getTime() + MsInDay);
+}
+
+function startOfUniDay(date) {
+  return new Date(floorDay(date).getTime() + OpeningOffset);
+}
+
+function dateToLocaleTimezoneDateString(date) {
+  const options = {
+    timeZone: 'UTC',
+    weekday: "short",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  
+  return Intl.DateTimeFormat(locale, options).format(date);
+}
+
+function dateToLocaleTimezoneTimeString(date) {
+  const options = {
+    timeZone: 'UTC',
+    hour: "numeric",
+    minute: "numeric",
+  };
+  
+  return Intl.DateTimeFormat(locale, options).format(date);
+}
+
+function extractIntervalDataSorted(bookingsData) {
+  const relevantData = bookingsData.map(({start, end, allDay}) => {
+    const [startUTC, endUTC] = [start, end].map(transformToUTCString);
+
+    const startAsDateObj = new Date(startUTC);
+    // belows caps the starting time to the start of the uni day i.e 7am
+    const startDate = new Date(Math.max(startAsDateObj, startOfUniDay(startAsDateObj)))
+    // below "flattens" allDay events into just lasting until uni closing time i.e start of the next day
+    const endDate = new Date(allDay ? (floorDay(startDate).getTime() + MsInDay) : endUTC)
+    return [startDate, endDate]
+  })
+
+  relevantData.sort(([s1, _], [s2, __]) => s1 - s2);
+
+  return relevantData;
+}
+
+function mergeConsecutiveIntervals(startEndData) {
+  const merged = [];
+  for(const [start, end] of startEndData) {
+    if(merged.length == 0) {
+      merged.push([start, end])
+      continue;
+    }
+  
+    const [prevStart, prevEnd] = merged[merged.length - 1];
+    if(prevEnd >= start) { // flattens overlapping bookings into one
+      merged.pop();
+      merged.push([prevStart, new Date(Math.max(prevEnd, end))])
+    } else {
+      merged.push([start, end])
+    }
+  }
+  return merged;
+}
+
+function generateIntermediateIntervals(startDate, endDate) {
+  const intervals = [];
+  let currDate = startDate;
+  while(currDate < endDate) {
+    const currDateDayStart = startOfUniDay(currDate);
+    if(currDate < currDateDayStart) { // ensures it's set to open time of uni minimum
+      currDate = currDateDayStart;
+    }
+
+    const endOfDay = ceilDay(currDate);
+    if(endDate > endOfDay) {
+      intervals.push([currDate, endOfDay])
+      currDate = endOfDay;
+    } else if(currDate < endDate) { // check again since we updated in the loop
+      intervals.push([currDate, endDate])
+      currDate = endDate;
+    }
+  }
+  return intervals;
+}
+
+function generateAllFreeTimes(mergedData) {
+  const freeTimes = [];
+  let currentTime = startOfUniDay(new Date());
+
+  for(const [start, end] of mergedData) {
+    freeTimes.push(...generateIntermediateIntervals(currentTime, start));
+    currentTime = end;
+  }
+
+  // generates the final interval for the final day
+  freeTimes.push(...generateIntermediateIntervals(currentTime, ceilDay(currentTime)))
+
+  return freeTimes;
+}
+
+function transformToPresentableData(freeTimes) {
+  if(freeTimes.length == 0) {
+    return [];
+  }
+
+  let currentTime = freeTimes[0][0]; // first start time
+  let currentDay = floorDay(currentTime);
+  let currentPresentableTimes = [];
+
+  const presentableFreeTimes = [];
+  for(const [start, end] of freeTimes) {
+    const uniDayStart = startOfUniDay(start);
+    if(currentTime < uniDayStart) { // new day
+      presentableFreeTimes.push([dateToLocaleTimezoneDateString(currentDay), currentPresentableTimes])
+      currentTime = uniDayStart;
+      currentDay = floorDay(currentTime);
+      currentPresentableTimes = []
+    }
+
+    currentPresentableTimes.push([start, end].map(t => dateToLocaleTimezoneTimeString(t)));
+  }
+
+  presentableFreeTimes.push([dateToLocaleTimezoneDateString(currentDay), currentPresentableTimes])
+
+  return presentableFreeTimes;
+}
+
+function generatePresentableFreeTimes(bookingsData) {
+  const relevantData = extractIntervalDataSorted(bookingsData);
+  const mergedData = mergeConsecutiveIntervals(relevantData);
+  const freeTimes = generateAllFreeTimes(mergedData);
+  const presentableData = transformToPresentableData(freeTimes);
+  return presentableData;
+}
+
+async function exec(cmd) { return (await exec_cmd(cmd)).stdout.slice(0, -1); }
+async function get(url) { return (await axios.get(url)).data; }
+async function post(url, data) { return (await axios.post(url, data)).data; }
 
 function seconds_to_time(t) {
     return new Date(t * 1000).toISOString().substring(11, 16)
@@ -48,59 +199,11 @@ async function queryTimetable(query) {
         const query_str = room_query_url + room_id;
         const bookings = await post(room_data_post_url, query_str);
 
-        // console.log(bookings, room_data_post_url, query_str)
-        fs.writeFileSync("data.txt", JSON.stringify(bookings, null, 2))
-
-        const days_to_dates = {};
-        const now_seconds = parseInt(await exec(`date -d $(date +"%D") +"%s"`));
-        for (let i = 0; i < days_ahead; i++) {
-            days_to_dates[now_seconds + (seconds_in_day * i)] = []
-        }
-
-        for (const booking of bookings) {
-            const start = booking["start"];
-            const end = booking["end"];
-
-            if (end == null)
-                continue;
-
-            const date = await exec(`date -d "${start}" +"%D"`);
-            const seconds_at_date = parseInt(await exec(`date -d "${date}" +"%s"`));
-            const start_time = parseInt(await exec(`date -d "${start}" +"%s"`)) - seconds_at_date;
-            const end_time = parseInt(await exec(`date -d "${end}" +"%s"`)) - seconds_at_date;
-
-            if (!days_to_dates[seconds_at_date])
-                days_to_dates[seconds_at_date] = []
-
-            if (booking.allDay)
-                days_to_dates[seconds_at_date].push([0, seconds_in_day]);
-
-            days_to_dates[seconds_at_date].push([start_time, end_time])
-        }
-
-        let free_times_days = [];
-
-        for (const [day, times] of Object.entries(days_to_dates)) {
-            const free_times = [];
-            let free_start = day_start;
-            times.sort(([s1, e1], [s2, e2]) => s1 - s2)
-            for (const [start, end] of times) {
-                free_times.push([seconds_to_time(free_start), seconds_to_time(start)]);
-                free_start = end;
-            }
-            if (free_start < day_end && free_start != day_start) {
-                free_times.push([seconds_to_time(free_start), seconds_to_time(day_end)]);
-            } else if (free_start == day_start) {
-                free_times.push([seconds_to_time(day_start), seconds_to_time(day_end)]);
-            }
-            free_times_days.push([parseInt(day), await exec(`date -d @${day} +"%a %b %d %Y"`), free_times.filter(([s, e]) => s != e)])
-        }
-
-        if (free_times_days.length > 0)
-            rooms_to_dates_and_free_times_new.push([
-                room_name,
-                free_times_days.sort(([t1, d1, ts1], [t2, d2, ts2]) => t1 - t2).map(([t, d, ts]) => [d, ts])
-            ])
+        const presentableData = generatePresentableFreeTimes(bookings);
+        rooms_to_dates_and_free_times_new.push([
+          room_name,
+          presentableData
+        ]);
     }
 
     return rooms_to_dates_and_free_times_new;
