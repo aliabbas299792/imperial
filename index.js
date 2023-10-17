@@ -1,19 +1,19 @@
 const axios = require('axios');
-const fs = require("fs");
+const express = require('express');
 const { promisify } = require('util');
 const exec_cmd = promisify(require('child_process').exec)
+
+const port = 3015;
+const app = express();
 
 const MsInDay = 24*3600*1000;
 const OpeningOffset = 7*3600*1000;
 const locale = 'en-GB';
 
+const days_ahead = 1;
+const queries = ["HXLY", "SHER", "BLKT", "SAF", "SKEM"];
 let rooms_to_dates_and_free_times = [];
 
-const queries = ["HXLY"/*, "SHER", "BLKT", "SAF", "SKEM"*/]
-const seconds_in_day = 60 * 60 * 24;
-const day_start = 60 * 60 * 9;
-const day_end = 60 * 60 * 24 - 1;
-const days_ahead = 1;
 
 function transformToUTCString(dateStr) {
   // https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)
@@ -165,11 +165,6 @@ function generatePresentableFreeTimes(bookingsData) {
 async function exec(cmd) { return (await exec_cmd(cmd)).stdout.slice(0, -1); }
 async function get(url) { return (await axios.get(url)).data; }
 async function post(url, data) { return (await axios.post(url, data)).data; }
-
-function seconds_to_time(t) {
-    return new Date(t * 1000).toISOString().substring(11, 16)
-}
-
 async function main() {
   const rooms_to_dates_and_free_times_tmp = []
   for(const q of queries) {
@@ -209,19 +204,14 @@ async function queryTimetable(query) {
     return rooms_to_dates_and_free_times_new;
 }
 
-main()
-setInterval(main, 1000 * 60 * 60)
-
-const express = require('express');
-const { exit } = require('process');
-const app = express()
-const port = 3015
-
 app.use(express.static('public'))
-    .get('/data', (req, res) => {
+    .get('/data', (_, res) => {
         res.send(JSON.stringify(rooms_to_dates_and_free_times))
     })
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+main()
+setInterval(main, 1000 * 60 * 60)
