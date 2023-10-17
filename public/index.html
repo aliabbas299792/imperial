@@ -1,0 +1,113 @@
+<style>
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    #data {
+        padding: 20px;
+    }
+
+    .room-block {
+        margin: 20px 0 30px 0;
+        padding: 10px;
+        background: #34495e;
+        color: #ecf0f1;
+    }
+
+    .room {
+        margin: 0;
+    }
+
+    .date-block {
+        margin: 20px 0 0 0;
+    }
+
+    .time {
+        font-weight: 600;
+    }
+
+    td {
+        border: black 1px solid;
+        padding: 5px;
+    }
+
+    th {
+        padding: 10px;
+        border: black 3px solid;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin: 30px auto 0 auto;
+    }
+</style>
+<table id="free_now">
+    <tr>
+        <th>Free room</th>
+        <th>From when</th>
+        <th>Until when</th>
+    </tr>
+</table>
+<div id="data"></div>
+<script>
+    const data_div = document.querySelector("#data");
+    const free_now_div = document.querySelector("#free_now");
+    let data_obj = [];
+
+    function time_in_range([start, end], time) {
+        const to_seconds = (t) => {
+            const [h, m] = t.split(":");
+            return h * 3600 + m * 60;
+        }
+
+        start = to_seconds(start);
+        end = to_seconds(end);
+        time = to_seconds(time);
+
+        return start <= time && time <= end;
+    }
+
+    fetch("/data").then(res => res.json()).then(r => {
+        for (const room of r) {
+            const [name, days] = room;
+            let html_str = `<div class='room-block'><h2 class='room'>${name}</h2>`;
+            for (const [date, times] of days) {
+                html_str += `<div class='date-block'><h4 class='date'>${date}</h4>`;
+                html_str += `Free: ` + times.map(t => t.map(time => `<span class='time'>${time}</span>`).join(" to ")).join(", ")
+                html_str += `</div>`;
+            }
+            html_str += "</div>";
+            data_div.innerHTML += html_str;
+        }
+        data_obj = r;
+    })
+        .then(_ => {
+            const free_now = find_a_room_now();
+            for(const [room, [start, end]] of free_now) {
+                free_now_div.innerHTML += `<tr><td>${room}</td><td><span class='time'>${start}</span></td><td><span class='time'>${end}</span></td>`;
+            }
+        })
+
+    function find_a_room_now() {
+        const d = new Date();
+        const today = d.toString().slice(0, 15);
+        const now = d.toString().slice(16, 21);
+        const free_now = [];
+        for ([room, days] of data_obj) {
+            for ([day, times] of days) {
+                if (day == today) {
+                    for (const t of times) {
+                        if (time_in_range(t, now)) {
+                            free_now.push([room, t])
+                        }
+                    }
+                }
+            }
+        }
+
+        return free_now;
+    }
+</script>
