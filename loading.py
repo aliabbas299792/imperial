@@ -21,4 +21,8 @@ def splitRoomWifiData(array: np.array) -> np.array:
 def loadData():
   clean = np.loadtxt(CLEAN_DATASET_PATH)
   noisy = np.loadtxt(NOISY_DATASET_PATH)
+  return clean, noisy
+
+def groupedData():
+  clean, noisy = loadData()
   return splitRoomWifiData(clean), splitRoomWifiData(noisy)
