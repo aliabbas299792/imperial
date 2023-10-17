@@ -1,0 +1,1358 @@
+[
+  {
+    "id": "655548721:-429630538:10:3647594:15",
+    "start": "2023-10-18T18:00:00",
+    "end": "2023-10-18T21:00:00",
+    "allDay": false,
+    "description": "Kx Booking\r\n\r\n<br />\r\n\r\nKx\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3647594\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "Kx Booking",
+    "faculty": "Cross or Non Faculty",
+    "eventCategory": "Kx",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "Kx Booking Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3669246:16",
+    "start": "2023-10-25T12:30:00",
+    "end": "2023-10-25T14:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSeminar\r\n\r\n<br />\r\n\r\nLee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3669246\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Seminar",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688250:15",
+    "start": "2023-10-20T18:00:00",
+    "end": "2023-10-20T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688250\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688250:16",
+    "start": "2023-10-27T18:00:00",
+    "end": "2023-10-27T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688250\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688723:15",
+    "start": "2023-10-17T18:00:00",
+    "end": "2023-10-17T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688723\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688723:16",
+    "start": "2023-10-24T18:00:00",
+    "end": "2023-10-24T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688723\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688790:15",
+    "start": "2023-10-19T18:00:00",
+    "end": "2023-10-19T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688790\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3688790:16",
+    "start": "2023-10-26T18:00:00",
+    "end": "2023-10-26T22:00:00",
+    "allDay": false,
+    "description": "Student Union Ad Hoc\r\n\r\n<br />\r\n\r\nMeeting\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3688790\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "SU IC Student Union",
+    "faculty": "AD Support Services",
+    "eventCategory": "Meeting",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "SU IC Student Union Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3700937:15",
+    "start": "2023-10-18T12:00:00",
+    "end": "2023-10-18T18:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nAdministrative\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 144<br />HXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3700937\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Administrative",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3700937:16",
+    "start": "2023-10-25T12:00:00",
+    "end": "2023-10-25T18:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nAdministrative\r\n\r\n<br />\r\n\r\n-\r\n\r\n<br />\r\n\r\nHXLY 144<br />HXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3700937\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Administrative",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3700988:16",
+    "start": "2023-10-25T15:00:00",
+    "end": "2023-10-25T17:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSeminar\r\n\r\n<br />\r\n\r\nAdu-Bofour, Olivia<br />Aynan, Ahmed<br />Hallsworth, Christopher A<br />Krasovsky, Igor<br />Lee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3700988\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Seminar",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701235:15",
+    "start": "2023-10-17T09:00:00",
+    "end": "2023-10-17T11:00:00",
+    "allDay": false,
+    "description": "MATH40001 - Introduction to University Mathematics<br />MATH40009 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nBuzzard, Kevin M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701235\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40001",
+      "MATH40009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701255:15",
+    "start": "2023-10-18T10:00:00",
+    "end": "2023-10-18T12:00:00",
+    "allDay": false,
+    "description": "MATH40001 - Introduction to University Mathematics<br />MATH40009 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nBuzzard, Kevin M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701255\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40001",
+      "MATH40009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701271:15",
+    "start": "2023-10-19T10:00:00",
+    "end": "2023-10-19T12:00:00",
+    "allDay": false,
+    "description": "MATH40001 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nBertrand, Thibault\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701271\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40001"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701324:16",
+    "start": "2023-10-23T14:00:00",
+    "end": "2023-10-23T16:00:00",
+    "allDay": false,
+    "description": "MATH40001 - Introduction to University Mathematics<br />MATH40009 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nBuzzard, Kevin M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701324\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40001",
+      "MATH40009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701520:16",
+    "start": "2023-10-25T09:00:00",
+    "end": "2023-10-25T12:00:00",
+    "allDay": false,
+    "description": "MATH40001 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nRevision\r\n\r\n<br />\r\n\r\nBertrand, Thibault<br />Buzzard, Kevin M<br />Lawn, Marie-Amelie\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701520\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Revision",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40001"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701901:15",
+    "start": "2023-10-17T13:00:00",
+    "end": "2023-10-17T14:00:00",
+    "allDay": false,
+    "description": "MATH60045 - Applied Probability<br />MATH70045 - Applied Probability\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKantas, Nikolas\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701901\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60045",
+      "MATH70045"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701901:16",
+    "start": "2023-10-24T13:00:00",
+    "end": "2023-10-24T14:00:00",
+    "allDay": false,
+    "description": "MATH60045 - Applied Probability<br />MATH70045 - Applied Probability\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKantas, Nikolas\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701901\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60045",
+      "MATH70045"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701905:16",
+    "start": "2023-10-23T13:00:00",
+    "end": "2023-10-23T14:00:00",
+    "allDay": false,
+    "description": "MATH50001 - Analysis 2<br />MATH50017 - Real Analysis and Topology for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCheraghi, Davoud\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701905\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50001",
+      "MATH50017"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3701951:16",
+    "start": "2023-10-23T16:00:00",
+    "end": "2023-10-23T18:00:00",
+    "allDay": false,
+    "description": "MATH60046 - Time Series Analysis<br />MATH70046 - Time Series Analysis\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCohen, Ed\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3701951\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60046",
+      "MATH70046"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702063:15",
+    "start": "2023-10-17T12:00:00",
+    "end": "2023-10-17T13:00:00",
+    "allDay": false,
+    "description": "MATH50010 - Probability for Statistics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nPike-Burke, Ciara M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702063\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50010"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702063:16",
+    "start": "2023-10-24T12:00:00",
+    "end": "2023-10-24T13:00:00",
+    "allDay": false,
+    "description": "MATH50010 - Probability for Statistics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nPike-Burke, Ciara M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702063\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50010"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702067:15",
+    "start": "2023-10-17T14:00:00",
+    "end": "2023-10-17T15:00:00",
+    "allDay": false,
+    "description": "MATH50003 - Linear Algebra and Numerical Analysis<br />MATH50016 - Linear Algebra 2 for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nLiebeck, Martin W\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702067\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50003",
+      "MATH50016"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702067:16",
+    "start": "2023-10-24T14:00:00",
+    "end": "2023-10-24T15:00:00",
+    "allDay": false,
+    "description": "MATH50003 - Linear Algebra and Numerical Analysis<br />MATH50016 - Linear Algebra 2 for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nLiebeck, Martin W\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702067\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50003",
+      "MATH50016"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702068:15",
+    "start": "2023-10-17T15:00:00",
+    "end": "2023-10-17T16:00:00",
+    "allDay": false,
+    "description": "MATH50004 - Multivariable Calculus and Differential Equations<br />MATH50015 - Multivariable Calculus for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nWalton, Andrew G\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702068\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50004",
+      "MATH50015"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702068:16",
+    "start": "2023-10-24T15:00:00",
+    "end": "2023-10-24T16:00:00",
+    "allDay": false,
+    "description": "MATH50004 - Multivariable Calculus and Differential Equations<br />MATH50015 - Multivariable Calculus for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nWalton, Andrew G\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702068\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50004",
+      "MATH50015"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702069:15",
+    "start": "2023-10-17T16:00:00",
+    "end": "2023-10-17T17:00:00",
+    "allDay": false,
+    "description": "MATH60047 - Stochastic Simulation<br />MATH70047 - Stochastic Simulation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nAkyildiz, O. Deniz\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702069\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60047",
+      "MATH70047"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702069:16",
+    "start": "2023-10-24T16:00:00",
+    "end": "2023-10-24T17:00:00",
+    "allDay": false,
+    "description": "MATH60047 - Stochastic Simulation<br />MATH70047 - Stochastic Simulation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nAkyildiz, O. Deniz\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702069\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60047",
+      "MATH70047"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702071:16",
+    "start": "2023-10-23T10:00:00",
+    "end": "2023-10-23T12:00:00",
+    "allDay": false,
+    "description": "MATH60045 - Applied Probability<br />MATH70045 - Applied Probability\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKantas, Nikolas\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702071\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60045",
+      "MATH70045"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702088:15",
+    "start": "2023-10-17T17:00:00",
+    "end": "2023-10-17T18:00:00",
+    "allDay": false,
+    "description": "MATH60046 - Time Series Analysis<br />MATH70046 - Time Series Analysis\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCohen, Ed\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702088\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60046",
+      "MATH70046"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3702088:16",
+    "start": "2023-10-24T17:00:00",
+    "end": "2023-10-24T18:00:00",
+    "allDay": false,
+    "description": "MATH60046 - Time Series Analysis<br />MATH70046 - Time Series Analysis\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCohen, Ed\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3702088\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60046",
+      "MATH70046"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703745:15",
+    "start": "2023-10-20T14:00:00",
+    "end": "2023-10-20T15:00:00",
+    "allDay": false,
+    "description": "MATH50003 - Linear Algebra and Numerical Analysis<br />MATH50016 - Linear Algebra 2 for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nLiebeck, Martin W\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703745\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50003",
+      "MATH50016"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703745:16",
+    "start": "2023-10-27T14:00:00",
+    "end": "2023-10-27T15:00:00",
+    "allDay": false,
+    "description": "MATH50003 - Linear Algebra and Numerical Analysis<br />MATH50016 - Linear Algebra 2 for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nLiebeck, Martin W\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703745\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50003",
+      "MATH50016"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703810:15",
+    "start": "2023-10-20T15:00:00",
+    "end": "2023-10-20T16:00:00",
+    "allDay": false,
+    "description": "MATH50004 - Multivariable Calculus and Differential Equations<br />MATH50015 - Multivariable Calculus for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nWalton, Andrew G\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703810\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50004",
+      "MATH50015"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703810:16",
+    "start": "2023-10-27T15:00:00",
+    "end": "2023-10-27T16:00:00",
+    "allDay": false,
+    "description": "MATH50004 - Multivariable Calculus and Differential Equations<br />MATH50015 - Multivariable Calculus for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nWalton, Andrew G\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703810\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50004",
+      "MATH50015"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703844:15",
+    "start": "2023-10-19T13:00:00",
+    "end": "2023-10-19T14:00:00",
+    "allDay": false,
+    "description": "MATH60005 - Optimisation<br />MATH70005 - Optimisation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKalise, Dante\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703844\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60005",
+      "MATH70005"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703844:16",
+    "start": "2023-10-26T13:00:00",
+    "end": "2023-10-26T14:00:00",
+    "allDay": false,
+    "description": "MATH60005 - Optimisation<br />MATH70005 - Optimisation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKalise, Dante\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703844\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60005",
+      "MATH70005"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703855:15",
+    "start": "2023-10-20T12:00:00",
+    "end": "2023-10-20T14:00:00",
+    "allDay": false,
+    "description": "MATH60005 - Optimisation<br />MATH70005 - Optimisation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKalise, Dante\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703855\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60005",
+      "MATH70005"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3703855:16",
+    "start": "2023-10-27T12:00:00",
+    "end": "2023-10-27T14:00:00",
+    "allDay": false,
+    "description": "MATH60005 - Optimisation<br />MATH70005 - Optimisation\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nKalise, Dante\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3703855\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH60005",
+      "MATH70005"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704054:15",
+    "start": "2023-10-19T15:00:00",
+    "end": "2023-10-19T16:00:00",
+    "allDay": false,
+    "description": "MATH50009 - Principles of Programming\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nHam, David A\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704054\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704054:16",
+    "start": "2023-10-26T15:00:00",
+    "end": "2023-10-26T16:00:00",
+    "allDay": false,
+    "description": "MATH50009 - Principles of Programming\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nHam, David A\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704054\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704068:15",
+    "start": "2023-10-20T16:00:00",
+    "end": "2023-10-20T17:00:00",
+    "allDay": false,
+    "description": "MATH50009 - Principles of Programming\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nHam, David A\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704068\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704068:16",
+    "start": "2023-10-27T16:00:00",
+    "end": "2023-10-27T17:00:00",
+    "allDay": false,
+    "description": "MATH50009 - Principles of Programming\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nHam, David A\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704068\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704131:15",
+    "start": "2023-10-19T16:00:00",
+    "end": "2023-10-19T17:00:00",
+    "allDay": false,
+    "description": "MATH50010 - Probability for Statistics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nPike-Burke, Ciara M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704131\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50010"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704131:16",
+    "start": "2023-10-26T16:00:00",
+    "end": "2023-10-26T17:00:00",
+    "allDay": false,
+    "description": "MATH50010 - Probability for Statistics\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nPike-Burke, Ciara M\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704131\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50010"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704554:15",
+    "start": "2023-10-19T14:00:00",
+    "end": "2023-10-19T15:00:00",
+    "allDay": false,
+    "description": "MATH50001 - Analysis 2<br />MATH50017 - Real Analysis and Topology for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCheraghi, Davoud\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704554\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50001",
+      "MATH50017"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3704554:16",
+    "start": "2023-10-26T14:00:00",
+    "end": "2023-10-26T15:00:00",
+    "allDay": false,
+    "description": "MATH50001 - Analysis 2<br />MATH50017 - Real Analysis and Topology for JMC\r\n\r\n<br />\r\n\r\nLecture\r\n\r\n<br />\r\n\r\nCheraghi, Davoud\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3704554\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Lecture",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH50001",
+      "MATH50017"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "Record and Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3708012:15",
+    "start": "2023-10-21T09:00:00",
+    "end": "2023-10-21T17:00:00",
+    "allDay": false,
+    "description": "Kx Booking\r\n\r\n<br />\r\n\r\nKx\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3708012\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "Kx Booking",
+    "faculty": "Cross or Non Faculty",
+    "eventCategory": "Kx",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "Kx Booking Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3779135:16",
+    "start": "2023-10-26T10:00:00",
+    "end": "2023-10-26T13:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nStudent Training\r\n\r\n<br />\r\n\r\nLee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3779135\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Student Training",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3822803:15",
+    "start": "2023-10-20T09:00:00",
+    "end": "2023-10-20T10:00:00",
+    "allDay": false,
+    "description": "MATH40009 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nExamination\r\n\r\n<br />\r\n\r\nBertrand, Thibault<br />Buzzard, Kevin M<br />Lawn, Marie-Amelie<br />Nicol, Valerie\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3822803\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Examination",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3822803:16",
+    "start": "2023-10-27T09:00:00",
+    "end": "2023-10-27T10:00:00",
+    "allDay": false,
+    "description": "MATH40009 - Introduction to University Mathematics\r\n\r\n<br />\r\n\r\nExamination\r\n\r\n<br />\r\n\r\nBertrand, Thibault<br />Buzzard, Kevin M<br />Lawn, Marie-Amelie<br />Nicol, Valerie\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3822803\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Examination",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MATH40009"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3843895:16",
+    "start": "2023-10-25T12:00:00",
+    "end": "2023-10-25T12:30:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSet up/take down\r\n\r\n<br />\r\n\r\nLee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3843895\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Set up/take down",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3872769:15",
+    "start": "2023-10-20T10:00:00",
+    "end": "2023-10-20T11:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSet up/take down\r\n\r\n<br />\r\n\r\nHaines, Helen C\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3872769\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Set up/take down",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3872769:16",
+    "start": "2023-10-27T10:00:00",
+    "end": "2023-10-27T11:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSet up/take down\r\n\r\n<br />\r\n\r\nHaines, Helen C\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3872769\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Set up/take down",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3872804:15",
+    "start": "2023-10-20T08:00:00",
+    "end": "2023-10-20T09:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSet up/take down\r\n\r\n<br />\r\n\r\nHaines, Helen C\r\n\r\n<br />\r\n\r\nHXLY 140<br />HXLY 213 - Clore Lecture Theatre<br />HXLY 410\r\n\r\n<br />\r\n\r\n3872804\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Set up/take down",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3875134:16",
+    "start": "2023-10-25T14:30:00",
+    "end": "2023-10-25T15:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nSet up/take down\r\n\r\n<br />\r\n\r\nLee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3875134\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Set up/take down",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:3893767:15",
+    "start": "2023-10-20T11:00:00",
+    "end": "2023-10-20T12:00:00",
+    "allDay": false,
+    "description": "Department of Mathematics Ad Hoc\r\n\r\n<br />\r\n\r\nCareers Event\r\n\r\n<br />\r\n\r\nChapman, Madelaine A<br />Lee, Rebecca J\r\n\r\n<br />\r\n\r\nHXLY 213 - Clore Lecture Theatre\r\n\r\n<br />\r\n\r\n3893767\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "MA Department of Mathematics",
+    "faculty": "PQ Faculty of Natural Sciences",
+    "eventCategory": "Careers Event",
+    "sites": [
+      "South Kensington"
+    ],
+    "modules": [
+      "MA Department of Mathematics Ad Hoc"
+    ],
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": "No Record and No Webcast",
+    "custom3": null
+  },
+  {
+    "id": "655548721:-429630538:10:2974586:15",
+    "start": "2023-10-18T07:00:00",
+    "end": null,
+    "allDay": true,
+    "description": "For Information Only\r\n\r\n<br />\r\n\r\n2974586\r\n",
+    "backgroundColor": "#badefc",
+    "textColor": "#000000",
+    "department": "CTSO Central Timetabling Support Office",
+    "faculty": "Cross or Non Faculty",
+    "eventCategory": "For Information Only",
+    "sites": null,
+    "modules": null,
+    "registerStatus": 1,
+    "studentMark": 0,
+    "custom1": null,
+    "custom2": null,
+    "custom3": null
+  }
+]
