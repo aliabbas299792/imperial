@@ -6,11 +6,11 @@ const exec_cmd = promisify(require('child_process').exec)
 const port = 3015;
 const app = express();
 
-const MsInDay = 24*3600*1000;
-const OpeningOffset = 7*3600*1000;
+const MsInDay = 24 * 3600 * 1000;
+const OpeningOffset = 7 * 3600 * 1000;
 const locale = 'en-GB';
 
-const days_ahead = 1;
+const days_ahead = 10;
 const queries = ["HXLY", "SHER", "BLKT", "SAF", "SKEM"];
 let rooms_to_dates_and_free_times = [];
 
@@ -41,7 +41,7 @@ function dateToLocaleTimezoneDateString(date) {
     month: "long",
     day: "numeric",
   };
-  
+
   return Intl.DateTimeFormat(locale, options).format(date);
 }
 
@@ -51,21 +51,29 @@ function dateToLocaleTimezoneTimeString(date) {
     hour: "numeric",
     minute: "numeric",
   };
-  
+
   return Intl.DateTimeFormat(locale, options).format(date);
 }
 
-function extractIntervalDataSorted(bookingsData) {
-  const relevantData = bookingsData.map(({start, end, allDay}) => {
-    const [startUTC, endUTC] = [start, end].map(transformToUTCString);
+function containsCaseInsensitive(str, search) {
+  return str.toLowerCase().indexOf(search) !== -1
+}
 
-    const startAsDateObj = new Date(startUTC);
-    // belows caps the starting time to the start of the uni day i.e 7am
-    const startDate = new Date(Math.max(startAsDateObj, startOfUniDay(startAsDateObj)))
-    // below "flattens" allDay events into just lasting until uni closing time i.e start of the next day
-    const endDate = new Date(allDay ? (floorDay(startDate).getTime() + MsInDay) : endUTC)
-    return [startDate, endDate]
-  })
+function extractIntervalDataSorted(bookingsData) {
+  // filter out information only "bookings" (checked on CELCAT these aren't room bookings)
+  // and then get the dates as if they were all in UTC since it's cleaner to process them as such
+  const relevantData = bookingsData
+    .filter(({ eventCategory }) => !containsCaseInsensitive(eventCategory, "information"))
+    .map(({ start, end, allDay }) => {
+      const [startUTC, endUTC] = [start, end].map(transformToUTCString);
+
+      const startAsDateObj = new Date(startUTC);
+      // belows caps the starting time to the start of the uni day i.e 7am
+      const startDate = new Date(Math.max(startAsDateObj, startOfUniDay(startAsDateObj)))
+      // below "flattens" allDay events into just lasting until uni closing time i.e start of the next day
+      const endDate = new Date(allDay ? (floorDay(startDate).getTime() + MsInDay) : endUTC)
+      return [startDate, endDate]
+    })
 
   relevantData.sort(([s1, _], [s2, __]) => s1 - s2);
 
@@ -74,14 +82,14 @@ function extractIntervalDataSorted(bookingsData) {
 
 function mergeConsecutiveIntervals(startEndData) {
   const merged = [];
-  for(const [start, end] of startEndData) {
-    if(merged.length == 0) {
+  for (const [start, end] of startEndData) {
+    if (merged.length == 0) {
       merged.push([start, end])
       continue;
     }
-  
+
     const [prevStart, prevEnd] = merged[merged.length - 1];
-    if(prevEnd >= start) { // flattens overlapping bookings into one
+    if (prevEnd >= start) { // flattens overlapping bookings into one
       merged.pop();
       merged.push([prevStart, new Date(Math.max(prevEnd, end))])
     } else {
@@ -94,17 +102,17 @@ function mergeConsecutiveIntervals(startEndData) {
 function generateIntermediateIntervals(startDate, endDate) {
   const intervals = [];
   let currDate = startDate;
-  while(currDate < endDate) {
+  while (currDate < endDate) {
     const currDateDayStart = startOfUniDay(currDate);
-    if(currDate < currDateDayStart) { // ensures it's set to open time of uni minimum
+    if (currDate < currDateDayStart) { // ensures it's set to open time of uni minimum
       currDate = currDateDayStart;
     }
 
     const endOfDay = ceilDay(currDate);
-    if(endDate > endOfDay) {
+    if (endDate > endOfDay) {
       intervals.push([currDate, endOfDay])
       currDate = endOfDay;
-    } else if(currDate < endDate) { // check again since we updated in the loop
+    } else if (currDate < endDate) { // check again since we updated in the loop
       intervals.push([currDate, endDate])
       currDate = endDate;
     }
@@ -112,23 +120,24 @@ function generateIntermediateIntervals(startDate, endDate) {
   return intervals;
 }
 
-function generateAllFreeTimes(mergedData) {
+function generateAllFreeTimes(mergedData, startDate, endDate) {
+  // startDate/endDate is used to ensure we get timings for the full interval we want
   const freeTimes = [];
-  let currentTime = startOfUniDay(new Date());
+  let currentTime = startOfUniDay(new Date(startDate));
 
-  for(const [start, end] of mergedData) {
+  for (const [start, end] of mergedData) {
     freeTimes.push(...generateIntermediateIntervals(currentTime, start));
     currentTime = end;
   }
 
   // generates the final interval for the final day
-  freeTimes.push(...generateIntermediateIntervals(currentTime, ceilDay(currentTime)))
+  freeTimes.push(...generateIntermediateIntervals(currentTime, ceilDay(new Date(endDate))))
 
   return freeTimes;
 }
 
 function transformToPresentableData(freeTimes) {
-  if(freeTimes.length == 0) {
+  if (freeTimes.length == 0) {
     return [];
   }
 
@@ -137,9 +146,9 @@ function transformToPresentableData(freeTimes) {
   let currentPresentableTimes = [];
 
   const presentableFreeTimes = [];
-  for(const [start, end] of freeTimes) {
+  for (const [start, end] of freeTimes) {
     const uniDayStart = startOfUniDay(start);
-    if(currentTime < uniDayStart) { // new day
+    if (currentTime < uniDayStart) { // new day
       presentableFreeTimes.push([dateToLocaleTimezoneDateString(currentDay), currentPresentableTimes])
       currentTime = uniDayStart;
       currentDay = floorDay(currentTime);
@@ -154,10 +163,10 @@ function transformToPresentableData(freeTimes) {
   return presentableFreeTimes;
 }
 
-function generatePresentableFreeTimes(bookingsData) {
+function generatePresentableFreeTimes(bookingsData, startDate, endDate) {
   const relevantData = extractIntervalDataSorted(bookingsData);
   const mergedData = mergeConsecutiveIntervals(relevantData);
-  const freeTimes = generateAllFreeTimes(mergedData);
+  const freeTimes = generateAllFreeTimes(mergedData, startDate, endDate);
   const presentableData = transformToPresentableData(freeTimes);
   return presentableData;
 }
@@ -167,50 +176,50 @@ async function get(url) { return (await axios.get(url)).data; }
 async function post(url, data) { return (await axios.post(url, data)).data; }
 async function main() {
   const rooms_to_dates_and_free_times_tmp = []
-  for(const q of queries) {
+  for (const q of queries) {
     rooms_to_dates_and_free_times_tmp.push(...(await queryTimetable(q)))
   }
   rooms_to_dates_and_free_times = rooms_to_dates_and_free_times_tmp
 }
 
 async function queryTimetable(query) {
-    const get_rooms_url = `https://www.imperial.ac.uk/timetabling/calendar/Home/ReadResourceListItems?myResources=false&searchTerm=${query}&pageSize=50&pageNumber=1&resType=102`
+  const get_rooms_url = `https://www.imperial.ac.uk/timetabling/calendar/Home/ReadResourceListItems?myResources=false&searchTerm=${query}&pageSize=50&pageNumber=1&resType=102`
 
-    const start = await exec(`date "+%Y-%m-%d"`);
-    const end = await exec(`date -d "+${days_ahead} days" '+%Y-%m-%d'`);
+  const start = await exec(`date "+%Y-%m-%d"`);
+  const end = await exec(`date -d "+${days_ahead} days" '+%Y-%m-%d'`);
 
-    const room_query_url = `start=${start}&end=${end}&resType=102&calView=month&federationIds%5B%5D=`;
-    const room_data_post_url = "https://www.imperial.ac.uk/timetabling/calendar/Home/GetCalendarData";
+  const room_query_url = `start=${start}&end=${end}&resType=102&calView=month&federationIds%5B%5D=`;
+  const room_data_post_url = "https://www.imperial.ac.uk/timetabling/calendar/Home/GetCalendarData";
 
-    const rooms_data = await get(get_rooms_url);
-    const rooms = rooms_data["results"];
+  const rooms_data = await get(get_rooms_url);
+  const rooms = rooms_data["results"];
 
-    let rooms_to_dates_and_free_times_new = []
+  let rooms_to_dates_and_free_times_new = []
 
-    for (const room of rooms) {
-        const room_name = room["text"];
-        const room_id = room["id"];
+  for (const room of rooms) {
+    const room_name = room["text"];
+    const room_id = room["id"];
 
-        const query_str = room_query_url + room_id;
-        const bookings = await post(room_data_post_url, query_str);
+    const query_str = room_query_url + room_id;
+    const bookings = await post(room_data_post_url, query_str);
 
-        const presentableData = generatePresentableFreeTimes(bookings);
-        rooms_to_dates_and_free_times_new.push([
-          room_name,
-          presentableData
-        ]);
-    }
+    const presentableData = generatePresentableFreeTimes(bookings, new Date(start), new Date(end));
+    rooms_to_dates_and_free_times_new.push([
+      room_name,
+      presentableData
+    ]);
+  }
 
-    return rooms_to_dates_and_free_times_new;
+  return rooms_to_dates_and_free_times_new;
 }
 
 app.use(express.static('public'))
-    .get('/data', (_, res) => {
-        res.send(JSON.stringify(rooms_to_dates_and_free_times))
-    })
+  .get('/data', (_, res) => {
+    res.send(JSON.stringify(rooms_to_dates_and_free_times))
+  })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
 
 main()

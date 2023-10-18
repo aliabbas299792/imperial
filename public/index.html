@@ -1,113 +1,150 @@
 <style>
-    * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
 
-    #data {
-        padding: 20px;
-    }
+  #data {
+    padding: 20px;
+  }
 
-    .room-block {
-        margin: 20px 0 30px 0;
-        padding: 10px;
-        background: #34495e;
-        color: #ecf0f1;
-    }
+  .room-block {
+    margin: 20px 0 30px 0;
+    padding: 10px;
+    background: #34495e;
+    color: #ecf0f1;
+  }
 
-    .room {
-        margin: 0;
-    }
+  .room {
+    margin: 0;
+  }
 
-    .date-block {
-        margin: 20px 0 0 0;
-    }
+  .date-block {
+    margin: 20px 0 0 0;
+  }
 
-    .time {
-        font-weight: 600;
-    }
+  .time {
+    font-weight: 600;
+  }
 
-    td {
-        border: black 1px solid;
-        padding: 5px;
-    }
+  td {
+    border: black 1px solid;
+    padding: 5px;
+  }
 
-    th {
-        padding: 10px;
-        border: black 3px solid;
-    }
+  th {
+    padding: 10px;
+    border: black 3px solid;
+  }
 
-    table {
-        border-collapse: collapse;
-        margin: 30px auto 0 auto;
-    }
+  table {
+    border-collapse: collapse;
+    margin: 30px auto 0 auto;
+  }
 </style>
 <table id="free_now">
-    <tr>
-        <th>Free room</th>
-        <th>From when</th>
-        <th>Until when</th>
-    </tr>
+  <tr>
+    <th>Free room</th>
+    <!-- <th>From when</th> -->
+    <th>Until when</th>
+    <th>Then</th>
+  </tr>
 </table>
 <div id="data"></div>
 <script>
-    const data_div = document.querySelector("#data");
-    const free_now_div = document.querySelector("#free_now");
-    let data_obj = [];
+  const data_div = document.querySelector("#data");
+  const free_now_div = document.querySelector("#free_now");
+  let data_obj = [];
 
-    function time_in_range([start, end], time) {
-        const to_seconds = (t) => {
-            const [h, m] = t.split(":");
-            return h * 3600 + m * 60;
-        }
-
-        start = to_seconds(start);
-        end = to_seconds(end);
-        time = to_seconds(time);
-
-        return start <= time && time <= end;
+  function time_in_range([start, end], time, excludeEnd) {
+    const to_seconds = (t) => {
+      const [h, m] = t.split(":");
+      return h * 3600 + m * 60;
     }
 
-    fetch("/data").then(res => res.json()).then(r => {
-        for (const room of r) {
-            const [name, days] = room;
-            let html_str = `<div class='room-block'><h2 class='room'>${name}</h2>`;
-            for (const [date, times] of days) {
-                html_str += `<div class='date-block'><h4 class='date'>${date}</h4>`;
-                html_str += `Free: ` + times.map(t => t.map(time => `<span class='time'>${time}</span>`).join(" to ")).join(", ")
-                html_str += `</div>`;
-            }
-            html_str += "</div>";
-            data_div.innerHTML += html_str;
-        }
-        data_obj = r;
+    start = to_seconds(start);
+    end = to_seconds(end);
+    time = to_seconds(time);
+
+    if(excludeEnd) {
+      return start <= time && time < end;
+    }
+
+    return start <= time && time <= end;
+  }
+
+  fetch("/data").then(res => res.json()).then(r => {
+    for (const room of r) {
+      const [name, days] = room;
+      let html_str = `<div class='room-block'><h2 class='room'>${name}</h2>`;
+      for (const [date, times] of days) {
+        html_str += `<div class='date-block'><h4 class='date'>${date}</h4>`;
+        html_str += `Free: ` + times.map(t => t.map(time => `<span class='time'>${time}</span>`).join(" to ")).join(", ")
+        html_str += `</div>`;
+      }
+      html_str += "</div>";
+      data_div.innerHTML += html_str;
+    }
+    data_obj = r;
+  })
+    .then(_ => {
+      const free_now = find_a_room_now();
+      for (const [room, [start, end], then] of free_now) {
+        free_now_div.innerHTML += `<tr><td>${room}</td><!--<td><span class='time'>${start}</span></td>--><td><span class='time'>${end}</span></td><td><span class='time'>${then}</span></td>`;
+      }
     })
-        .then(_ => {
-            const free_now = find_a_room_now();
-            for(const [room, [start, end]] of free_now) {
-                free_now_div.innerHTML += `<tr><td>${room}</td><td><span class='time'>${start}</span></td><td><span class='time'>${end}</span></td>`;
-            }
-        })
 
-    function find_a_room_now() {
-        const d = new Date();
-        const today = d.toString().slice(0, 15);
-        const now = d.toString().slice(16, 21);
-        const free_now = [];
-        for ([room, days] of data_obj) {
-            for ([day, times] of days) {
-                if (day == today) {
-                    for (const t of times) {
-                        if (time_in_range(t, now)) {
-                            free_now.push([room, t])
-                        }
-                    }
-                }
+  // function 
+
+  function find_a_room_now() {
+    const d = new Date();
+    const today = d.toString().slice(0, 15);
+    const now = d.toString().slice(16, 21);
+    const free_now = [];
+
+    const until = new Set();
+    const todayBookings = [];
+
+    for ([room, days] of data_obj) {
+      for (roomData of days) {
+        const [day, times] = roomData;
+        if (new Date(day).getTime() == new Date(today).getTime()) {
+          todayBookings.push([room, times])
+          for (const t of times) {
+            if (time_in_range(t, now)) {
+              until.add(t[1])
             }
+          }
         }
-
-        return free_now;
+      }
     }
+
+    const untilMap = {};
+    for (const [room, times] of todayBookings) {
+      for (const u of until) {
+        for (const t of times) {
+          if (time_in_range(t, u, true)) {
+            if(!untilMap[u]) untilMap[u] = []
+            untilMap[u].push(`${room} (to ${t[1]})`)
+          }
+        }
+      }
+    }
+
+    for (const [room, times] of todayBookings) {
+      for (const t of times) {
+        if (time_in_range(t, now)) {
+          const thenStr = untilMap[t[1]]?.join("<br>");
+          free_now.push([room, t, thenStr || "Nowhere"])
+        }
+      }
+    }
+    
+
+    console.log(free_now)
+
+    return free_now;
+  }
 </script>
