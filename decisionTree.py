@@ -1,6 +1,7 @@
+from nodes import InternalNode, LeafNode
+
 import numpy as np
 from typing import cast, NamedTuple, Optional, Union, Tuple
-from nodes import InternalNode, LeafNode
 
 SplitPoint = NamedTuple("SplitPoint", [("featureCol", int), ("value", float)])
 RoomLabel = int

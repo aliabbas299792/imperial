@@ -1,7 +1,8 @@
 from loading import loadRawData
 from decisionTree import decisionTreeLearning
-import matplotlib.pyplot as plt
+
 import time
+import matplotlib.pyplot as plt
 
 
 def plot_tree(node, ax, x=300, y=300, depth=0):
@@ -58,15 +59,14 @@ def plot_tree(node, ax, x=300, y=300, depth=0):
 def main():
     cleanData, noisyData = loadRawData()
 
-    t1 = time.perf_counter()
+    startTime = time.perf_counter()
 
     node, depth = decisionTreeLearning(cleanData)
 
     fig, ax = plt.subplots()
     plot_tree(node, ax)
-    t2 = time.perf_counter()
-    print(t2 - t1)
-    
+    print(f"Time elapsed: {time.perf_counter() - startTime}s")
+
     plt.axis("off")
     plt.savefig("tree.png", dpi=1200)
     plt.show()
