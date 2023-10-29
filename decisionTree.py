@@ -1,6 +1,7 @@
 from loading import loadRawData
 import numpy as np
-from typing import cast, NamedTuple, Optional
+import time
+from typing import cast, NamedTuple
 
 SplitPoint = NamedTuple("SplitPoint", [("featureCol", int), ("value", float)])
 
@@ -45,51 +46,27 @@ class RoomCount:
     def exactlyOneRoomPopulated(self) -> bool:
         return sum([1 if r >= 1 else 0 for r in self.roomCount]) == 1
 
-vals = set()
-def decisionTreeLearning(data: np.ndarray, alreadySplittedCols: set, depth: int = 0):
+
+def decisionTreeLearning(data: np.ndarray, depth: int = 0):
     if np.size(data) == 0:
         return
-    
+
     count = countRoomLabelsInDataset(data)
 
-    if count.exactlyOneRoomPopulated() or count.totalRooms() == 0:
-        # print("base case")
-        return
+    if count.exactlyOneRoomPopulated():
+        return  # base case
 
-    splitPoint = findSplit(data, count, alreadySplittedCols)
-        
-
-    if not splitPoint:
-        print('no valid split found')
-        return
-        # raise Exception("Split point was not found")
-
-    if splitPoint.featureCol in alreadySplittedCols:
-        print("haha!")
-        print(alreadySplittedCols)
-        return
-
-    print(splitPoint.featureCol, splitPoint.value,)
-    s = alreadySplittedCols.copy()
-    s.add(splitPoint.featureCol)
+    splitPoint = findSplit(data, count)
 
     splitCond = data[:, splitPoint.featureCol] < splitPoint.value
     leftDataset = data[splitCond]
     rightDataset = data[~splitCond]
 
-    global vals
-    vals.add(splitPoint.value)
-    # print("vals", len(vals))
-    
-    decisionTreeLearning(leftDataset, s, depth + 1)
-    decisionTreeLearning(rightDataset, s, depth + 1)
+    decisionTreeLearning(leftDataset, depth + 1)
+    decisionTreeLearning(rightDataset, depth + 1)
 
 
-
-def findSplit(data: np.ndarray, roomCountParent: RoomCount, excludeCols: set[int]) -> Optional[SplitPoint]:
-    # assumes each row to be structured as such
-    # [s1, s2, s3, s4, s5, s6, s7, roomNum]
-
+def findSplit(data: np.ndarray, roomCountParent: RoomCount) -> SplitPoint:
     roomNums = data.T[-1]
     parentEntropy = roomCountParent.entropy()
     totalRooms = roomCountParent.totalRooms()
@@ -106,6 +83,9 @@ def findSplit(data: np.ndarray, roomCountParent: RoomCount, excludeCols: set[int
 
         sortedIdxs = np.argsort(featureCol)
         for currIdx, nextIdx in zip(sortedIdxs, sortedIdxs[1:]):
+            if featureCol[currIdx] == featureCol[nextIdx]:
+                continue
+
             # mid point for splitting between sorted examples
             midpointVal = cast(float, np.mean(featureCol[[currIdx, nextIdx]]))
             roomNum = roomNums[currIdx]
@@ -123,7 +103,7 @@ def findSplit(data: np.ndarray, roomCountParent: RoomCount, excludeCols: set[int
                 maxIGCol = colNum
 
     if maxIGCol == None or maxIGSplit == None:
-        return None
+        raise Exception("No valid split point found")
 
     return SplitPoint(maxIGCol, maxIGSplit)
 
@@ -138,14 +118,13 @@ def countRoomLabelsInDataset(data: np.ndarray) -> RoomCount:
     return count
 
 
-import time
 def main():
     cleanData, noisyData = loadRawData()
-    t1 = time.perf_counter()
-    # print("Clean Data Shape", cleanData.shape)
-    # print("Noisy Data Shape", noisyData.shape)
 
-    decisionTreeLearning(cleanData, set())
+    t1 = time.perf_counter()
+
+    decisionTreeLearning(cleanData)
+
     t2 = time.perf_counter()
     print(t2 - t1)
 
