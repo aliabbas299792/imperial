@@ -1,7 +1,7 @@
 from common import CLEAN_DATASET_PATH, NOISY_DATASET_PATH
 import numpy as np
 
-LabelDataTuple = tuple[np.array, np.array]
+LabelDataTuple = tuple[np.ndarray, np.ndarray]
 NoisyCleanTuple = tuple[LabelDataTuple, LabelDataTuple]
 
 def splitRoomWifiData(ldTuple: LabelDataTuple) -> dict:
@@ -23,7 +23,7 @@ def splitRoomWifiData(ldTuple: LabelDataTuple) -> dict:
     grouped[g] = np.array(grouped[g])
   return grouped
 
-def loadRawData() -> tuple[np.array, np.array]:
+def loadRawData() -> tuple[np.ndarray, np.ndarray]:
   """
   Loads the raw data from the text file
   """
@@ -33,7 +33,7 @@ def loadSplitData() -> NoisyCleanTuple:
   """
   Splits the datasets into tuples of the label column, and the data columns
   """
-  def splitDataset(data: np.array) -> LabelDataTuple:
+  def splitDataset(data: np.ndarray) -> LabelDataTuple:
     """
     Partitions the data as in the comment above
     """
