@@ -1,9 +1,9 @@
-from loading import loadRawData
 import numpy as np
-import time
-from typing import cast, NamedTuple
+from typing import cast, NamedTuple, Optional, Union, Tuple
+from nodes import InternalNode, LeafNode
 
 SplitPoint = NamedTuple("SplitPoint", [("featureCol", int), ("value", float)])
+RoomLabel = int
 
 
 class RoomCount:
@@ -43,18 +43,26 @@ class RoomCount:
     def weightedEntropy(self, supersetNumRooms) -> float:
         return self.entropy() * (self.totalRooms() / supersetNumRooms)
 
-    def exactlyOneRoomPopulated(self) -> bool:
-        return sum([1 if r >= 1 else 0 for r in self.roomCount]) == 1
+    def getLabelIfSingleRoomPopulated(self) -> Optional[RoomLabel]:
+        seenRoom = False
+        label = None
+        for roomIdx, count in enumerate(self.roomCount):
+            if not seenRoom and count != 0:
+                seenRoom = True
+                label = RoomLabel(roomIdx + 1)  # back to 1-indexed
+            elif seenRoom and count != 0:
+                return None
+        return label
 
 
-def decisionTreeLearning(data: np.ndarray, depth: int = 0):
-    if np.size(data) == 0:
-        return
-
+def decisionTreeLearning(
+    data: np.ndarray, depth: int = 0
+) -> Tuple[Union[InternalNode, LeafNode], int]:
     count = countRoomLabelsInDataset(data)
 
-    if count.exactlyOneRoomPopulated():
-        return  # base case
+    label = count.getLabelIfSingleRoomPopulated()
+    if label != None:
+        return LeafNode(label), depth
 
     splitPoint = findSplit(data, count)
 
@@ -62,8 +70,14 @@ def decisionTreeLearning(data: np.ndarray, depth: int = 0):
     leftDataset = data[splitCond]
     rightDataset = data[~splitCond]
 
-    decisionTreeLearning(leftDataset, depth + 1)
-    decisionTreeLearning(rightDataset, depth + 1)
+    nodeCentre = InternalNode(splitPoint.value, splitPoint.featureCol)
+    nodeLeft, depthLeft = decisionTreeLearning(leftDataset, depth + 1)
+    nodeRight, depthRight = decisionTreeLearning(rightDataset, depth + 1)
+
+    nodeCentre.attach_left(nodeLeft)
+    nodeCentre.attach_right(nodeRight)
+
+    return nodeCentre, max(depthLeft, depthRight)
 
 
 def findSplit(data: np.ndarray, roomCountParent: RoomCount) -> SplitPoint:
@@ -97,7 +111,7 @@ def findSplit(data: np.ndarray, roomCountParent: RoomCount) -> SplitPoint:
             rWeightedEntr = rightRoomsCount.weightedEntropy(totalRooms)
             infoGain = parentEntropy - lWeightedEntr - rWeightedEntr
 
-            if infoGain > maxIG:
+            if infoGain >= maxIG:
                 maxIG = infoGain
                 maxIGSplit = midpointVal
                 maxIGCol = colNum
@@ -116,18 +130,3 @@ def countRoomLabelsInDataset(data: np.ndarray) -> RoomCount:
         count.incr(roomNum)
 
     return count
-
-
-def main():
-    cleanData, noisyData = loadRawData()
-
-    t1 = time.perf_counter()
-
-    decisionTreeLearning(cleanData)
-
-    t2 = time.perf_counter()
-    print(t2 - t1)
-
-
-if __name__ == "__main__":
-    main()
