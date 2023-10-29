@@ -97,21 +97,22 @@ def findSplit(data: np.ndarray, roomCountParent: RoomCount) -> SplitPoint:
 
         sortedIdxs = np.argsort(featureCol)
         for currIdx, nextIdx in zip(sortedIdxs, sortedIdxs[1:]):
-            if featureCol[currIdx] == featureCol[nextIdx]:
-                continue
-
-            # mid point for splitting between sorted examples
-            midpointVal = cast(float, np.mean(featureCol[[currIdx, nextIdx]]))
             roomNum = roomNums[currIdx]
 
             leftRoomsCount.decr(roomNum)
             rightRoomsCount.incr(roomNum)
 
+            if featureCol[currIdx] == featureCol[nextIdx]:
+                continue
+
+            # mid point for splitting between sorted examples
+            midpointVal = cast(float, np.mean(featureCol[[currIdx, nextIdx]]))
+
             lWeightedEntr = leftRoomsCount.weightedEntropy(totalRooms)
             rWeightedEntr = rightRoomsCount.weightedEntropy(totalRooms)
             infoGain = parentEntropy - lWeightedEntr - rWeightedEntr
 
-            if infoGain >= maxIG:
+            if infoGain > maxIG:
                 maxIG = infoGain
                 maxIGSplit = midpointVal
                 maxIGCol = colNum
