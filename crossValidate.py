@@ -14,6 +14,17 @@ class ConfusionStats:
     recall: float = 0
     precision: float = 0
     fScore: float = 0
+    confusionMat: np.ndarray = np.array([])
+
+    def __str__(self) -> str:
+        indentedStrMat = "\t\t" + str(self.confusionMat).replace("\n", "\n\t\t")
+        return (
+            f"\n\t-> Accuracy: {self.accuracy}"
+            f"\n\t-> Precision: {self.precision}"
+            f"\n\t-> Recall: {self.recall}"
+            f"\n\t-> F1-score: {self.fScore}"
+            f"\n\t-> Confusion Matrix:\n{indentedStrMat}"
+        )
 
 
 def evaluation(testData: np.ndarray, decisionTree: InternalNode) -> np.ndarray:
@@ -56,6 +67,8 @@ def confusionStats(confusionMat: np.ndarray) -> ConfusionStats:
         stats.fScore += (
             2 * ((stats.precision * stats.recall) / (stats.precision + stats.recall))
         ) / classes
+
+    stats.confusionMat = confusionMat
     return stats
 
 
@@ -88,6 +101,7 @@ def main():
     print(f"Clean stats: {statsClean}")
     print(f"Noisy stats: {statsNoisy}")
     print(f"Time elapsed: {time.perf_counter() - startTime}s")
+    print(f"For {NUM_CROSS_VALIDATION_FOLDS} folds")
 
 
 if __name__ == "__main__":
