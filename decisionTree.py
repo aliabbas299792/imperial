@@ -1,59 +1,10 @@
 from nodes import InternalNode, LeafNode
+from RoomCount import RoomCount
 
 import numpy as np
-from typing import cast, NamedTuple, Optional, Union, Tuple
+from typing import cast, NamedTuple, Union, Tuple
 
 SplitPoint = NamedTuple("SplitPoint", [("featureCol", int), ("value", float)])
-RoomLabel = int
-
-
-class RoomCount:
-    def __init__(self):
-        self.roomCount = [0, 0, 0, 0]
-
-    def copyCount(self) -> "RoomCount":
-        rc = RoomCount()
-        rc.roomCount = self.roomCount[:]
-        return rc
-
-    def addRoomCount(self, roomNum: int, incr: int) -> "RoomCount":
-        idx = int(roomNum - 1)  # roomNum labels are 1-indexed, and loaded as floats
-        self.roomCount[idx] += incr
-        return self
-
-    def incr(self, roomNum: int) -> "RoomCount":
-        return self.addRoomCount(roomNum, 1)
-
-    def decr(self, roomNum: int) -> "RoomCount":
-        return self.addRoomCount(roomNum, -1)
-
-    def totalRooms(self) -> int:
-        return sum(self.roomCount)
-
-    def entropy(self) -> float:
-        total = self.totalRooms()
-
-        # avoids divide by zero and signifies no uncertainty
-        if total == 0:
-            return 0
-
-        return sum(
-            [-p * np.log2(p) for p in [r / total for r in self.roomCount] if p != 0]
-        )
-
-    def weightedEntropy(self, supersetNumRooms) -> float:
-        return self.entropy() * (self.totalRooms() / supersetNumRooms)
-
-    def getLabelIfSingleRoomPopulated(self) -> Optional[RoomLabel]:
-        seenRoom = False
-        label = None
-        for roomIdx, count in enumerate(self.roomCount):
-            if not seenRoom and count != 0:
-                seenRoom = True
-                label = RoomLabel(roomIdx + 1)  # back to 1-indexed
-            elif seenRoom and count != 0:
-                return None
-        return label
 
 
 def decisionTreeLearning(

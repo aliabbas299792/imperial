@@ -1,12 +1,7 @@
-from common import DEFAULT_CLEAN_DATASET_PATH, DEFAULT_NOISY_DATASET_PATH
+from common import DEFAULT_CLEAN_DATASET_PATH, DEFAULT_NOISY_DATASET_PATH, loadRawData
 from crossValidate import crossValidateDataset
 from visualise import generateVisualisations
 import argparse
-import numpy as np
-
-
-def loadRawData(dataset_path: str) -> np.ndarray:
-    return np.loadtxt(dataset_path)
 
 
 def main():
@@ -38,13 +33,13 @@ def main():
 
     # Determine which dataset path to use based on command-line arguments
     if args.clean:
-        dataset_path = DEFAULT_CLEAN_DATASET_PATH
+        datasetPath = DEFAULT_CLEAN_DATASET_PATH
     elif args.noisy:
-        dataset_path = DEFAULT_NOISY_DATASET_PATH
+        datasetPath = DEFAULT_NOISY_DATASET_PATH
     else:
-        dataset_path = args.path
+        datasetPath = args.path
 
-    dataset = loadRawData(dataset_path)
+    dataset = loadRawData(datasetPath)
 
     if args.visualisation:
         generateVisualisations(dataset)

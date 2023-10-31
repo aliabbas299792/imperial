@@ -1,6 +1,13 @@
-from common import NUM_CROSS_VALIDATION_FOLDS, NUM_ROOMS
+from common import (
+    NUM_CROSS_VALIDATION_FOLDS,
+    NUM_ROOMS,
+    DEFAULT_CLEAN_DATASET_PATH,
+    DEFAULT_NOISY_DATASET_PATH,
+    loadRawData,
+)
+from RoomCount import RoomCount
 from decisionTree import decisionTreeLearning
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from nodes import InternalNode
 
 import numpy as np
@@ -8,21 +15,29 @@ import time
 
 
 @dataclass
-class ConfusionStats:
-    accuracy: float = 0
+class RoomConfusionStats:
+    roomLabel: int = 0
     recall: float = 0
     precision: float = 0
     fScore: float = 0
+
+
+@dataclass
+class ConfusionStats:
+    accuracy: float = 0
+    roomConfusionStats: list[RoomConfusionStats] = field(default_factory=list)
     confusionMat: np.ndarray = np.array([])
 
     def __str__(self) -> str:
+        prefix = "\n\t->"
         indentedStrMat = "\t\t" + str(self.confusionMat).replace("\n", "\n\t\t")
+        roomStats = prefix + prefix.join(
+            [str(roomStat) for roomStat in self.roomConfusionStats]
+        )
         return (
-            f"\n\t-> Accuracy: {self.accuracy}"
-            f"\n\t-> Precision: {self.precision}"
-            f"\n\t-> Recall: {self.recall}"
-            f"\n\t-> F1-score: {self.fScore}"
-            f"\n\t-> Confusion Matrix:\n{indentedStrMat}"
+            f"{prefix} Accuracy: {self.accuracy}"
+            f"{roomStats}"
+            f"{prefix} Confusion Matrix:\n{indentedStrMat}"
         )
 
 
@@ -42,9 +57,7 @@ def confusionStats(confusionMat: np.ndarray) -> ConfusionStats:
     classes = NUM_ROOMS
 
     accuracy = 0
-    precision = 0
-    recall = 0
-    fScore = 0
+    classConfusionStatsList = []
 
     for i in range(classes):
         truePos = confusionMat[i][i]
@@ -62,20 +75,22 @@ def confusionStats(confusionMat: np.ndarray) -> ConfusionStats:
                 elif actualIdx == i and predictIdx != i:
                     falseNeg += predictions
 
-        precision_here = truePos / (truePos + falsePos)
-        recall_here = truePos / (truePos + falseNeg)
-
         accuracy += (truePos + trueNeg) / (truePos + trueNeg + falsePos + falseNeg)
-        precision += precision_here
-        recall += recall_here
-        fScore += (2 * precision_here * recall_here) / (precision_here + recall_here)
+
+        confusionStats = RoomConfusionStats()
+        confusionStats.precision = truePos / (truePos + falsePos)
+        confusionStats.recall = truePos / (truePos + falseNeg)
+        confusionStats.fScore = (
+            2 * confusionStats.precision * confusionStats.recall
+        ) / (confusionStats.precision + confusionStats.recall)
+
+        confusionStats.roomLabel = RoomCount.getLabelFromIdx(i)
+
+        classConfusionStatsList.append(confusionStats)
 
     accuracy /= classes
-    precision /= classes
-    recall /= classes
-    fScore /= classes
 
-    return ConfusionStats(accuracy, recall, precision, fScore, confusionMat)
+    return ConfusionStats(accuracy, classConfusionStatsList, confusionMat)
 
 
 def generateFolds(data: np.ndarray, numFolds: int = 10) -> ConfusionStats:
@@ -92,7 +107,7 @@ def crossValidate(data: np.ndarray):
 
         confusionMats.append(evaluation(testData, decisionTree))
 
-    overallConfusionMat = np.sum(confusionMats, axis=0)
+    overallConfusionMat = np.sum(confusionMats, axis=0) / NUM_CROSS_VALIDATION_FOLDS
     return confusionStats(overallConfusionMat)
 
 
@@ -108,4 +123,11 @@ def crossValidateDataset(dataset: np.ndarray):
 
 
 if __name__ == "__main__":
-    crossValidateDataset()
+    cleanDataset = loadRawData(DEFAULT_CLEAN_DATASET_PATH)
+    noisyDataset = loadRawData(DEFAULT_NOISY_DATASET_PATH)
+
+    print("Clean dataset stuff:")
+    crossValidateDataset(cleanDataset)
+    print("")
+    print("Noisy dataset stuff:")
+    crossValidateDataset(noisyDataset)

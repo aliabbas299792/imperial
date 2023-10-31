@@ -1,3 +1,4 @@
+from common import loadRawData, DEFAULT_CLEAN_DATASET_PATH
 from decisionTree import decisionTreeLearning
 
 import time
@@ -72,4 +73,7 @@ def generateVisualisations(dataset: np.ndarray):
 
 
 if __name__ == "__main__":
-    generateVisualisations()
+    # when run from here will only show visualisation from the clean dataset
+    # for more options use tool.py
+    cleanDataset = loadRawData(DEFAULT_CLEAN_DATASET_PATH)
+    generateVisualisations(cleanDataset)
