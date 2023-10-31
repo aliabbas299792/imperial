@@ -42,7 +42,11 @@ def evaluation(testData: np.ndarray, decisionTree: InternalNode) -> np.ndarray:
 def confusionStats(confusionMat: np.ndarray) -> ConfusionStats:
     classes = NUM_ROOMS
 
-    stats = ConfusionStats()
+    accuracy = 0
+    precision = 0
+    recall = 0
+    fScore = 0
+
     for i in range(classes):
         truePos = confusionMat[i][i]
         trueNeg = 0
@@ -59,17 +63,20 @@ def confusionStats(confusionMat: np.ndarray) -> ConfusionStats:
                 elif actualIdx == i and predictIdx != i:
                     falseNeg += predictions
 
-        stats.accuracy += (
-            (truePos + trueNeg) / (truePos + trueNeg + falsePos + falseNeg)
-        ) / classes
-        stats.precision += (truePos / (truePos + falsePos)) / classes
-        stats.recall += (truePos / (truePos + falseNeg)) / classes
-        stats.fScore += (
-            2 * ((stats.precision * stats.recall) / (stats.precision + stats.recall))
-        ) / classes
+        precision_here = truePos / (truePos + falsePos)
+        recall_here = truePos / (truePos + falseNeg)
 
-    stats.confusionMat = confusionMat
-    return stats
+        accuracy += (truePos + trueNeg) / (truePos + trueNeg + falsePos + falseNeg)
+        precision += precision_here
+        recall += recall_here
+        fScore += (2 * precision_here * recall_here) / (precision_here + recall_here)
+
+    accuracy /= classes
+    precision /= classes
+    recall /= classes
+    fScore /= classes
+
+    return ConfusionStats(accuracy, recall, precision, fScore, confusionMat)
 
 
 def generateFolds(data: np.ndarray, numFolds: int = 10) -> ConfusionStats:
