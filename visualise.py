@@ -1,7 +1,7 @@
-from loading import loadRawData
 from decisionTree import decisionTreeLearning
 
 import time
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -56,15 +56,14 @@ def plot_tree(node, ax, x=300, y=300, depth=0):
         plot_tree(node.getRight(), ax, x + hx, y - hy, depth + 1)
 
 
-def main():
-    cleanData, noisyData = loadRawData()
-
+def generateVisualisations(dataset: np.ndarray):
     startTime = time.perf_counter()
 
-    node, depth = decisionTreeLearning(cleanData)
+    node, depth = decisionTreeLearning(dataset)
 
     fig, ax = plt.subplots()
     plot_tree(node, ax)
+    print(f"The maximum depth of the tree was: {depth}")
     print(f"Time elapsed: {time.perf_counter() - startTime}s")
 
     plt.axis("off")
@@ -73,4 +72,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    generateVisualisations()

@@ -1,7 +1,6 @@
 from common import NUM_CROSS_VALIDATION_FOLDS, NUM_ROOMS
 from decisionTree import decisionTreeLearning
 from dataclasses import dataclass
-from loading import loadRawData
 from nodes import InternalNode
 
 import numpy as np
@@ -97,19 +96,16 @@ def crossValidate(data: np.ndarray):
     return confusionStats(overallConfusionMat)
 
 
-def main():
+def crossValidateDataset(dataset: np.ndarray):
     startTime = time.perf_counter()
 
-    cleanData, noisyData = loadRawData()
+    stats = crossValidate(dataset)
 
-    statsClean = crossValidate(cleanData)
-    statsNoisy = crossValidate(noisyData)
-
-    print(f"Clean stats: {statsClean}")
-    print(f"Noisy stats: {statsNoisy}")
+    print(f"Decision tree stats: {stats}")
     print(f"Time elapsed: {time.perf_counter() - startTime}s")
+
     print(f"For {NUM_CROSS_VALIDATION_FOLDS} folds")
 
 
 if __name__ == "__main__":
-    main()
+    crossValidateDataset()
