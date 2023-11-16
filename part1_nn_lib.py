@@ -220,13 +220,20 @@ class LinearLayer(Layer):
             - n_in {int} -- Number (or dimension) of inputs.
             - n_out {int} -- Number (or dimension) of outputs.
         """
+
+        """
+       Constructor: In the constructor, initialise the attributes you need for this class. In particular, NumPy
+arrays representing the learnable parameters of the layer, initialized in a sensible manner (hint: you
+can use the provided xavier_init function). Use the attributes _W, _b to refer to your weights matrix
+and bias respectively.
+        """
         self.n_in = n_in
         self.n_out = n_out
-
+        
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._W = None
+        self._W = xavier_init((n_in,n_out),1.0)
         self._b = None
 
         self._cache_current = None
@@ -253,7 +260,7 @@ class LinearLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        return (np.matmul(x,self._W) + self._b)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
