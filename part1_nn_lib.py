@@ -99,13 +99,13 @@ class SigmoidLayer(Layer):
     """
 
     def __init__(self):
-        """
+        """ 
         Constructor of the Sigmoid layer.
         """
-        self._cache_current = None
+        self._cache_current = 0
 
     def forward(self, x):
-        """
+        """ 
         Performs forward pass through the Sigmoid layer.
 
         Logs information needed to compute gradient at a later stage in
@@ -120,11 +120,18 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        self._cache_current = x
+        A = np.array([])
+        A[0] = np.matmul(self._W, x) + self._B
+        L = [np.matmul(self._W, i) + self._B for i in x]
+        return [ 1/(1 +  np.exp(-( self._W  ))) ]
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
+
+    def _handle(self, multiplier, x):
+        return np.matmul(multiplier, x) + self._B
 
     def backward(self, grad_z):
         """
