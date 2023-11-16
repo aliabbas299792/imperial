@@ -326,7 +326,23 @@ class MultiLayerNetwork(object):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._layers = None
+        
+        self._layers = np.zeros((len(neurons),))
+        n_input = input_dim
+        for i in range(len(neurons)):
+            n_output = neurons[i]
+
+            LayerConstructor: Layer = LinearLayer
+            if i >= len(activations):
+                LayerConstructor = LinearLayer
+            elif activations[i] == "relu":
+                LayerConstructor = ReluLayer
+            elif activations[i] == "sigmoid":
+                LayerConstructor = SigmoidLayer
+
+            self._layers[i] = LayerConstructor(n_input, neurons[i])
+            n_input = n_output
+        
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
@@ -345,7 +361,10 @@ class MultiLayerNetwork(object):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        return np.zeros((1, self.neurons[-1])) # Replace with your own code
+        
+        for i in range(len(self.neurons)):
+            x = self._layers[i].forward(x)
+        return x
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -369,7 +388,10 @@ class MultiLayerNetwork(object):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        
+        for i in reversed(range(len(self.neurons))):
+            grad_z = self._layers[i].backward(grad_z)
+        return grad_z
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -386,7 +408,9 @@ class MultiLayerNetwork(object):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        
+        for i in range(len(self.neurons)):
+            self._layers[i].update_params(learning_rate)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
