@@ -102,7 +102,8 @@ class SigmoidLayer(Layer):
         """ 
         Constructor of the Sigmoid layer.
         """
-        self._cache_current = 0
+        self._W = None
+        self._cache_current = np.array([])
 
     def forward(self, x):
         """ 
@@ -121,17 +122,23 @@ class SigmoidLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         self._cache_current = x
-        A = np.array([])
-        A[0] = np.matmul(self._W, x) + self._B
-        L = [np.matmul(self._W, i) + self._B for i in x]
-        return [ 1/(1 +  np.exp(-( self._W  ))) ]
+        M = self._W.shape
+        self._cache_current[0] = self._sigmoid(np.matmul(X, self._W[0]) + self._B[0])
+        return self._recruse(x, self._cache_current.shape - 1)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def _handle(self, multiplier, x):
-        return np.matmul(multiplier, x) + self._B
+    def _recurse(X, index):
+        if index == 0:
+            return self._cache_current[-1]
+
+        self._cache_current[-index] = self._sigmoid(np.matmul(X, self._cache_current[-index -1]) + self._B[-index])
+        return self._recurse(X, index - 1)
+
+    def _sigmoid(self, input):
+        return [1 / (1 + np.exp(-i)) for i in input]
 
     def backward(self, grad_z):
         """
@@ -184,11 +191,25 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        self._cache_current = x
+        M = self._W.shape
+        self._cache_current[0] = self._relu(np.matmul(X, self._W[0]) + self._B[0])
+        return self._recruse(x, self._cache_current.shape - 1)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
+
+    def _recurse(X, index):
+        if index == 0:
+            return self._cache_current[-1]
+
+        self._cache_current[-index] = self._relu(np.matmul(X, self._cache_current[-index -1]) + self._B[-index])
+        return self._recurse(X, index - 1)
+
+    def _relu(self, input):
+
+        return [np.max(0, i) for i in input]
 
     def backward(self, grad_z):
         """
@@ -240,9 +261,10 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._W = xavier_init((n_in,n_out),1.0)
-        self._b = None
+        self._W = xavier_init((n_in,n_out))
+        self._b = np.zeros(n_out)
 
+        #Will change
         self._cache_current = None
         self._grad_W_current = None
         self._grad_b_current = None
@@ -267,11 +289,15 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        return (np.matmul(x,self._W) + self._b)
+        out = np.matmul(self._W, x) + self._b
+        self._cache_current = x, out
+
+        return out
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
+
 
     def backward(self, grad_z):
         """
@@ -290,7 +316,13 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+
+        inputs, _ = self._cache_current
+        
+        self._grad_W_current = np.dot(grad_z, inputs.T)
+        self._grad_b_current = np.dot((1/ grad_z.shape[0]) * np.ones(grad_z.shape[0]), grad_z)
+
+        return np.dot(grad_z, self._W.T)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
