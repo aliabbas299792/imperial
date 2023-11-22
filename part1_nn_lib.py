@@ -186,9 +186,9 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = [[self._reul(i) for i in j] for j in x]
+        outputs = [[self._relu(i) for i in j] for j in x]
         self.cache_current = x, outputs
-        return [[self._reul(i) for i in j] for j in x]
+        return [[self._relu(i) for i in j] for j in x]
 
         #######################################################################
         #                       ** END OF YOUR CODE **
