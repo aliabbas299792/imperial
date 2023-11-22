@@ -122,6 +122,7 @@ class SigmoidLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         outputs = [[self._sigmoid(i) for i in j] for j in x]
+        self._cache_current = outputs
         return outputs
 
         #######################################################################
@@ -187,7 +188,7 @@ class ReluLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         outputs = [[self._relu(i) for i in j] for j in x]
-        self.cache_current = x, outputs
+        self._cache_current = x, outputs
         return [[self._relu(i) for i in j] for j in x]
 
         #######################################################################
