@@ -256,10 +256,10 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._W = xavier_init((n_in,n_out))
+        self._W = xavier_init((n_in, n_out))
         self._b = np.zeros(n_out)
 
-        #Will change
+        
         self._cache_current = None
         self._grad_W_current = None
         self._grad_b_current = None
@@ -315,7 +315,7 @@ and bias respectively.
         inputs, _ = self._cache_current
         
         self._grad_W_current = np.dot(grad_z, inputs.T)
-        self._grad_b_current = np.dot((1/ grad_z.shape[0]) * np.ones(grad_z.shape[0]), grad_z)
+        self._grad_b_current = np.dot(np.ones(grad_z.shape[0]).T, grad_z)
 
         return np.dot(grad_z, self._W.T)
 
@@ -334,7 +334,8 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        self._W -= learning_rate * self._grad_W_current
+        self._B -= learning_rate * self._grad_B_current
 
         #######################################################################
         #                       ** END OF YOUR CODE **
