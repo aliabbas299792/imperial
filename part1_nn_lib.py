@@ -198,7 +198,9 @@ class ReluLayer(Layer):
 
 
     def _relu(self, input):
-        return np.max(0, input)
+        if input > 0:
+            return input
+        return 0
 
     def backward(self, grad_z):
         """
@@ -408,9 +410,13 @@ class MultiLayerNetwork(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        for i in range(len(self.neurons)):
-            x = self._layers[i].forward(x)
+        for layer in self._layers:
+            x = layer.forward(x)        
         return x
+
+        """for i in range(len(self.neurons)):
+            x = self._layers[i].forward(x)
+        return x"""
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -541,9 +547,12 @@ class Trainer(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
         
-        indices = np.array(input_dataset.shape[0])
-        np.random.shuffle(indices)
-        return input_dataset[indices], target_dataset[indices]
+        
+        shuffled_inputs = input_dataset
+        shuffled_target_dataset = target_dataset
+        np.random.shuffle(shuffled_inputs)
+        np.random.shuffle(shuffled_target_dataset)
+        return shuffled_inputs, shuffled_target_dataset
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -576,11 +585,11 @@ class Trainer(object):
         for _ in range(self.nb_epoch):
             local_input, local_target = input_dataset, target_dataset
             
-            if self.shuffle:
+            if self.shuffle_flag:
                 #TODO: Check if should be _shuffle() and not shuffle()
                 local_input, local_target = self.shuffle(local_input, local_target)
 
-            indices = np.array(local_input.shape[0])
+            indices = np.array([i for i in range(local_input.shape[0])])
             batch_indices = np.array_split(indices, self.batch_size)
             for bis in batch_indices:
               input = local_input[bis]
@@ -593,7 +602,7 @@ class Trainer(object):
               self.network.update_params(self.learning_rate)
 
         #######################################################################
-        #                       ** END OF YOUR CODE **
+        #                       ** END OF YOUR CODE **                        #
         #######################################################################
 
     def eval_loss(self, input_dataset, target_dataset):
