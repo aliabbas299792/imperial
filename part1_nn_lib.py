@@ -151,7 +151,7 @@ class SigmoidLayer(Layer):
         #######################################################################
         outputs = self._cache_current
         grad_x = np.vectorize(self._sigmoid)(outputs)
-        return np.matmul(grad_z, grad_x)
+        return grad_z * grad_x
 
 
         #######################################################################
