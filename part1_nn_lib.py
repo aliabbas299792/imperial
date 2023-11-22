@@ -102,8 +102,8 @@ class SigmoidLayer(Layer):
         """ 
         Constructor of the Sigmoid layer.
         """
-        self._W = None
-        self._cache_current = np.array([])
+        self._W = xavier_init()
+        self._cache_current = None
 
     def forward(self, x):
         """ 
@@ -121,24 +121,16 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._cache_current = x
-        M = self._W.shape
-        self._cache_current[0] = self._sigmoid(np.matmul(X, self._W[0]) + self._B[0])
-        return self._recruse(x, self._cache_current.shape - 1)
+        outputs = [[self._sigmoid(i) for i in j] for j in x]
+        return outputs
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def _recurse(X, index):
-        if index == 0:
-            return self._cache_current[-1]
-
-        self._cache_current[-index] = self._sigmoid(np.matmul(X, self._cache_current[-index -1]) + self._B[-index])
-        return self._recurse(X, index - 1)
 
     def _sigmoid(self, input):
-        return [1 / (1 + np.exp(-i)) for i in input]
+        return (1 + np.exp(-input))
 
     def backward(self, grad_z):
         """
@@ -157,7 +149,10 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        outputs = self._cache_current
+        grad_x = [[(self._sigmoid(i) * (1 - self._sigmoid(i))) for i in j] for j in outputs]
+        return np.matmul(grad_z, grad_x)
+
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -191,25 +186,18 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        self._cache_current = x
-        M = self._W.shape
-        self._cache_current[0] = self._relu(np.matmul(X, self._W[0]) + self._B[0])
-        return self._recruse(x, self._cache_current.shape - 1)
+        outputs = [[self._reul(i) for i in j] for j in x]
+        self.cache_current = x, outputs
+        return [[self._reul(i) for i in j] for j in x]
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def _recurse(X, index):
-        if index == 0:
-            return self._cache_current[-1]
 
-        self._cache_current[-index] = self._relu(np.matmul(X, self._cache_current[-index -1]) + self._B[-index])
-        return self._recurse(X, index - 1)
 
     def _relu(self, input):
-
-        return [np.max(0, i) for i in input]
+        return np.max(0, input)
 
     def backward(self, grad_z):
         """
@@ -228,12 +216,18 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        pass
+        x, output = self._cache_current
+        grad_x = [[self._getgradient(i) for i in j] for j in output]
+        return np.matmul(grad_z, grad_x)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
+    def _getgradient(self, i):
+        if i > 0:
+            return 1
+        return 0
 
 class LinearLayer(Layer):
     """
