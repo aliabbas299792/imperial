@@ -619,7 +619,7 @@ class Trainer(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
         
-        nn_output = self.network.forward(input_dataset, target_dataset)
+        nn_output = self.network.forward(input_dataset)
         return self._loss_layer.forward(nn_output, target_dataset)
 
         #######################################################################
@@ -729,7 +729,6 @@ def example_main():
     )
 
     trainer.train(x_train_pre, y_train)
-    print("we here now training done")
     print("Train loss = ", trainer.eval_loss(x_train_pre, y_train))
     print("Validation loss = ", trainer.eval_loss(x_val_pre, y_val))
 
