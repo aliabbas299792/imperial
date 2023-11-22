@@ -187,18 +187,19 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = [[self._relu(i) for i in j] for j in x]
+        outputs = np.vectorize(self._relu)(x)
+        
         self._cache_current = x, outputs
-        return [[self._relu(i) for i in j] for j in x]
+        return outputs
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
 
-
-    def _relu(self, input):
-        return np.max(0, input)
+    @staticmethod
+    def _relu(input):
+        return np.max([0, input])
 
     def backward(self, grad_z):
         """
@@ -217,15 +218,16 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        x, output = self._cache_current
-        grad_x = [[self._getgradient(i) for i in j] for j in output]
-        return np.matmul(grad_z, grad_x)
+        x, A_mat = self._cache_current # A_mat is the matrix after having activation applied
+        grad_x = np.vectorize(self._getgradient)(x)
+        return grad_z * grad_x
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def _getgradient(self, i):
+    @staticmethod
+    def _getgradient(i):
         if i > 0:
             return 1
         return 0
@@ -284,7 +286,7 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        out = np.matmul(self._W, x) + self._b
+        out = np.matmul(self._W.T, x.T).T + self._b
         self._cache_current = x, out
 
         return out
@@ -314,8 +316,8 @@ and bias respectively.
 
         inputs, _ = self._cache_current
         
-        self._grad_W_current = np.dot(grad_z, inputs.T)
-        self._grad_b_current = np.dot(np.ones(grad_z.shape[0]).T, grad_z)
+        self._grad_W_current = np.matmul(inputs.T, grad_z)
+        self._grad_b_current = np.sum(grad_z, axis=0) # equivalent of multiplying by 1^T vector
 
         return np.dot(grad_z, self._W.T)
 
@@ -335,7 +337,7 @@ and bias respectively.
         #                       ** START OF YOUR CODE **
         #######################################################################
         self._W -= learning_rate * self._grad_W_current
-        self._B -= learning_rate * self._grad_B_current
+        self._b -= learning_rate * self._grad_b_current
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -374,18 +376,18 @@ class MultiLayerNetwork(object):
         for i in range(len(neurons)):
             n_output = neurons[i]
 
-            LayerConstructor: Layer = LinearLayer
+            linearLayer = LinearLayer(n_input, neurons[i])
+            nonLinearLayer = None
             if i >= len(activations):
-                #LayerConstructor = LinearLayer
-                self._layers.append(LinearLayer(n_input, neurons[i]))
+                pass # stick with no non linear layer
             elif activations[i] == "relu":
-                #LayerConstructor = ReluLayer
-                self._layers.append(ReluLayer())
+                nonLinearLayer = ReluLayer()
             elif activations[i] == "sigmoid":
-                #LayerConstructor = SigmoidLayer
-                self._layers.append(SigmoidLayer())
+                nonLinearLayer = SigmoidLayer()
 
-            #self._layers[i] = LayerConstructor(n_input, neurons[i])
+            self._layers.append(linearLayer)
+            if nonLinearLayer:
+                self._layers.append(nonLinearLayer)
             n_input = n_output
 
         #######################################################################
@@ -408,8 +410,8 @@ class MultiLayerNetwork(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        for i in range(len(self.neurons)):
-            x = self._layers[i].forward(x)
+        for layer in self._layers:
+            x = layer.forward(x)
         return x
 
         #######################################################################
@@ -435,8 +437,8 @@ class MultiLayerNetwork(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        for i in reversed(range(len(self.neurons))):
-            grad_z = self._layers[i].backward(grad_z)
+        for layer in self._layers[::-1]:
+            grad_z = layer.backward(grad_z)
         return grad_z
 
         #######################################################################
@@ -523,6 +525,10 @@ class Trainer(object):
         #######################################################################
 
     @staticmethod
+    def _generate_indices(data):
+        return np.arange(len(data))
+
+    @staticmethod
     def shuffle(input_dataset, target_dataset):
         """
         Returns shuffled versions of the inputs.
@@ -541,7 +547,7 @@ class Trainer(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
         
-        indices = np.array(input_dataset.shape[0])
+        indices = Trainer._generate_indices(input_dataset)
         np.random.shuffle(indices)
         return input_dataset[indices], target_dataset[indices]
 
@@ -577,10 +583,9 @@ class Trainer(object):
             local_input, local_target = input_dataset, target_dataset
             
             if self.shuffle:
-                #TODO: Check if should be _shuffle() and not shuffle()
                 local_input, local_target = self.shuffle(local_input, local_target)
 
-            indices = np.array(local_input.shape[0])
+            indices = Trainer._generate_indices(local_input)
             batch_indices = np.array_split(indices, self.batch_size)
             for bis in batch_indices:
               input = local_input[bis]
@@ -724,6 +729,7 @@ def example_main():
     )
 
     trainer.train(x_train_pre, y_train)
+    print("we here now training done")
     print("Train loss = ", trainer.eval_loss(x_train_pre, y_train))
     print("Validation loss = ", trainer.eval_loss(x_val_pre, y_val))
 
