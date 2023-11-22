@@ -132,7 +132,7 @@ class SigmoidLayer(Layer):
 
     @staticmethod
     def _sigmoid(input):
-        return (1 + np.exp(-input))
+        return 1/(1 + np.exp(-input))
     
     @staticmethod
     def _sigmoid_grad(x):
@@ -207,7 +207,7 @@ class ReluLayer(Layer):
 
     @staticmethod
     def _relu_grad(x):
-        return 1 if x > 0 else 0
+        return 1 if x >= 0 else 0
 
     def backward(self, grad_z):
         """
