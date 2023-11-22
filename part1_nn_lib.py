@@ -102,7 +102,6 @@ class SigmoidLayer(Layer):
         """ 
         Constructor of the Sigmoid layer.
         """
-        self._W = xavier_init()
         self._cache_current = None
 
     def forward(self, x):
@@ -121,8 +120,9 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = [[self._sigmoid(i) for i in j] for j in x]
-        self._cache_current = outputs
+        
+        outputs = np.vectorize(self._sigmoid)(x)
+        self._cache_current = x
         return outputs
 
         #######################################################################
@@ -130,8 +130,13 @@ class SigmoidLayer(Layer):
         #######################################################################
 
 
-    def _sigmoid(self, input):
+    @staticmethod
+    def _sigmoid(input):
         return (1 + np.exp(-input))
+    
+    @staticmethod
+    def _sigmoid_grad(x):
+        return SigmoidLayer._sigmoid(x) * (1 - SigmoidLayer._sigmoid(x))
 
     def backward(self, grad_z):
         """
@@ -150,10 +155,9 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = self._cache_current
-        grad_x = [[(self._sigmoid(i) * (1 - self._sigmoid(i))) for i in j] for j in outputs]
-        return np.matmul(grad_z, grad_x)
 
+        grad_x = np.vectorize(self._sigmoid_grad)(self._cache_current)
+        return grad_z * grad_x
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -187,9 +191,9 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = np.vectorize(self._relu)(x)
         
-        self._cache_current = x, outputs
+        outputs = np.vectorize(self._relu)(x)
+        self._cache_current = x
         return outputs
 
         #######################################################################
@@ -200,6 +204,10 @@ class ReluLayer(Layer):
     @staticmethod
     def _relu(input):
         return np.max([0, input])
+
+    @staticmethod
+    def _relu_grad(x):
+        return 1 if x > 0 else 0
 
     def backward(self, grad_z):
         """
@@ -218,19 +226,13 @@ class ReluLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        x, A_mat = self._cache_current # A_mat is the matrix after having activation applied
-        grad_x = np.vectorize(self._getgradient)(x)
+
+        grad_x = np.vectorize(self._relu_grad)(self._cache_current)
         return grad_z * grad_x
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
-
-    @staticmethod
-    def _getgradient(i):
-        if i > 0:
-            return 1
-        return 0
 
 class LinearLayer(Layer):
     """
@@ -698,7 +700,7 @@ class Preprocessor(object):
 def example_main():
     input_dim = 4
     neurons = [16, 3]
-    activations = ["relu", "identity"]
+    activations = ["sigmoid", "relu"]
     net = MultiLayerNetwork(input_dim, neurons, activations)
 
     dat = np.loadtxt("iris.dat")
