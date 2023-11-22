@@ -102,7 +102,6 @@ class SigmoidLayer(Layer):
         """ 
         Constructor of the Sigmoid layer.
         """
-        self._W = xavier_init()
         self._cache_current = None
 
     def forward(self, x):
@@ -121,7 +120,7 @@ class SigmoidLayer(Layer):
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        outputs = [[self._sigmoid(i) for i in j] for j in x]
+        outputs = np.vectorize(self._sigmoid)(x)
         self._cache_current = outputs
         return outputs
 
@@ -151,7 +150,7 @@ class SigmoidLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         outputs = self._cache_current
-        grad_x = [[(self._sigmoid(i) * (1 - self._sigmoid(i))) for i in j] for j in outputs]
+        grad_x = np.vectorize(self._sigmoid)(outputs)
         return np.matmul(grad_z, grad_x)
 
 
