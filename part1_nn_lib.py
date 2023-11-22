@@ -369,20 +369,23 @@ class MultiLayerNetwork(object):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        self._layers = np.zeros((len(neurons),))
+        self._layers = []
         n_input = input_dim
         for i in range(len(neurons)):
             n_output = neurons[i]
 
             LayerConstructor: Layer = LinearLayer
             if i >= len(activations):
-                LayerConstructor = LinearLayer
+                #LayerConstructor = LinearLayer
+                self._layers.append(LinearLayer(n_input, neurons[i]))
             elif activations[i] == "relu":
-                LayerConstructor = ReluLayer
+                #LayerConstructor = ReluLayer
+                self._layers.append(ReluLayer())
             elif activations[i] == "sigmoid":
-                LayerConstructor = SigmoidLayer
+                #LayerConstructor = SigmoidLayer
+                self._layers.append(SigmoidLayer())
 
-            self._layers[i] = LayerConstructor(n_input, neurons[i])
+            #self._layers[i] = LayerConstructor(n_input, neurons[i])
             n_input = n_output
 
         #######################################################################
@@ -397,6 +400,7 @@ class MultiLayerNetwork(object):
             x {np.ndarray} -- Input array of shape (batch_size, input_dim).
 
         Returns:
+    
             {np.ndarray} -- Output array of shape (batch_size,
                 #_neurons_in_final_layer)
         """
@@ -573,7 +577,8 @@ class Trainer(object):
             local_input, local_target = input_dataset, target_dataset
             
             if self.shuffle:
-                local_input, local_target = self._shuffle(local_input, local_target)
+                #TODO: Check if should be _shuffle() and not shuffle()
+                local_input, local_target = self.shuffle(local_input, local_target)
 
             indices = np.array(local_input.shape[0])
             batch_indices = np.array_split(indices, self.batch_size)
