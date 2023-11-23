@@ -90,7 +90,11 @@ class Regressor():
         #######################################################################
 
         #I think this uses functions from part 1 but which layer do we use?
-        #layer.forward_pass(x) 
+        #new_x = layer.forward_pass(x)
+        #loss = trainer.eval_loss(x,y) 
+        #backward_pass()    
+        #update_params()
+        #optional functions and which trainer to use?
 
 
         X, Y = self._preprocessor(x, y = y, training = True) # Do not forget
