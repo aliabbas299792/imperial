@@ -60,9 +60,8 @@ class Regressor():
         # Replace this code with your own
         # Return preprocessed x and y, return None for y if it was None
 
-        #reading from the csv file
+        #reading from the csv file but unsure what default_value to use
         df = pd.read_csv('housing.csv')
-        #what should the default_value be
         #newdf = df.fillna(default_value) 
 
         return x, (y if isinstance(y, pd.DataFrame) else None)
