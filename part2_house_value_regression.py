@@ -59,6 +59,12 @@ class Regressor():
 
         # Replace this code with your own
         # Return preprocessed x and y, return None for y if it was None
+
+        #reading from the csv file
+        df = pd.read_csv('housing.csv')
+        #what should the default_value be
+        #newdf = df.fillna(default_value) 
+
         return x, (y if isinstance(y, pd.DataFrame) else None)
 
         #######################################################################
@@ -83,6 +89,10 @@ class Regressor():
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
+
+        #I think this uses functions from part 1 but which layer do we use?
+        #layer.forward_pass(x) 
+
 
         X, Y = self._preprocessor(x, y = y, training = True) # Do not forget
         return self
