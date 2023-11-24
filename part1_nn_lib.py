@@ -84,7 +84,7 @@ class CrossEntropyLossLayer(Layer):
         probs = self.softmax(inputs)
         self._cache_current = y_target, probs
 
-        out = -1 / n_obs * np.sum(y_target * np.log(probs))
+        out = -1 / n_obs * np.sum(y_target * np.log(probs, where=(probs != 0)))
         return out
 
     def backward(self):
