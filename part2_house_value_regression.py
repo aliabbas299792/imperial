@@ -87,16 +87,23 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
+        IsYADataframe = isinstance(y, pd.DataFrame)
+
         # Replace this code with your own
         # Return preprocessed x and y, return None for y if it was None
 
-        median_filled_data = self._fill_numeric_empty_with_medians(x)
+        input_x = x
+        input_y = y
+
+        median_filled_data = self._fill_numeric_empty_with_medians(input_x)
         flattened_data = self._flatten_categorical_data(median_filled_data)
 
-        preprocessed_x = flattened_data
-        preprocessed_y = y  # not done anything to y yet
+        preprocessed_x = flattened_data.to_numpy()
+        preprocessed_y = None
+        if IsYADataframe:
+            preprocessed_y = input_y.to_numpy()
 
-        return preprocessed_x, (preprocessed_y if isinstance(y, pd.DataFrame) else None)
+        return preprocessed_x, preprocessed_y
 
         #######################################################################
         #                       ** END OF YOUR CODE **
