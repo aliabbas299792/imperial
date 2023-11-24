@@ -89,11 +89,20 @@ class Regressor():
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        #I think this uses functions from part 1 but which layer do we use?
-        #new_x = layer.forward_pass(x)
-        #loss = trainer.eval_loss(x,y) 
-        #backward_pass()    
-        #update_params()
+        #I think this uses functions from part 1
+        # which layer do we use?
+        #for i in range self.nb_epoch: ?
+        #input_x = x
+        #new_x = layer.forward_pass(input_x)
+        #loss = trainer.eval_loss(x,y) not sure if this is right actually
+        #alternative way for computing loss:
+        #forward_loss = 0
+        #for i in range batch_size:
+        #    forward_loss += 0.5*(new_x[i] - y[i])*(new_x[i] - y[i])
+        
+        #grad_loss_wrt_to_inputs = layer.backward_pass(forward_loss) 
+        #need to find out what learning_rate is
+        #layer.update_params(learning_rate)
         #optional functions and which trainer to use?
 
 
@@ -123,7 +132,23 @@ class Regressor():
         #######################################################################
 
         X, _ = self._preprocessor(x, training = False) # Do not forget
-        pass
+        #what do they mean do not forget??
+        #X is the preprocessed input array
+        #regressor = self.fit(X,y)
+        #remove pass
+        #return predicted value for given input       
+        # MSE = 0
+        # batch_size,_ = shape(X)
+        # for i in range(batch_size):
+        #     MSE+= (y[i] - y_hat[i])*(y[i] - y_hat[i])
+        # MSE = MSE * (1/batch_size)
+        # #cross-entropy
+        # #define C
+        # L = 0
+        # for i in range(batch_size):
+        #     for c range(C):
+
+        return forward_pass(X)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
