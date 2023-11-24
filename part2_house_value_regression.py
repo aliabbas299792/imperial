@@ -2,7 +2,7 @@ import torch
 import pickle
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import mean_squared_error
 from sklearn.preprocessing import LabelBinarizer
 
 
@@ -231,9 +231,10 @@ class Regressor:
         #######################################################################
 
         X, Y = self._preprocessor(x, y = y, training = False) # Do not forget
-        #predict(X)
-        cross_val = cross_val_score(self,X,y,scoring="neg_mean_squared_error",cv = 10)
-        return 0 # Replace this code with your own
+        pred_y = self.predict(X)
+        mse = mean_squared_error(y.to_numpy(),pred_y)
+        rmse = np.sqrt(mse)
+        return rmse
 
         #######################################################################
         #                       ** END OF YOUR CODE **
