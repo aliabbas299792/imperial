@@ -2,6 +2,7 @@ import torch
 import pickle
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import cross_val_score
 
 class Regressor():
 
@@ -173,6 +174,8 @@ class Regressor():
         #######################################################################
 
         X, Y = self._preprocessor(x, y = y, training = False) # Do not forget
+        #predict(X)
+        cross_val = cross_val_score(self,X,y,scoring="neg_mean_squared_error",cv = 10)
         return 0 # Replace this code with your own
 
         #######################################################################
