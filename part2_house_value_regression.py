@@ -29,6 +29,9 @@ class Regressor:
         self.input_size = X.shape[1]
         self.output_size = 1
         self.nb_epoch = nb_epoch
+
+        self.input_columns = None
+        self.input_columns_types = None
         return
 
         #######################################################################
@@ -64,6 +67,14 @@ class Regressor:
 
         return curr_df
 
+    def _recover_dataframe_from_input_numpy_array(self, input_x: np.ndarray):
+        df = pd.DataFrame(input_x, columns=self.input_columns)
+
+        for col, t in zip(self.input_columns, self.input_columns_types):
+            df[col] = df[col].astype(t)
+
+        return df
+
     def _preprocessor(self, x, y=None, training=False):
         """
         Preprocess input of the network.
@@ -98,10 +109,18 @@ class Regressor:
         median_filled_data = self._fill_numeric_empty_with_medians(input_x)
         flattened_data = self._flatten_categorical_data(median_filled_data)
 
+        self.input_columns = flattened_data.columns
+        self.input_columns_types = [
+            flattened_data[col].dtype for col in self.input_columns
+        ]
+
         preprocessed_x = flattened_data.to_numpy()
         preprocessed_y = None
         if IsYADataframe:
             preprocessed_y = input_y.to_numpy()
+
+        # i.e we can recover the original dataframe from the numpy array since we've saved both column names and datatypes
+        # print(flattened_data.equals(self._recover_dataframe_from_input_numpy_array(preprocessed_x)))
 
         return preprocessed_x, preprocessed_y
 
