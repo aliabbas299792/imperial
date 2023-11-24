@@ -2,18 +2,19 @@ import torch
 import pickle
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import LabelBinarizer
 
-class Regressor():
 
-    def __init__(self, x, nb_epoch = 1000):
+class Regressor:
+    def __init__(self, x, nb_epoch=1000):
         # You can add any input parameters you need
         # Remember to set them with a default value for LabTS tests
-        """ 
+        """
         Initialise the model.
-          
+
         Arguments:
-            - x {pd.DataFrame} -- Raw input data of shape 
-                (batch_size, input_size), used to compute the size 
+            - x {pd.DataFrame} -- Raw input data of shape
+                (batch_size, input_size), used to compute the size
                 of the network.
             - nb_epoch {int} -- number of epochs to train the network.
 
@@ -24,25 +25,54 @@ class Regressor():
         #######################################################################
 
         # Replace this code with your own
-        X, _ = self._preprocessor(x, training = True)
+        X, _ = self._preprocessor(x, training=True)
         self.input_size = X.shape[1]
         self.output_size = 1
-        self.nb_epoch = nb_epoch 
+        self.nb_epoch = nb_epoch
         return
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def _preprocessor(self, x, y = None, training = False):
-        """ 
+    def _flatten_categorical_data(self, dataframe):
+        current_df = dataframe
+
+        # we need to flatten categorical data (assuming strings are all categorical) into their own columns
+        # loop over columns which are potentially strings
+        for col in current_df.select_dtypes(include="object"):
+            # skip any columns which aren't strings
+            if not pd.api.types.is_string_dtype(current_df[col].dtype):
+                continue
+
+            # and we can then binarise the data
+            lb = LabelBinarizer()
+            binarised = lb.fit_transform(current_df[col])
+            lb_dataframe = pd.DataFrame(binarised, columns=lb.classes_)
+            current_df = pd.concat([current_df, lb_dataframe], axis=1).drop(col, axis=1)
+
+        return current_df
+
+    def _fill_numeric_empty_with_medians(self, dataframe):
+        # fill empty values with the median of the column
+        curr_df = dataframe.copy()
+
+        # loop over columns with numeric data
+        for col in curr_df.select_dtypes(include=["number"]):
+            medians = curr_df[col].median()
+            curr_df[col].fillna(medians, inplace=True)
+
+        return curr_df
+
+    def _preprocessor(self, x, y=None, training=False):
+        """
         Preprocess input of the network.
-          
+
         Arguments:
-            - x {pd.DataFrame} -- Raw input array of shape 
+            - x {pd.DataFrame} -- Raw input array of shape
                 (batch_size, input_size).
             - y {pd.DataFrame} -- Raw target array of shape (batch_size, 1).
-            - training {boolean} -- Boolean indicating if we are training or 
+            - training {boolean} -- Boolean indicating if we are training or
                 testing the model.
 
         Returns:
@@ -50,7 +80,7 @@ class Regressor():
               size (batch_size, input_size). The input_size does not have to be the same as the input_size for x above.
             - {torch.tensor} or {numpy.ndarray} -- Preprocessed target array of
               size (batch_size, 1).
-            
+
         """
 
         #######################################################################
@@ -60,17 +90,18 @@ class Regressor():
         # Replace this code with your own
         # Return preprocessed x and y, return None for y if it was None
 
-        #reading from the csv file but unsure what default_value to use
-        df = pd.read_csv('housing.csv')
-        #newdf = df.fillna(default_value) 
+        median_filled_data = self._fill_numeric_empty_with_medians(x)
+        flattened_data = self._flatten_categorical_data(median_filled_data)
 
-        return x, (y if isinstance(y, pd.DataFrame) else None)
+        preprocessed_x = flattened_data
+        preprocessed_y = y  # not done anything to y yet
+
+        return preprocessed_x, (preprocessed_y if isinstance(y, pd.DataFrame) else None)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-        
     def fit(self, x, y):
         """
         Regressor training function
