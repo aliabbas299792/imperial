@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import mean_squared_error
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.metrics import mean_squared_error
 
 
 class Regressor:
@@ -33,6 +34,19 @@ class Regressor:
 
         self.input_columns = None
         self.input_columns_types = None
+
+        neurons = [64, 32, 1]
+        activations = ["relu", "relu", "linear"]
+
+        self.model = MultiLayerNetwork(input_size, neurons, activations)
+        self.trainer = Trainer(self.model,
+                                batch_size=32,
+                                nb_epoch=self.nb_epoch,
+                                learning_rate=0.001,
+                                loss_fun="mse",
+                                shuffle_flag=True,
+        )
+        
         return
 
         #######################################################################
@@ -165,6 +179,13 @@ class Regressor:
 
 
         X, Y = self._preprocessor(x, y = y, training = True) # Do not forget
+        X_np, Y_np = X.values, Y.values
+
+        for epoch in range(self.nb_epoch):
+            nn_output = self.model.forward(X_np)
+            loss = self.trainer._loss_layer.forward(nn_output, Y_np)
+            nn_grad = self.model.backward(grad)
+            self.model.update_params(self.trained.learning_rate)
         return self
 
         #######################################################################
