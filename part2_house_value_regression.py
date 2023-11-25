@@ -5,6 +5,7 @@ import pandas as pd
 import sklearn
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import mean_squared_error
+from part1_nn_lib.py import MultiLayerNetwork, Trainer
 
 
 class Regressor:
