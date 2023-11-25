@@ -253,8 +253,8 @@ class Regressor:
 
         X, Y = self._preprocessor(x, y = y, training = False) # Do not forget
         pred_y = self.predict(X)
-        mse = mean_squared_error(y.to_numpy(),pred_y)
-        rmse = np.sqrt(mse)
+        rmse = mean_squared_error(y.to_numpy(),pred_y, squared=False)
+        
         return rmse
 
         #######################################################################
