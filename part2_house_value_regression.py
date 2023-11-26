@@ -1,4 +1,4 @@
-#import torch
+# import torch
 import pickle
 import numpy as np
 import pandas as pd
@@ -41,14 +41,15 @@ class Regressor:
         activations = ["relu", "relu", "linear"]
 
         self.model = MultiLayerNetwork(self.input_size, neurons, activations)
-        self.trainer = Trainer(self.model,
-                                batch_size=32,
-                                nb_epoch=self.nb_epoch,
-                                learning_rate=0.001,
-                                loss_fun="mse",
-                                shuffle_flag=True,
+        self.trainer = Trainer(
+            self.model,
+            batch_size=32,
+            nb_epoch=self.nb_epoch,
+            learning_rate=0.001,
+            loss_fun="mse",
+            shuffle_flag=True,
         )
-        
+
         return
 
         #######################################################################
@@ -95,7 +96,9 @@ class Regressor:
 
         return df
 
-    def _preprocessor(self, x: pd.DataFrame, y: Optional[pd.DataFrame]=None, training=False):
+    def _preprocessor(
+        self, x: pd.DataFrame, y: Optional[pd.DataFrame] = None, training=False
+    ):
         """
         Preprocess input of the network.
 
@@ -151,7 +154,7 @@ class Regressor:
         Regressor training function
 
         Arguments:
-            - x {pd.DataFrame} -- Raw input array of shape 
+            - x {pd.DataFrame} -- Raw input array of shape
                 (batch_size, input_size).
             - y {pd.DataFrame} -- Raw output array of shape (batch_size, 1).
 
@@ -164,31 +167,30 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        #I think this uses functions from part 1
+        # I think this uses functions from part 1
         # which layer do we use?
-        #for i in range self.nb_epoch: ?
-        #input_x = x
-        #new_x = layer.forward_pass(input_x)
-        #loss = trainer.eval_loss(x,y) not sure if this is right actually
-        #alternative way for computing loss:
-        #forward_loss = 0
-        #for i in range batch_size:
+        # for i in range self.nb_epoch: ?
+        # input_x = x
+        # new_x = layer.forward_pass(input_x)
+        # loss = trainer.eval_loss(x,y) not sure if this is right actually
+        # alternative way for computing loss:
+        # forward_loss = 0
+        # for i in range batch_size:
         #    forward_loss += 0.5*(new_x[i] - y[i])*(new_x[i] - y[i])
-        
-        #grad_loss_wrt_to_inputs = layer.backward_pass(forward_loss) 
-        #need to find out what learning_rate is
-        #layer.update_params(learning_rate)
-        #optional functions and which trainer to use?
 
+        # grad_loss_wrt_to_inputs = layer.backward_pass(forward_loss)
+        # need to find out what learning_rate is
+        # layer.update_params(learning_rate)
+        # optional functions and which trainer to use?
 
-        X, Y = self._preprocessor(x, y, True) # Do not forget
+        X, Y = self._preprocessor(x, y, True)  # Do not forget
         X_np, Y_np = X, Y
 
         for epoch in range(self.nb_epoch):
             nn_output = self.model.forward(X_np)
             loss = self.trainer._loss_layer.forward(nn_output, Y_np)
             print(f"Loss: {loss}")
-            #TODO: Change grad
+            # TODO: Change grad
             grad = nn_output / loss
             nn_grad = self.model.backward(grad)
             self.model.update_params(self.trainer.learning_rate)
@@ -198,13 +200,12 @@ class Regressor:
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-            
     def predict(self, x: pd.DataFrame):
         """
         Output the value corresponding to an input x.
 
         Arguments:
-            x {pd.DataFrame} -- Raw input array of shape 
+            x {pd.DataFrame} -- Raw input array of shape
                 (batch_size, input_size).
 
         Returns:
@@ -216,12 +217,12 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        #X is the preprocessed input array
-        X, _ = self._preprocessor(x, None) # Do not forget
-        #what do they mean do not forget??
-        #regressor = self.fit(X,y)
-        #remove pass
-        #return predicted value for given input       
+        # X is the preprocessed input array
+        X, _ = self._preprocessor(x, None)  # Do not forget
+        # what do they mean do not forget??
+        # regressor = self.fit(X,y)
+        # remove pass
+        # return predicted value for given input
         # MSE = 0
         # batch_size,_ = shape(X)
         # for i in range(batch_size):
@@ -244,7 +245,7 @@ class Regressor:
         Function to evaluate the model accuracy on a validation dataset.
 
         Arguments:
-            - x {pd.DataFrame} -- Raw input array of shape 
+            - x {pd.DataFrame} -- Raw input array of shape
                 (batch_size, input_size).
             - y {pd.DataFrame} -- Raw output array of shape (batch_size, 1).
 
@@ -258,8 +259,8 @@ class Regressor:
         #######################################################################
 
         pred_y = self.predict(x)
-        rmse = mean_squared_error(y.to_numpy(),pred_y, squared=False)
-        
+        rmse = mean_squared_error(y.to_numpy(), pred_y, squared=False)
+
         return rmse
 
         #######################################################################
@@ -267,39 +268,38 @@ class Regressor:
         #######################################################################
 
 
-def save_regressor(trained_model): 
-    """ 
+def save_regressor(trained_model):
+    """
     Utility function to save the trained regressor model in part2_model.pickle.
     """
     # If you alter this, make sure it works in tandem with load_regressor
-    with open('part2_model.pickle', 'wb') as target:
+    with open("part2_model.pickle", "wb") as target:
         pickle.dump(trained_model, target)
     print("\nSaved model in part2_model.pickle\n")
 
 
-def load_regressor(): 
-    """ 
+def load_regressor():
+    """
     Utility function to load the trained regressor model in part2_model.pickle.
     """
     # If you alter this, make sure it works in tandem with save_regressor
-    with open('part2_model.pickle', 'rb') as target:
+    with open("part2_model.pickle", "rb") as target:
         trained_model = pickle.load(target)
     print("\nLoaded model in part2_model.pickle\n")
     return trained_model
 
 
-
-def RegressorHyperParameterSearch(): 
+def RegressorHyperParameterSearch():
     # Ensure to add whatever inputs you deem necessary to this function
     """
-    Performs a hyper-parameter for fine-tuning the regressor implemented 
+    Performs a hyper-parameter for fine-tuning the regressor implemented
     in the Regressor class.
 
     Arguments:
         Add whatever inputs you need.
-        
+
     Returns:
-        The function should return your optimised hyper-parameters. 
+        The function should return your optimised hyper-parameters.
 
     """
 
@@ -314,25 +314,23 @@ def RegressorHyperParameterSearch():
     #######################################################################
 
 
-
 def example_main():
-
     output_label = "median_house_value"
 
     # Use pandas to read CSV data as it contains various object types
     # Feel free to use another CSV reader tool
     # But remember that LabTS tests take Pandas DataFrame as inputs
-    data = pd.read_csv("housing.csv") 
+    data = pd.read_csv("housing.csv")
 
     # Splitting input and output
     x_train: pd.DataFrame = data.drop(output_label, axis=1)
     y_train: pd.DataFrame = data.loc[:, [output_label]]
 
     # Training
-    # This example trains on the whole available dataset. 
-    # You probably want to separate some held-out data 
+    # This example trains on the whole available dataset.
+    # You probably want to separate some held-out data
     # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch = 10)
+    regressor = Regressor(x_train, nb_epoch=10)
     regressor.fit(x_train, y_train)
     save_regressor(regressor)
 
@@ -343,4 +341,3 @@ def example_main():
 
 if __name__ == "__main__":
     example_main()
-
