@@ -196,8 +196,10 @@ class Regressor:
         #######################################################################
 
         # X is the preprocessed input array
-        X, _ = self._preprocessor(x, None)
-        return self.model.forward(X)
+        preprocessed_x, _ = self._preprocessor(x, None)
+        normalised_x = self.normaliser.apply(preprocessed_x)
+
+        return self.model.forward(normalised_x)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
