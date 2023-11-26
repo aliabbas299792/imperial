@@ -5,7 +5,7 @@ import pandas as pd
 import sklearn
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import mean_squared_error
-from part1_nn_lib import MultiLayerNetwork, Trainer
+from part1_nn_lib import MultiLayerNetwork, Trainer, Preprocessor
 from typing import Optional, cast
 
 
@@ -33,6 +33,8 @@ class Regressor:
         self.input_size = X.shape[1]
         self.output_size = 1
         self.nb_epoch = nb_epoch
+
+        self.normaliser = Preprocessor(X)
 
         self.input_columns = None
         self.input_columns_types = None
@@ -168,7 +170,9 @@ class Regressor:
         #######################################################################
 
         preprocessed_x, preprocessed_y = self._preprocessor(x, y)
-        self.trainer.train(preprocessed_x, cast(np.ndarray, preprocessed_y))
+        normalised_x = self.normaliser.apply(preprocessed_x)
+
+        self.trainer.train(normalised_x, cast(np.ndarray, preprocessed_y))
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -193,7 +197,6 @@ class Regressor:
 
         # X is the preprocessed input array
         X, _ = self._preprocessor(x, None)
-
         return self.model.forward(X)
 
         #######################################################################
