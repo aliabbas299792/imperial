@@ -1,4 +1,4 @@
-import torch
+#import torch
 import pickle
 import numpy as np
 import pandas as pd
@@ -39,7 +39,7 @@ class Regressor:
         neurons = [64, 32, 1]
         activations = ["relu", "relu", "linear"]
 
-        self.model = MultiLayerNetwork(input_size, neurons, activations)
+        self.model = MultiLayerNetwork(self.input_size, neurons, activations)
         self.trainer = Trainer(self.model,
                                 batch_size=32,
                                 nb_epoch=self.nb_epoch,
@@ -179,14 +179,17 @@ class Regressor:
         #optional functions and which trainer to use?
 
 
-        X, Y = self._preprocessor(x, y = y, training = True) # Do not forget
-        X_np, Y_np = X.values, Y.values
+        X, Y = self._preprocessor(x, y, True) # Do not forget
+        X_np, Y_np = X, Y
 
         for epoch in range(self.nb_epoch):
             nn_output = self.model.forward(X_np)
             loss = self.trainer._loss_layer.forward(nn_output, Y_np)
+            print(f"Loss: {loss}")
+            #TODO: Change grad
+            grad = nn_output / loss
             nn_grad = self.model.backward(grad)
-            self.model.update_params(self.trained.learning_rate)
+            self.model.update_params(self.trainer.learning_rate)
         return self
 
         #######################################################################
@@ -211,9 +214,9 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        X, _ = self._preprocessor(x, training = False) # Do not forget
-        #what do they mean do not forget??
         #X is the preprocessed input array
+        X, _ = self._preprocessor(x, None) # Do not forget
+        #what do they mean do not forget??
         #regressor = self.fit(X,y)
         #remove pass
         #return predicted value for given input       
@@ -228,7 +231,7 @@ class Regressor:
         # for i in range(batch_size):
         #     for c range(C):
 
-        return forward_pass(X)
+        return self.model.forward(X)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
