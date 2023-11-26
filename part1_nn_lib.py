@@ -121,7 +121,7 @@ class SigmoidLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         
-        outputs = np.vectorize(self._sigmoid)(x)
+        outputs = self._sigmoid(x)
         self._cache_current = x
         return outputs
 
@@ -156,7 +156,7 @@ class SigmoidLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        grad_x = np.vectorize(self._sigmoid_grad)(self._cache_current)
+        grad_x = self._sigmoid_grad(self._cache_current)
         return grad_z * grad_x
 
         #######################################################################
@@ -192,7 +192,7 @@ class ReluLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
         
-        outputs = np.vectorize(self._relu)(x)
+        outputs = self._relu(x)
         self._cache_current = x
         return outputs
 
@@ -203,11 +203,11 @@ class ReluLayer(Layer):
 
     @staticmethod
     def _relu(input):
-        return np.max([0, input])
+        return np.maximum(0, input)
 
     @staticmethod
     def _relu_grad(x):
-        return 1 if x >= 0 else 0
+        return np.where(x > 0, 1, 0)
 
     def backward(self, grad_z):
         """
@@ -227,7 +227,7 @@ class ReluLayer(Layer):
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        grad_x = np.vectorize(self._relu_grad)(self._cache_current)
+        grad_x = self._relu_grad(self._cache_current)
         return grad_z * grad_x
 
         #######################################################################
@@ -598,6 +598,7 @@ class Trainer(object):
               grad = self._loss_layer.backward()
               nn_grad = self.network.backward(grad)
               self.network.update_params(self.learning_rate)
+              print(f"Root loss is {np.sqrt(loss)}")
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -700,7 +701,7 @@ class Preprocessor(object):
 def example_main():
     input_dim = 4
     neurons = [16, 3]
-    activations = ["relu", "identity"]
+    activations = ["relu", "sigmoid"]
     net = MultiLayerNetwork(input_dim, neurons, activations)
 
     dat = np.loadtxt("iris.dat")
