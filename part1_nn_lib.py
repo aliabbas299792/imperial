@@ -598,7 +598,7 @@ class Trainer(object):
               grad = self._loss_layer.backward()
               nn_grad = self.network.backward(grad)
               self.network.update_params(self.learning_rate)
-              print(f"Root loss is {np.sqrt(loss)}")
+              # print(f"Root loss is {np.sqrt(loss)}")
 
         #######################################################################
         #                       ** END OF YOUR CODE **
