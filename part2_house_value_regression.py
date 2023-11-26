@@ -6,7 +6,7 @@ import sklearn
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import mean_squared_error
 from part1_nn_lib import MultiLayerNetwork, Trainer
-from typing import Optional
+from typing import Optional, cast
 
 
 class Regressor:
@@ -45,7 +45,7 @@ class Regressor:
             self.model,
             batch_size=32,
             nb_epoch=self.nb_epoch,
-            learning_rate=0.001,
+            learning_rate=0.1,
             loss_fun="mse",
             shuffle_flag=True,
         )
@@ -167,34 +167,8 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        # I think this uses functions from part 1
-        # which layer do we use?
-        # for i in range self.nb_epoch: ?
-        # input_x = x
-        # new_x = layer.forward_pass(input_x)
-        # loss = trainer.eval_loss(x,y) not sure if this is right actually
-        # alternative way for computing loss:
-        # forward_loss = 0
-        # for i in range batch_size:
-        #    forward_loss += 0.5*(new_x[i] - y[i])*(new_x[i] - y[i])
-
-        # grad_loss_wrt_to_inputs = layer.backward_pass(forward_loss)
-        # need to find out what learning_rate is
-        # layer.update_params(learning_rate)
-        # optional functions and which trainer to use?
-
-        X, Y = self._preprocessor(x, y, True)  # Do not forget
-        X_np, Y_np = X, Y
-
-        for epoch in range(self.nb_epoch):
-            nn_output = self.model.forward(X_np)
-            loss = self.trainer._loss_layer.forward(nn_output, Y_np)
-            print(f"Loss: {loss}")
-            # TODO: Change grad
-            grad = nn_output / loss
-            nn_grad = self.model.backward(grad)
-            self.model.update_params(self.trainer.learning_rate)
-        return self
+        preprocessed_x, preprocessed_y = self._preprocessor(x, y)
+        self.trainer.train(preprocessed_x, cast(np.ndarray, preprocessed_y))
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -218,21 +192,7 @@ class Regressor:
         #######################################################################
 
         # X is the preprocessed input array
-        X, _ = self._preprocessor(x, None)  # Do not forget
-        # what do they mean do not forget??
-        # regressor = self.fit(X,y)
-        # remove pass
-        # return predicted value for given input
-        # MSE = 0
-        # batch_size,_ = shape(X)
-        # for i in range(batch_size):
-        #     MSE+= (y[i] - y_hat[i])*(y[i] - y_hat[i])
-        # MSE = MSE * (1/batch_size)
-        # #cross-entropy
-        # #define C
-        # L = 0
-        # for i in range(batch_size):
-        #     for c range(C):
+        X, _ = self._preprocessor(x, None)
 
         return self.model.forward(X)
 
@@ -330,7 +290,7 @@ def example_main():
     # This example trains on the whole available dataset.
     # You probably want to separate some held-out data
     # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch=10)
+    regressor = Regressor(x_train, nb_epoch=100)
     regressor.fit(x_train, y_train)
     save_regressor(regressor)
 

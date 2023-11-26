@@ -557,7 +557,7 @@ class Trainer(object):
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def train(self, input_dataset, target_dataset):
+    def train(self, input_dataset: np.ndarray, target_dataset: np.ndarray):
         """
         Main training loop. Performs the following steps `nb_epoch` times:
             - Shuffles the input data (if `shuffle` is True)
