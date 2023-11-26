@@ -6,6 +6,7 @@ import sklearn
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import mean_squared_error
 from part1_nn_lib import MultiLayerNetwork, Trainer
+from typing import Optional
 
 
 class Regressor:
@@ -86,12 +87,15 @@ class Regressor:
     def _recover_dataframe_from_input_numpy_array(self, input_x: np.ndarray):
         df = pd.DataFrame(input_x, columns=self.input_columns)
 
-        for col, t in zip(self.input_columns, self.input_columns_types):
+        cols = [] if not self.input_columns else self.input_columns
+        col_types = [] if not self.input_columns_types else self.input_columns_types
+
+        for col, t in zip(cols, col_types):
             df[col] = df[col].astype(t)
 
         return df
 
-    def _preprocessor(self, x, y=None, training=False):
+    def _preprocessor(self, x: pd.DataFrame, y: Optional[pd.DataFrame]=None, training=False):
         """
         Preprocess input of the network.
 
@@ -114,8 +118,6 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        IsYADataframe = isinstance(y, pd.DataFrame)
-
         # Replace this code with your own
         # Return preprocessed x and y, return None for y if it was None
 
@@ -132,7 +134,7 @@ class Regressor:
 
         preprocessed_x = flattened_data.to_numpy()
         preprocessed_y = None
-        if IsYADataframe:
+        if input_y is not None:
             preprocessed_y = input_y.to_numpy()
 
         # i.e we can recover the original dataframe from the numpy array since we've saved both column names and datatypes
@@ -144,7 +146,7 @@ class Regressor:
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def fit(self, x, y):
+    def fit(self, x: pd.DataFrame, y: pd.DataFrame):
         """
         Regressor training function
 
@@ -197,7 +199,7 @@ class Regressor:
         #######################################################################
 
             
-    def predict(self, x):
+    def predict(self, x: pd.DataFrame):
         """
         Output the value corresponding to an input x.
 
@@ -237,7 +239,7 @@ class Regressor:
         #                       ** END OF YOUR CODE **
         #######################################################################
 
-    def score(self, x, y):
+    def score(self, x: pd.DataFrame, y: pd.DataFrame):
         """
         Function to evaluate the model accuracy on a validation dataset.
 
@@ -255,8 +257,7 @@ class Regressor:
         #                       ** START OF YOUR CODE **
         #######################################################################
 
-        X, Y = self._preprocessor(x, y = y, training = False) # Do not forget
-        pred_y = self.predict(X)
+        pred_y = self.predict(x)
         rmse = mean_squared_error(y.to_numpy(),pred_y, squared=False)
         
         return rmse
@@ -324,8 +325,8 @@ def example_main():
     data = pd.read_csv("housing.csv") 
 
     # Splitting input and output
-    x_train = data.loc[:, data.columns != output_label]
-    y_train = data.loc[:, [output_label]]
+    x_train: pd.DataFrame = data.drop(output_label, axis=1)
+    y_train: pd.DataFrame = data.loc[:, [output_label]]
 
     # Training
     # This example trains on the whole available dataset. 
