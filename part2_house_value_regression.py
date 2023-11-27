@@ -34,20 +34,21 @@ class Regressor:
         self.output_size = 1
         self.nb_epoch = nb_epoch
 
-        self.normaliser = Preprocessor(X)
+        self.normaliser_x = None
+        self.normaliser_y = None
 
         self.input_columns = None
         self.input_columns_types = None
 
-        neurons = [64, 32, 1]
-        activations = ["relu", "relu", "linear"]
+        neurons = [128, 16, 64, 32, 1]
+        activations = ["relu", "relu", "relu", "relu", "relu"]
 
         self.model = MultiLayerNetwork(self.input_size, neurons, activations)
         self.trainer = Trainer(
             self.model,
-            batch_size=32,
+            batch_size=5,
             nb_epoch=self.nb_epoch,
-            learning_rate=0.1,
+            learning_rate=0.001,
             loss_fun="mse",
             shuffle_flag=True,
         )
@@ -170,9 +171,14 @@ class Regressor:
         #######################################################################
 
         preprocessed_x, preprocessed_y = self._preprocessor(x, y)
-        normalised_x = self.normaliser.apply(preprocessed_x)
 
-        self.trainer.train(normalised_x, cast(np.ndarray, preprocessed_y))
+        self.normaliser_x = Preprocessor(preprocessed_x)
+        self.normaliser_y = Preprocessor(preprocessed_y)
+
+        normalised_x = self.normaliser_x.apply(preprocessed_x)
+        normalised_y = self.normaliser_y.apply(preprocessed_y)
+
+        self.trainer.train(normalised_x, cast(np.ndarray, normalised_y))
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -197,9 +203,10 @@ class Regressor:
 
         # X is the preprocessed input array
         preprocessed_x, _ = self._preprocessor(x, None)
-        normalised_x = self.normaliser.apply(preprocessed_x)
+        normalised_x = self.normaliser_x.apply(preprocessed_x)
 
-        return self.model.forward(normalised_x)
+        output = self.model.forward(normalised_x)
+        return self.normaliser_y.revert(output)
 
         #######################################################################
         #                       ** END OF YOUR CODE **
@@ -295,7 +302,7 @@ def example_main():
     # This example trains on the whole available dataset.
     # You probably want to separate some held-out data
     # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch=100)
+    regressor = Regressor(x_train, nb_epoch=10)
     regressor.fit(x_train, y_train)
     save_regressor(regressor)
 
