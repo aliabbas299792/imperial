@@ -8,6 +8,8 @@ from part1_nn_lib import MultiLayerNetwork, Trainer, Preprocessor
 from typing import Optional, cast
 from itertools import product
 
+np.seterr(all="ignore")
+
 
 class Regressor:
     def __init__(
@@ -322,7 +324,7 @@ def GridSearch(epoch_nums, learning_rates, activation_functions):
             print(best_regressor_score)
 
     print(f"Best regressor score found: {best_regressor_score}")
-    return best_regressor
+    return best_regressor, best_regressor_score
 
 
 def get_combo_in_lists(lists, idx):
@@ -381,7 +383,7 @@ def RandomisedSearch(
             print(best_regressor_score)
 
     print(f"Best regressor score found: {best_regressor_score}")
-    return best_regressor
+    return best_regressor, best_regressor_score
 
 
 def RegressorHyperParameterSearch():
@@ -457,8 +459,8 @@ def RegressorHyperParameterSearch():
 
     print(f"The hyperparameter search space size is: {hyperparameter_space_size}")
 
-    GridSearch(epoch_nums, learning_rates, activation_functions)
-    RandomisedSearch(
+    grid_nn, score_grid = GridSearch(epoch_nums, learning_rates, activation_functions)
+    random_nn, score_random = RandomisedSearch(
         epoch_nums,
         learning_rates,
         loss_layers,
@@ -466,6 +468,14 @@ def RegressorHyperParameterSearch():
         network_structures,
         activation_functions,
     )
+
+    print(
+        f"Best score using grid search: {score_grid}, best using random search: {score_random}"
+    )
+    if score_grid < score_random:
+        save_regressor(grid_nn)
+    else:
+        save_regressor(random_nn)
 
     return  # Return the chosen hyper parameters
 
