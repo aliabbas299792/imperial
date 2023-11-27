@@ -289,6 +289,9 @@ def RegressorHyperParameterSearch():
 def example_main():
     output_label = "median_house_value"
 
+    # setting a predetermined random seed reproducible training
+    np.random.seed(10)
+
     # Use pandas to read CSV data as it contains various object types
     # Feel free to use another CSV reader tool
     # But remember that LabTS tests take Pandas DataFrame as inputs
@@ -302,7 +305,7 @@ def example_main():
     # This example trains on the whole available dataset.
     # You probably want to separate some held-out data
     # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch=20)
+    regressor = Regressor(x_train, nb_epoch=40)
     regressor.fit(x_train, y_train)
     save_regressor(regressor)
 
