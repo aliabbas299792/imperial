@@ -286,11 +286,6 @@ and bias respectively.
         #######################################################################
         #                       ** START OF YOUR CODE **
         #######################################################################
-        with open("text.txt", "+a") as f:
-            f.write(
-                "\n\n\n########################################################################################\n"
-            )
-            f.write(np.array2string(self._W))
 
         out = np.matmul(x, self._W) + self._b
         self._cache_current = x, out
@@ -356,6 +351,8 @@ class MultiLayerNetwork(object):
     MultiLayerNetwork: A network consisting of stacked linear layers and
     activation functions.
     """
+
+    ActivationFunctionOptions = ["relu", "sigmoid", "identity"]
 
     def __init__(self, input_dim, neurons, activations):
         """
@@ -490,6 +487,8 @@ def load_network(fpath):
 
 
 class Trainer(object):
+    LossLayerOptions = ["mse", "cross_entropy"]
+
     """
     Trainer: Object that manages the training of a neural network.
     """
