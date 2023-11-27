@@ -40,15 +40,15 @@ class Regressor:
         self.input_columns = None
         self.input_columns_types = None
 
-        neurons = [128, 16, 64, 32, 1]
-        activations = ["relu", "relu", "relu", "relu", "relu"]
+        neurons = [64, 32, 1]
+        activations = ["relu", "relu"]
 
         self.model = MultiLayerNetwork(self.input_size, neurons, activations)
         self.trainer = Trainer(
             self.model,
-            batch_size=5,
+            batch_size=32,
             nb_epoch=self.nb_epoch,
-            learning_rate=0.001,
+            learning_rate=0.01,
             loss_fun="mse",
             shuffle_flag=True,
         )
@@ -302,7 +302,7 @@ def example_main():
     # This example trains on the whole available dataset.
     # You probably want to separate some held-out data
     # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch=10)
+    regressor = Regressor(x_train, nb_epoch=20)
     regressor.fit(x_train, y_train)
     save_regressor(regressor)
 
