@@ -2,15 +2,24 @@
 import pickle
 import numpy as np
 import pandas as pd
-import sklearn
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import mean_squared_error
 from part1_nn_lib import MultiLayerNetwork, Trainer, Preprocessor
 from typing import Optional, cast
+from itertools import product
 
 
 class Regressor:
-    def __init__(self, x, nb_epoch=1000):
+    def __init__(
+        self,
+        x,
+        nb_epoch=1000,
+        learning_rate=0.01,
+        loss_layer="mse",
+        batch_size=32,
+        network_structure=[8, 16, 1],
+        activations=["relu", "relu"],
+    ):
         # You can add any input parameters you need
         # Remember to set them with a default value for LabTS tests
         """
@@ -32,7 +41,6 @@ class Regressor:
         X, _ = self._preprocessor(x, training=True)
         self.input_size = X.shape[1]
         self.output_size = 1
-        self.nb_epoch = nb_epoch
 
         self.normaliser_x = None
         self.normaliser_y = None
@@ -40,16 +48,13 @@ class Regressor:
         self.input_columns = None
         self.input_columns_types = None
 
-        neurons = [64, 32, 1]
-        activations = ["relu", "relu"]
-
-        self.model = MultiLayerNetwork(self.input_size, neurons, activations)
+        self.model = MultiLayerNetwork(self.input_size, network_structure, activations)
         self.trainer = Trainer(
             self.model,
-            batch_size=32,
-            nb_epoch=self.nb_epoch,
-            learning_rate=0.01,
-            loss_fun="mse",
+            batch_size=batch_size,
+            nb_epoch=nb_epoch,
+            learning_rate=learning_rate,
+            loss_fun=loss_layer,
             shuffle_flag=True,
         )
 
@@ -231,6 +236,10 @@ class Regressor:
         #######################################################################
 
         pred_y = self.predict(x)
+        if not np.all(np.isfinite(pred_y)):
+            print("Failed to train")
+            return np.inf
+
         rmse = mean_squared_error(y.to_numpy(), pred_y, squared=False)
 
         return rmse
@@ -261,6 +270,120 @@ def load_regressor():
     return trained_model
 
 
+def load_housing_dataset():
+    output_label = "median_house_value"
+
+    data = pd.read_csv("housing.csv")
+
+    # Splitting input and output
+    x_train: pd.DataFrame = data.drop(output_label, axis=1)
+    y_train: pd.DataFrame = data.loc[:, [output_label]]
+
+    return x_train, y_train
+
+
+def GridSearch(epoch_nums, learning_rates, activation_functions):
+    reduced_hyperparameter_search_space = (
+        len(epoch_nums) * len(learning_rates) * len(activation_functions)
+    )
+
+    print(
+        f"Reduced hyperparameter search space size: {reduced_hyperparameter_search_space}"
+    )
+
+    # found to perform well through trial and error
+    fixed_network_structure = [8, 16, 1]
+    fixed_loss_layer = "mse"
+    fixed_batch_size = 32
+
+    x_train, y_train = load_housing_dataset()
+    best_regressor = None
+    best_regressor_score = np.inf
+
+    def MakeRegressor(nb_epoch, lr, activation_functions):
+        return Regressor(
+            x_train,
+            network_structure=fixed_network_structure,
+            loss_layer=fixed_loss_layer,
+            batch_size=fixed_batch_size,
+            nb_epoch=nb_epoch,
+            learning_rate=lr,
+            activations=activation_functions,
+        )
+
+    for epochs, lr, activs in product(epoch_nums, learning_rates, activation_functions):
+        r = MakeRegressor(epochs, lr, activs)
+        r.fit(x_train, y_train)
+
+        score = r.score(x_train, y_train)
+        if score < best_regressor_score:
+            best_regressor = r
+            best_regressor_score = score
+            print(best_regressor_score)
+
+    print(f"Best regressor score found: {best_regressor_score}")
+    return best_regressor
+
+
+def get_combo_in_lists(lists, idx):
+    result = []
+    for l in lists:
+        list_idx = idx % len(l)
+        result.append(l[list_idx])
+        idx //= len(l)
+    return result
+
+
+def RandomisedSearch(
+    epoch_nums,
+    learning_rates,
+    loss_layers,
+    batch_sizes,
+    network_structures,
+    activation_functions,
+):
+    NUM_SAMPLES = 100
+
+    hyperparameter_space_size = (
+        len(epoch_nums)
+        * len(learning_rates)
+        * len(loss_layers)
+        * len(batch_sizes)
+        * len(network_structures)
+        * len(activation_functions)
+    )
+
+    x_train, y_train = load_housing_dataset()
+    best_regressor = None
+    best_regressor_score = np.inf
+
+    random_idxs = [
+        np.random.randint(0, hyperparameter_space_size) for _ in range(NUM_SAMPLES)
+    ]
+
+    lists = [
+        epoch_nums,
+        learning_rates,
+        loss_layers,
+        batch_sizes,
+        network_structures,
+        activation_functions,
+    ]
+    for i in random_idxs:
+        combo = get_combo_in_lists(lists, i)
+        r = Regressor(x_train, *combo)
+        r.fit(x_train, y_train)
+
+        score = r.score(x_train, y_train)
+        if score < best_regressor_score:
+            best_regressor = r
+            best_regressor_score = score
+            print(best_regressor_score)
+
+    print(f"Best regressor score found: {best_regressor_score}")
+    return best_regressor
+
+
 def RegressorHyperParameterSearch():
     # Ensure to add whatever inputs you deem necessary to this function
     """
@@ -279,6 +402,71 @@ def RegressorHyperParameterSearch():
     #                       ** START OF YOUR CODE **
     #######################################################################
 
+    seed = np.random.randint(0, 2**32 - 1)
+    np.random.seed(seed)
+    print(f"Seed being used for current run: {seed}")
+
+    MAX_LAYERS = 3
+    NODE_INTERVAL_BASE = 2
+    NODE_MAX_SCALE = 5
+    POSSIBLE_NODE_VALS = [NODE_INTERVAL_BASE**i for i in range(NODE_MAX_SCALE)]
+
+    MAX_EPOCHS_SCALE = 10
+    EPOCH_INTERVAL = 10
+
+    INIT_LR = 10**-5
+    LR_EXPONENT_BASE = 10
+    LR_MAX_SCALE = 6
+
+    BATCH_EXPONENT_BASE = 2
+    BATCH_SCALE = 7
+
+    # generate every possible network structure for num_layers layers
+    # using POSSIBLE_NODE_VALUES
+    def network_structure_gen(num_layers):
+        if num_layers == 0:
+            return [[]]
+
+        return [
+            structure + [n_val]
+            for structure in network_structure_gen(num_layers - 1)
+            for n_val in POSSIBLE_NODE_VALS
+        ]
+
+    epoch_nums = [EPOCH_INTERVAL * i for i in range(MAX_EPOCHS_SCALE)]
+    learning_rates = [INIT_LR * (LR_EXPONENT_BASE**i) for i in range(LR_MAX_SCALE)]
+    loss_layers = [
+        "mse"
+    ]  # fixing the loss layer since cross entropy is better suited for classification
+    batch_sizes = [BATCH_EXPONENT_BASE**i for i in range(BATCH_SCALE)]
+    network_structures = []
+    for num_layers in range(MAX_LAYERS):
+        # adding 1 for the final output node
+        network_structures += [s + [1] for s in network_structure_gen(num_layers + 1)]
+
+    activation_functions = MultiLayerNetwork.ActivationFunctionOptions[:]
+
+    hyperparameter_space_size = (
+        len(epoch_nums)
+        * len(learning_rates)
+        * len(loss_layers)
+        * len(batch_sizes)
+        * len(network_structures)
+        * len(activation_functions)
+    )
+
+    print(f"The hyperparameter search space size is: {hyperparameter_space_size}")
+
+    GridSearch(epoch_nums, learning_rates, activation_functions)
+    RandomisedSearch(
+        epoch_nums,
+        learning_rates,
+        loss_layers,
+        batch_sizes,
+        network_structures,
+        activation_functions,
+    )
+
     return  # Return the chosen hyper parameters
 
     #######################################################################
@@ -287,19 +475,10 @@ def RegressorHyperParameterSearch():
 
 
 def example_main():
-    output_label = "median_house_value"
-
     # setting a predetermined random seed reproducible training
     np.random.seed(10)
 
-    # Use pandas to read CSV data as it contains various object types
-    # Feel free to use another CSV reader tool
-    # But remember that LabTS tests take Pandas DataFrame as inputs
-    data = pd.read_csv("housing.csv")
-
-    # Splitting input and output
-    x_train: pd.DataFrame = data.drop(output_label, axis=1)
-    y_train: pd.DataFrame = data.loc[:, [output_label]]
+    x_train, y_train = load_housing_dataset()
 
     # Training
     # This example trains on the whole available dataset.
@@ -315,4 +494,5 @@ def example_main():
 
 
 if __name__ == "__main__":
-    example_main()
+    # example_main()
+    RegressorHyperParameterSearch()
