@@ -24,8 +24,6 @@ defmodule Flooding do
       for p <- 0..(this.n_peers - 1),
           do: Node.spawn(:"peer#{p}_#{this.node_suffix}", Peer, :start, [p])
 
-
-    Process.sleep(1)
     for peer <- peers, do: send(peer, {:start, peers})
 
     send List.first(peers), :hello
