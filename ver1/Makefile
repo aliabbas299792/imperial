@@ -4,7 +4,7 @@
 
 PEERS    = 10
 START    = Flooding.start
-MAX_TIME = 5000
+MAX_TIME = 50000
 
 HOST	:= 127.0.0.1
 

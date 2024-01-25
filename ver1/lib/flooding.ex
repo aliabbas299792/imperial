@@ -20,7 +20,15 @@ defmodule Flooding do
   defp start(this, :cluster_start) do
     IO.puts("-> Flooding at #{Helper.node_string()}")
 
-    # **** ADD YOUR CODE HERE ****
+    peers =
+      for p <- 0..(this.n_peers - 1),
+          do: Node.spawn(:"peer#{p}_#{this.node_suffix}", Peer, :start, [p])
+
+
+    Process.sleep(1)
+    for peer <- peers, do: send(peer, {:start, peers})
+
+    send List.first(peers), :hello
   end
 
   # start :cluster_start
