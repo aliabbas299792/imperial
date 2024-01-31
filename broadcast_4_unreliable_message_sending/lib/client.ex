@@ -5,11 +5,22 @@ defmodule Client do
         {:bind, peer_ids, beb} -> %{peer_ids: peer_ids, beb: beb}
       end
 
-    Map.merge(
-      %{id: id, broadcasted: %{}, delivered: %{}, max_broadcasts: nil},
-      remote_data
-    )
-    |> next()
+    this =
+      Map.merge(
+        %{id: id, broadcasted: %{}, delivered: %{}, max_broadcasts: nil},
+        remote_data
+      )
+
+    this =
+      receive do
+        # expects to receive a single :broadcast message
+        {:beb_deliver, {:broadcast, max_broadcasts, timeout}} ->
+          Process.send_after(self(), :timeout, timeout)
+          %{this | max_broadcasts: max_broadcasts}
+      end
+
+    # initial broadcast
+    this |> beb_broadcast() |> next()
   end
 
   defp beb_broadcast(this) do
@@ -18,7 +29,7 @@ defmodule Client do
         {%{
            this
            | broadcasted: Map.update(this.broadcasted, peer_id, 1, fn old_val -> old_val + 1 end)
-        }, allow_broadcasts and (Map.get(this.broadcasted, peer_id, 0) < this.max_broadcasts) }
+         }, allow_broadcasts and Map.get(this.broadcasted, peer_id, 0) < this.max_broadcasts}
       end)
 
     if allow_broadcasts do
@@ -31,15 +42,6 @@ defmodule Client do
 
   defp next(this) do
     receive do
-      {:beb_deliver, {:broadcast, max_broadcasts, timeout}} ->
-        # expects to receive a single :broadcast message
-        this = %{this | max_broadcasts: max_broadcasts}
-
-        Process.send_after(self(), :timeout, timeout)
-
-        # initial broadcast
-        this |> beb_broadcast() |> next()
-
       {:beb_deliver, {:propagate_broadcast, sender_id}} ->
         # received 1 message
         this = %{
@@ -53,7 +55,7 @@ defmodule Client do
       :timeout ->
         IO.puts(
           "Peer #{this.id}: #{Enum.join(for p <- this.peer_ids do
-            "{#{this.broadcasted[p]} #{this.delivered[p]}}"
+            "{#{Map.get(this.broadcasted, p, 0)} #{Map.get(this.delivered, p, 0)}}"
           end,
           " ")}"
         )

@@ -49,8 +49,9 @@ end # node_init
 
 defp more_parameters(this) do
   Map.merge this, %{
-    broadcasts: 10_000_000,
-    timeout: 3_000
+    broadcasts: 1_000,
+    timeout: 3_000,
+    unreliability: 20
   }
 end # more_parameters
 

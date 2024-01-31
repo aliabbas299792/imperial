@@ -1,8 +1,8 @@
 defmodule Peer do
-  def start(broadcast_pid, id) do
+  def start(broadcast_pid, id, unreliability) do
     client = spawn(Client, :start, [id])
     beb = spawn(BestEffort, :start, [])
-    pl = spawn(PerfectLink, :start, [])
+    pl = spawn(LossyPerfectLink, :start, [unreliability])
 
     send(broadcast_pid, {:perfect_link, pl})
 

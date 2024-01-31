@@ -15,7 +15,7 @@ defp start(this, :cluster_start) do
   IO.puts "-> Broadcast at #{Helper.node_string()}"
 
   peer_data = for n <- 0..this.n_peers do
-    node = Node.spawn(:"peer#{n}_#{this.node_suffix}", Peer, :start, [self(), n])
+    node = Node.spawn(:"peer#{n}_#{this.node_suffix}", Peer, :start, [self(), n, this.unreliability])
     {node, n}
   end
   pls_data = for {_, id} <- peer_data do
