@@ -1,14 +1,16 @@
-# PL Broadcast
-This version has a perfect link and a client making up each Peer.
-- I also changed the interleaving design to use an internal list to track which peers I need to send to, and I use a non blocking `receive` block to take one off on each loop (by setting the timeout time to 0)
+# BEB Broadcast
+This version has each peer made up like this:
+```
+Client -> BEB -> PL ----network---- other clients
+```
+And the actual broadcasting interleaving is now handled in the BEB module.
 
-I set the max timeout to be 3s and set there to be 1,000,000 broadcasts:
+Once more I see that the average performance has gotten worse (10 million messages, 3 seconds):
 ```
-Peer 2: {111509 20828} {111509 21343} {111509 17513} {111509 17196} {111509 17422} {111509 17206}
-Peer 4: {49535 7324} {49535 7744} {49535 8288} {49535 7135} {49535 13018} {49535 6025}
-Peer 3: {26488 3551} {26488 5112} {26488 7148} {26488 7973} {26488 1481} {26488 1222}
-Peer 1: {23518 1311} {23518 15434} {23518 1473} {23518 1334} {23518 2631} {23518 1334}
-Peer 5: {44567 7139} {44567 9406} {44567 7338} {44567 5931} {44567 5065} {44567 9687}
-Peer 0: {134118 85724} {134118 11668} {134118 10826} {134118 8802} {134118 8864} {134118 8233}
+Peer 1: {89584 12216} {89584 14135} {89584 15647} {89584 15860} {89584 15861} {89584 15864}
+Peer 0: {95552 16315} {95552 15861} {95552 15762} {95552 15888} {95552 15861} {95552 15864}
+Peer 5: {25157 2856} {25157 3015} {25157 1467} {25157 6229} {25157 5243} {25157 6346}
+Peer 4: {61914 10397} {61914 11220} {61914 9478} {61914 10383} {61914 10367} {61914 10068}
+Peer 3: {97086 12562} {97086 15860} {97086 16079} {97086 20861} {97086 15860} {97086 15863}
+Peer 2: {67355 2271} {67355 2280} {67355 55948} {67355 2293} {67355 2265} {67355 2297}
 ```
-As you can see, despite making the processing more efficient, introduction of the PL abstraction did pretty substantially slow down performance vs the same case in task 1.

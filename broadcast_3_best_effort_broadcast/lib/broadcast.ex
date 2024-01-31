@@ -14,16 +14,19 @@ defp start(_this, :cluster_wait) do :skip end
 defp start(this, :cluster_start) do
   IO.puts "-> Broadcast at #{Helper.node_string()}"
 
-  peers = for n <- 0..this.n_peers do Node.spawn(:"peer#{n}_#{this.node_suffix}", Peer, :start, [self(), n]) end
-  pls = for _ <- peers do
+  peer_data = for n <- 0..this.n_peers do
+    node = Node.spawn(:"peer#{n}_#{this.node_suffix}", Peer, :start, [self(), n])
+    {node, n}
+  end
+  pls_data = for {_, id} <- peer_data do
     receive do
-      {:perfect_link, pl} -> pl
+      {:perfect_link, pl} -> {pl, id}
     end
   end
 
   Process.sleep(500)
-  for p <- peers do send(p, {:bind, pls}) end
-  for pl <- pls do send(pl, {:broadcast, this.broadcasts, this.timeout}) end
+  for {peer_node, _} <- peer_data do send(peer_node, {:bind, pls_data}) end
+  for {pl, _} <- pls_data do send(pl, {:broadcast, this.broadcasts, this.timeout}) end
 
 end # start :cluster_start
 

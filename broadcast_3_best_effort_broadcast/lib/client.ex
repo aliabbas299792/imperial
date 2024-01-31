@@ -1,45 +1,29 @@
 defmodule Client do
   def start(id) do
-    {pl, peers} =
+    remote_data =
       receive do
-        {:bind, pl, peers} -> {pl, peers}
+        {:bind, peer_ids, beb} -> %{peer_ids: peer_ids, beb: beb}
       end
 
-    %{
-      pl: pl,
-      peers: peers,
-      id: id,
-      buffered_broadcasts: [],
-      broadcasted: %{},
-      delivered: %{},
-      max_broadcasts: nil
-    }
+    Map.merge(
+      %{id: id, broadcasted: %{}, delivered: %{}, max_broadcasts: nil},
+      remote_data
+    )
     |> next()
   end
 
-  defp buffer_broadcast(this) do
-    Enum.reduce(this.peers, this, fn peer, this ->
-      if Map.get(this.broadcasted, peer, 0) != this.max_broadcasts do
-        %{
-          this
-          | broadcasted: Map.update(this.broadcasted, peer, 1, fn old_val -> old_val + 1 end),
-            buffered_broadcasts: [peer | this.buffered_broadcasts]
-        }
-      else
-        this
-      end
-    end)
-  end
+  defp beb_broadcast(this) do
+    {new_this, allow_broadcasts} =
+      Enum.reduce(this.peer_ids, {this, true}, fn peer_id, {this, allow_broadcasts} ->
+        {%{
+           this
+           | broadcasted: Map.update(this.broadcasted, peer_id, 1, fn old_val -> old_val + 1 end)
+        }, allow_broadcasts and (Map.get(this.broadcasted, peer_id, 0) < this.max_broadcasts) }
+      end)
 
-  defp pl_send(this, peer, payload) do
-    send(this.pl, {:pl_send, peer, payload})
-  end
-
-  defp process_one_buffered_broadcast(this) do
-    if this.buffered_broadcasts != [] do
-      [peer | tail] = this.buffered_broadcasts
-      pl_send(this, peer, {:propagate_broadcast, this.pl})
-      %{this | buffered_broadcasts: tail}
+    if allow_broadcasts do
+      send(new_this.beb, {:beb_broadcast, {:propagate_broadcast, new_this.id}})
+      new_this
     else
       this
     end
@@ -47,34 +31,32 @@ defmodule Client do
 
   defp next(this) do
     receive do
-      {:pl_deliver, {:broadcast, max_broadcasts, timeout}} ->
+      {:beb_deliver, {:broadcast, max_broadcasts, timeout}} ->
         # expects to receive a single :broadcast message
         this = %{this | max_broadcasts: max_broadcasts}
 
         Process.send_after(self(), :timeout, timeout)
 
         # initial broadcast
-        this |> buffer_broadcast() |> next()
+        this |> beb_broadcast() |> next()
 
-      {:pl_deliver, {:propagate_broadcast, sender}} ->
+      {:beb_deliver, {:propagate_broadcast, sender_id}} ->
         # received 1 message
         this = %{
           this
-          | delivered: Map.update(this.delivered, sender, 1, fn old_val -> old_val + 1 end)
+          | delivered: Map.update(this.delivered, sender_id, 1, fn old_val -> old_val + 1 end)
         }
 
         # set out plan to send out messages to all peers
-        this |> buffer_broadcast() |> next()
+        this |> beb_broadcast() |> next()
 
       :timeout ->
         IO.puts(
-          "Peer #{this.id}: #{Enum.join(for p <- this.peers do
+          "Peer #{this.id}: #{Enum.join(for p <- this.peer_ids do
             "{#{this.broadcasted[p]} #{this.delivered[p]}}"
           end,
           " ")}"
         )
-    after
-      0 -> this |> process_one_buffered_broadcast() |> next()
     end
   end
 end
