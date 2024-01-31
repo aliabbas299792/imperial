@@ -1,11 +1,11 @@
 
-# distributed algorithms, n.dulay, 4 jan 24 
+# distributed algorithms, n.dulay, 4 jan 24
 # lab3 -- various helper functions
 
 defmodule Helper do
 
-def lookup(name) do 
-  addresses = :inet_res.lookup(name,:in,:a) 
+def lookup(name) do
+  addresses = :inet_res.lookup(name,:in,:a)
   {a, b, c, d} = hd(addresses) 		        # get octets for 1st ipv4 address
   :"#{a}.#{b}.#{c}.#{d}"
 end # lookup
@@ -33,7 +33,7 @@ end # node_exit
 def exit_after(duration) do
   Process.sleep(duration)
   IO.puts "Exiting #{node()}"
-  node_exit()	
+  node_exit()
 end # exit_after
 
 def node_init do  # get node arguments and spawn a process to exit node after max_time
@@ -49,11 +49,12 @@ end # node_init
 
 defp more_parameters(this) do
   Map.merge this, %{
-    broadcasts:   1_000_000,
-
-    # **** ADD YOUR PARAMETERS HERE ****
+    broadcasts: 1_000_000,
+    # timeout: 10_000,
+    # broadcasts:   10_000_000,
+    # broadcasts: 1_000,
+    timeout: 120_000
   }
 end # more_parameters
 
 end # Helper
-

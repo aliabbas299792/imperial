@@ -4,7 +4,7 @@
 
 PEERS    = 5
 START    = Broadcast.start
-MAX_TIME = 15000
+MAX_TIME = 600000
 
 HOST	:= 127.0.0.1
 
