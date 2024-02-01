@@ -2,7 +2,7 @@ defmodule Client do
   def start(id) do
     remote_data =
       receive do
-        {:bind, peer_ids, beb} -> %{peer_ids: peer_ids, beb: beb}
+        {:bind, peer_ids, erb} -> %{peer_ids: peer_ids, erb: erb}
       end
 
     this =
@@ -14,16 +14,16 @@ defmodule Client do
     this =
       receive do
         # expects to receive a single :broadcast message
-        {:beb_deliver, {:broadcast, max_broadcasts, timeout}} ->
+        {:rb_deliver, {:broadcast, max_broadcasts, timeout}} ->
           Process.send_after(self(), :timeout, timeout)
           %{this | max_broadcasts: max_broadcasts}
       end
 
     # initial broadcast
-    this |> beb_broadcast() |> next()
+    this |> erb_broadcast() |> next()
   end
 
-  defp beb_broadcast(this) do
+  defp erb_broadcast(this) do
     {new_this, allow_broadcasts} =
       Enum.reduce(this.peer_ids, {this, true}, fn peer_id, {this, allow_broadcasts} ->
         {%{
@@ -33,7 +33,7 @@ defmodule Client do
       end)
 
     if allow_broadcasts do
-      send(new_this.beb, {:beb_broadcast, {:propagate_broadcast, new_this.id}})
+      send(new_this.erb, {:rb_broadcast, {:propagate_broadcast, new_this.id}})
       new_this
     else
       this
@@ -42,7 +42,7 @@ defmodule Client do
 
   defp next(this) do
     receive do
-      {:beb_deliver, {:propagate_broadcast, sender_id}} ->
+      {:rb_deliver, {:propagate_broadcast, sender_id}} ->
         # received 1 message
         this = %{
           this
@@ -50,7 +50,7 @@ defmodule Client do
         }
 
         # set out plan to send out messages to all peers
-        this |> beb_broadcast() |> next()
+        this |> erb_broadcast() |> next()
 
       :timeout ->
         IO.puts(

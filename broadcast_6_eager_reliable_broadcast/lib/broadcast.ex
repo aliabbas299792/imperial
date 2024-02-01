@@ -26,7 +26,7 @@ defp start(this, :cluster_start) do
 
   Process.sleep(500)
   for {peer_node, _} <- peer_data do send(peer_node, {:bind, pls_data}) end
-  for {pl, _} <- pls_data do send(pl, {:broadcast, this.broadcasts, this.timeout}) end
+  for {pl, n} <- pls_data do send(pl, {:rb_data, n, {:broadcast, this.broadcasts, this.timeout}}) end
 
 end # start :cluster_start
 

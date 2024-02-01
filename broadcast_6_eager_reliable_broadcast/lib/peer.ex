@@ -3,7 +3,8 @@ defmodule Peer do
     client = spawn(Client, :start, [id])
     beb = spawn(BestEffort, :start, [])
     pl = spawn(LossyPerfectLink, :start, [unreliability])
-    child_pids = [client, beb, pl]
+    erb = spawn(EagerReliable, :start, [])
+    child_pids = [client, beb, pl, erb]
 
     send(broadcast_pid, {:perfect_link, pl})
 
@@ -17,8 +18,9 @@ defmodule Peer do
       end
 
     send(pl, {:bind, beb})
-    send(beb, {:bind, client, pl, pls})
-    send(client, {:bind, ids, beb})
+    send(beb, {:bind, erb, pl, pls})
+    send(erb, {:bind, client, beb})
+    send(client, {:bind, ids, erb})
 
     if Helper.random(5) < 2 do # 1 in 5 chance of instant death
       Process.sleep(5)
@@ -28,13 +30,3 @@ defmodule Peer do
     end
   end
 end
-
-
-# [
-#   {#PID<20132.140.0>, 0},
-#   {#PID<0.140.0>, 1},
-#   {#PID<20184.140.0>, 2},
-#   {#PID<20185.140.0>, 3},
-#   {#PID<20187.140.0>, 4},
-#   {#PID<20186.140.0>, 5}
-# ]
