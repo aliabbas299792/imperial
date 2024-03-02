@@ -7,7 +7,7 @@ from bot_control.BotInterface import BotInterface, MotorStatus
 
 class Bot(BotInterface):
     BP: brickpi3.BrickPi3 = None
-    
+
     @staticmethod
     def cleanup():
         if Bot.BP:
@@ -21,7 +21,7 @@ class Bot(BotInterface):
             self.BP = Bot.BP
 
         Bot.cleanup()  # ensure everything is unconfigured
-        time.sleep(0.3) # give it a bit to make sure this is the case
+        time.sleep(0.3)  # give it a bit to make sure this is the case
 
         self.motorR = self.BP.PORT_C
         self.motorL = self.BP.PORT_B
@@ -106,8 +106,10 @@ class Bot(BotInterface):
                 reading = self.BP.get_sensor(self.BP.PORT_3)
                 value = reading
             except brickpi3.SensorError:
-                if time.time() - mark_time > 0.5: # 0.2s have passed
+                if time.time() - mark_time > 0.5:  # 0.2s have passed
                     mark_time = time.time()
-                    print("    -> 0.2s have passed while trying to get a non garbage sensor reading")
+                    print(
+                        "    -> 0.2s have passed while trying to get a non garbage sensor reading"
+                    )
             time.sleep(0.02)
         return value

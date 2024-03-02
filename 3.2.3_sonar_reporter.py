@@ -24,7 +24,7 @@ and maximum depths that the sensor can reliably measure?
     - Maximum reliable measurement: ~220cm
 
 2. Move the sonar so that it faces the wall at a non-orthogonal incidence angle. What is the maximum angular deviation from perpendicular to the wall at which it will still give sensible readings?
-    - At a distance of ~80cm an angle of ~25deg is the maximum angle that gives sensible readings. 
+    - At a distance of ~80cm an angle of ~25deg is the maximum angle that gives sensible readings.
 
 3. Do your sonar depth measurements have any systematic (non-zero mean) errors? To test this, set
 up the sensor at a range of hand-measured depths (20cm, 40cm, 60cm, 80cm, 100cm) from a wall
@@ -45,5 +45,5 @@ scatter in each case?
 5. In a range of general conditions for robot navigation, what fraction of the time do you think your
 sonar gives garbage readings very far from ground truth?
     - If an object in front of the sonar is not flat and smooth, reported distances will be very irregular and unstable. Also, during motion the robot may not be moving on smooth ground causing detection of sound reflection to be distorted. Also, from far distances, interference may cause the robot to produce innacurate readings. Overall we should expect that up to ~5% of the readings at any given time will be very far from the ground truth.
-    
+
 """
