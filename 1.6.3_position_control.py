@@ -7,9 +7,8 @@ This makes the robot move in a square using position control, callibrated by
   our empirically derived values
 """
 
-from common import main_wrapper, curse_print, ControlProcedure
 from bot_control.PositionControl import PositionControlBot
-from bot_control.Bot import Bot
+from common import ControlProcedure, PiBot, curse_print, main_wrapper
 
 
 def control_loop(posBot: PositionControlBot, letter: str):
@@ -39,7 +38,7 @@ def control_loop(posBot: PositionControlBot, letter: str):
 
 
 def main():
-    bot = Bot()
+    bot = PiBot()
     posControlBot = PositionControlBot(bot, 300)
 
     def control_loop_fn(inp: str):

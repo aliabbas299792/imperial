@@ -15,6 +15,10 @@ class TestBot(BotInterface):
         self.velocity_right = 0
         
         self.power_limit = 0
+        
+    @staticmethod
+    def cleanup():
+        pass
 
     def reset_encoders(self):
         self.offset_left = 0

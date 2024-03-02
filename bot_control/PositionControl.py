@@ -1,6 +1,7 @@
-import time
 import math
 import random
+import time
+
 from bot_control.BotInterface import BotInterface, ControlBot
 
 

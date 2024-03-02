@@ -3,12 +3,12 @@ The robot will use its ultrasonic sensor to maintain a set distance
   (TARGET_DIST) from whatever is in front of it
 """
 
+import time
 from collections import deque
 
-from common import main_wrapper, curse_print
 from bot_control.Bot import Bot
 from bot_control.VelocityControl import VelocityControlBot
-import time
+from common import PiBot, curse_print, main_wrapper
 
 TARGET_DIST: int = 30  # in cm
 PROPORTIONAL_CONSTANT = 5

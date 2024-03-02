@@ -1,13 +1,18 @@
 
-from collections import namedtuple
-from abc import ABC, abstractmethod
 import time
+from abc import ABC, abstractmethod
+from collections import namedtuple
 
 MotorStatus = namedtuple(
     "MotorStatus", ["status_flag", "power_percent", "encoder_pos", "velocity_dps"]
 )
 
-class BotInterface(ABC):
+class BotInterface(ABC):      
+    @staticmethod
+    @abstractmethod
+    def cleanup():
+        return
+
     @abstractmethod
     def reset_encoders(self):
         return

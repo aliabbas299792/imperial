@@ -1,20 +1,15 @@
-try:
-  import brickpi3
-except:
-  pass
+import time
 
-import random
+import brickpi3
 
 from bot_control.BotInterface import BotInterface, MotorStatus
-import time
-import math
 
 
 class Bot(BotInterface):
     BP: brickpi3.BrickPi3 = None
-
+    
     @staticmethod
-    def _reset_bp():
+    def cleanup():
         if Bot.BP:
             Bot.BP.reset_all()
 
@@ -25,7 +20,7 @@ class Bot(BotInterface):
         else:
             self.BP = Bot.BP
 
-        Bot._reset_bp()  # ensure everything is unconfigured
+        Bot.cleanup()  # ensure everything is unconfigured
         time.sleep(0.3) # give it a bit to make sure this is the case
 
         self.motorR = self.BP.PORT_C

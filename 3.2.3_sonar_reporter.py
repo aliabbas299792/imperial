@@ -1,16 +1,18 @@
-from bot_control.TestBot import TestBot
+from common import PiBot
+
 
 def main():
-    bot = TestBot()
-    
+    bot = PiBot()
+
     while True:
         measurement = bot.get_ultrasonic_sensor_value()
         print(f"Distance: {measurement}cm")
 
+
 if __name__ == "__main__":
     main()
 
-'''
+"""
 Distances measured from the front of the top of sonar.
 
 1. When placed facing and perpendicular to a smooth surface such as a wall, what are the minimum
@@ -41,5 +43,4 @@ scatter in each case?
 sonar gives garbage readings very far from ground truth?
     - If an object in front of the sonar is not flat and smooth, reported distances will be very irregular and unstable. Also, during motion the robot may not be moving on smooth ground causing detection of sound reflection to be distorted. Also, from far distances, interference may cause the robot to produce innacurate readings. Overall we should expect that up to ~5% of the readings at any given time will be very far from the ground truth.
     
-'''
-
+"""

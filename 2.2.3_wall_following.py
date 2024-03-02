@@ -3,12 +3,13 @@ The robot will use its ultrasonic sensor to maintain a set distance
   (TARGET_DIST) from the wall on its side
 """
 
-from collections import deque
-
-from common import main_wrapper
-from bot_control.Bot import Bot
-from bot_control.VelocityControl import VelocityControlBot
 import time
+from collections import deque
+from typing import Deque
+
+from bot_control.BotInterface import BotInterface
+from bot_control.VelocityControl import VelocityControlBot
+from common import PiBot, main_wrapper
 
 TARGET_DIST: int = 30  # in cm
 PROPORTIONAL_CONSTANT = 5
@@ -17,13 +18,13 @@ TEMPORAL_FILTERING_WINDOW = 5  # num samples
 BOT_SPEED = 200
 
 
-def median_value(q: deque[int]) -> int:
+def median_value(q: Deque[int]) -> int:
     if len(q) == 0:
         return 0
     return sorted(q)[len(q) // 2]
 
 
-def control_loop(bot: Bot, velBot: VelocityControlBot):
+def control_loop(bot: BotInterface, velBot: VelocityControlBot):
     # short sleep to allow the motors to accelerate a bit before the next command
     short_sleep = lambda: time.sleep(0.3)
 
@@ -58,7 +59,7 @@ def control_loop(bot: Bot, velBot: VelocityControlBot):
 
 
 def main():
-    bot = Bot()
+    bot = PiBot()
     velControlBot = VelocityControlBot(bot, BOT_SPEED)
 
     control_loop(bot, velControlBot)

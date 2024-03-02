@@ -2,9 +2,8 @@
 This simply allows you to control the bot via power control
 """
 
-from common import main_wrapper, curse_print, ControlProcedure
 from bot_control.PowerControl import PowerControlBot
-from bot_control.Bot import Bot
+from common import ControlProcedure, PiBot, curse_print, main_wrapper
 
 
 def control_loop(posBot: PowerControlBot, letter: str):
@@ -28,7 +27,7 @@ def control_loop(posBot: PowerControlBot, letter: str):
 
 
 def main():
-    bot = Bot()
+    bot = PiBot()
     posControlBot = PowerControlBot(bot, 50)
 
     def control_loop_fn(inp: str):
