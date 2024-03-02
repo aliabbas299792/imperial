@@ -1,4 +1,6 @@
-from common import PiBot
+from time import sleep
+
+from common import PiBot, curse_print, main_wrapper
 
 
 def main():
@@ -6,11 +8,12 @@ def main():
 
     while True:
         measurement = bot.get_ultrasonic_sensor_value()
-        print(f"Distance: {measurement}cm")
+        curse_print(f"Distance: {measurement}cm")
+        sleep(0.2)
 
 
 if __name__ == "__main__":
-    main()
+    main_wrapper(main)
 
 """
 Distances measured from the front of the top of sonar.

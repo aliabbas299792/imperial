@@ -7,8 +7,18 @@ This makes the robot move in a square using position control, callibrated by
   our empirically derived values
 """
 
-from bot_control.PositionControl import PositionControlBot
-from common import ControlProcedure, PiBot, curse_print, main_wrapper
+import time
+
+from bot_control.PositionControl import Bot, PositionControlBot
+from common import curse_getkey, curse_print, main_wrapper
+
+
+def move_square(posControlBot: PositionControlBot, forward_dist=833, turn_amount=256):
+    for _ in range(4):
+        posControlBot.move_forward(forward_dist)
+        time.sleep(1.5)
+        posControlBot.turn_left(turn_amount)
+        time.sleep(1)
 
 
 def control_loop(posBot: PositionControlBot, letter: str):
@@ -26,10 +36,7 @@ def control_loop(posBot: PositionControlBot, letter: str):
         posBot.turn_right()
     elif letter == "y":
         curse_print("Moving in a square")
-        posBot.move_square(forward_dist=833, turn_amount=250)
-    elif letter == "u":
-        curse_print("Moving in a square stop every 10sec")
-        posBot.move_square_10(forward_dist=833, turn_amount=250)
+        move_square(posBot, forward_dist=833, turn_amount=250)
     elif letter == "x":
         curse_print("Stopping")
         posBot.stop()
@@ -38,14 +45,13 @@ def control_loop(posBot: PositionControlBot, letter: str):
 
 
 def main():
-    bot = PiBot()
+    bot = Bot()
     posControlBot = PositionControlBot(bot, 300)
 
-    def control_loop_fn(inp: str):
-        control_loop(posControlBot, inp)
-
-    control_proc = ControlProcedure(control_loop_fn)
-    control_proc.start_procedure()
+    while True:
+        key = curse_getkey()
+        control_loop(posControlBot, key)
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":

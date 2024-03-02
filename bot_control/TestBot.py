@@ -1,21 +1,23 @@
-from bot_control.BotInterface import BotInterface, MotorStatus
-import time
 import math
 import random
+import time
+
+from bot_control.BotInterface import BotInterface, MotorStatus
+
 
 class TestBot(BotInterface):
     def __init__(self):
         self.offset_left = 0
         self.offset_right = 0
-        
+
         self.power_left = 0
         self.power_right = 0
-        
+
         self.velocity_left = 0
         self.velocity_right = 0
-        
+
         self.power_limit = 0
-        
+
     @staticmethod
     def cleanup():
         pass
@@ -74,4 +76,4 @@ class TestBot(BotInterface):
         return random.randint(0, 1)
 
     def get_ultrasonic_sensor_value(self) -> int:
-        return int(math.cos(time.time()/10)**2 * 235 + 20)
+        return int(math.cos(time.time() / 10) ** 2 * 235 + 20)

@@ -12,12 +12,13 @@ import sys
 import time
 from dataclasses import dataclass
 from importlib.util import module_from_spec, spec_from_file_location
+from typing import Callable
 
 from bot_control.BotInterface import BotInterface
 
 _IS_INITIALISED = False
 WEB_PRINT = False
-PiBot: BotInterface
+PiBot: Callable[[], BotInterface]
 
 
 def cleanup():
@@ -67,20 +68,23 @@ def curse_getkey():
         exit(0)
 
 
-def curse_noecho():
-    curses.noecho()
+def curse_getstr():
+    try:
+        line = CursesState.stdscr.getstr(CursesState.current_line, 0).decode(
+            encoding="utf-8"
+        )
+        CursesState.current_line += 1
+        return line
+    except:
+        cleanup()
+        exit(0)
 
 
-class ControlProcedure:
-    def __init__(self, control_loop_fn):
-        self.control_loop_fn = control_loop_fn
-        curse_noecho()
-
-    def start_procedure(self):
-        while True:
-            inp = curse_getkey()
-            self.control_loop_fn(inp)
-            time.sleep(0.1)
+def curse_echo(enable=True):
+    if enable:
+        curses.echo()
+    else:
+        curses.noecho()
 
 
 def init_system():
