@@ -148,7 +148,7 @@ export default {
       for (const component of this.grade_data) {
         const component_name = component["name"];
         pc_values[component_name] = {}
-        
+
         const parts = Object.entries(component["parts"]);
         let total_component_frac = 0;
         let so_far_part_weight = 0;
@@ -170,14 +170,29 @@ export default {
           const exam_multiplier = 1 - coursework_multiplier;
 
           for (const [name, data] of courseworks) {
-            const val = parseFloat(this.user_data[component_name][part_name][name]);
             const cw_weight = coursework_multiplier * data["weight"] * component["weight"] * part_data["weight"];
-            if (!isNaN(val)) {
-              if ("marks" in data) {
-                weighted_user_total_marks += val / data["marks"] * cw_weight;
+
+            // raw value is either a bool, number or string
+            // if it's a string then we just skip the mark, for bool we either do or don't give full weight
+            // with number we use it appropriately
+            const raw_value = this.user_data[component_name][part_name][name];
+            const numeric_value = parseFloat(raw_value);
+            if(typeof raw_value == "boolean" || !isNaN(numeric_value)) {
+              let val = undefined;
+              if(typeof raw_value == "boolean") {
+                val = raw_value ? cw_weight : 0;
               } else {
-                weighted_user_total_marks += (val / 100) * cw_weight;
+                val = numeric_value;
               }
+
+              if ("marks" in data) {
+                weighted_user_total_marks += (val / data["marks"]) * cw_weight;
+              } else if(data.is_percent) {
+                weighted_user_total_marks += (val / 100) * cw_weight;
+              } else {
+                weighted_user_total_marks += val;
+              }
+              
               total_weight += cw_weight;
               so_far_weight += cw_weight;
             } else {
@@ -445,6 +460,13 @@ table td {
                   <td colspan="2">
                     <va-input class="mark-input" label="Percentage mark"
                       v-model="user_data[component['name']][part_name][coursework_name]" />
+                  </td>
+                </template>
+                <template v-else-if="coursework_data.is_pass_fail">
+                  <td colspan="2">
+                    <div class="checkbox">
+                      <input type="checkbox" v-model="user_data[component['name']][part_name][coursework_name]" />
+                    </div>
                   </td>
                 </template>
                 <template v-else>
