@@ -10,23 +10,23 @@
         "courseworks": {
           "Pintos - Task 0 (Codebase Preview)": {
             "weight": 0.07,
-            "marks": 40
+            "marks": 100
           },
           "Pintos - Task 1 (Scheduling)": {
             "weight": 0.14,
-            "marks": 20
+            "marks": 100
           },
           "Pintos - Task 2 (User Programs)": {
             "weight": 0.21,
-            "marks": 20
+            "marks": 100
           },
           "Linkload": {
             "weight": 0.03,
-            "marks": 25
+            "marks": 100
           },
           "DevOps - Continuous Delivery": {
             "weight": 0.05,
-            "is_percent": true
+            "marks": 100
           },
           "WACC - Front-End": {
             "weight": 0.25,
@@ -44,7 +44,7 @@
         "courseworks": {
           "Coursework": {
             "weight": 1,
-            "is_percent": true
+            "marks": 35
           }
         }
       },
@@ -54,11 +54,11 @@
         "courseworks": {
           "Pintos - Task 3 (Virtual Memory)": {
             "weight": 0.5,
-            "marks": 20
+            "marks": 100
           },
           "True Concurrency": {
             "weight": 0.27,
-            "is_percent": true
+            "marks": 100
           },
           "WACC - Extensions": {
             "weight": 0.23,
@@ -79,27 +79,27 @@
         "courseworks": {
           "Project Milestones 1": {
             "weight": 0.05,
-            "is_percent": true
+            "marks": 10
           },
           "Project Milestones 2": {
             "weight": 0.1,
-            "is_percent": true
+            "marks": 10
           },
           "Project Milestones 3": {
             "weight": 0.1,
-            "is_percent": true
+            "marks": 10
           },
           "Project Milestones 4": {
             "weight": 0.05,
-            "is_percent": true
+            "marks": 10
           },
           "Project Documentation": {
             "weight": 0.1,
-            "is_percent": true
+            "marks": 40
           },
-          "Project Presentation/Demonstration": {
+          "Project Presentation": {
             "weight": 0.5,
-            "is_percent": true
+            "marks": 100
           },
           "Law Case Study": {
             "weight": 0.1,
@@ -169,11 +169,11 @@
         "courseworks": {
           "CW1": {
             "weight": 0.5,
-            "is_percent": true
+            "marks": 100
           },
           "CW2": {
             "weight": 0.5,
-            "is_percent": true
+            "marks": 100
           }
         },
         "exams": {
@@ -257,19 +257,19 @@
         "courseworks": {
           "Pintos Task 0 Design Document": {
             "weight": 0.25,
-            "marks": 10
+            "marks": 100
           },
           "Pintos Task 1 Design Document": {
             "weight": 0.25,
-            "marks": 30
+            "marks": 100
           },
           "Pintos Task 2 Design Document": {
             "weight": 0.25,
-            "marks": 40
+            "marks": 100
           },
           "Pintos Task 3 Design Document": {
             "weight": 0.25,
-            "marks": 30
+            "marks": 100
           }
         },
         "exams": {
