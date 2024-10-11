@@ -83,7 +83,7 @@ export default {
       try {
         const module = await import(`${grade_data_file}`);
         this.loaded_data = module.default
-        this.grade_data = this.loaded_data["year_components"];
+        this.grade_data = this.loaded_data["grade_components"];
         this.pass_percent = this.loaded_data["pass_percent"];
         this.progress_to_meng = this.loaded_data["progress_to_meng"]
         this.user_data = gen_user_data(this.grade_data);
