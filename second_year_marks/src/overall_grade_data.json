@@ -1,0 +1,49 @@
+{
+  "year_components": [
+  {
+    "weight": 1,
+    "name": "Year Marks",
+    "type": "normal",
+    "parts": {
+      "First Year": {
+        "weight": 0.075,
+        "exams": {
+          "Overall Percentage": {
+            "weight": 1,
+            "is_percent": true
+          }
+        }
+      },
+      "Second Year": {
+        "weight": 0.2,
+        "exams": {
+          "Overall Percentage": {
+            "weight": 1,
+            "is_percent": true
+          }
+        }
+      },
+      "Third Year": {
+        "weight": 0.3625,
+        "exams": {
+          "Overall Percentage": {
+            "weight": 1,
+            "is_percent": true
+          }
+        }
+      },
+      "Fourth Year": {
+        "weight": 0.3625,
+        "exams": {
+          "Overall Percentage": {
+            "weight": 1,
+            "is_percent": true
+          }
+        }
+      }
+    }
+  }
+],
+  "pass_percent": 40,
+  "progress_to_meng": false
+}

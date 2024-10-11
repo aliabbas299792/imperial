@@ -1,16 +1,24 @@
 <script>
-import grade_data from './grade_data.json'
+function get_calc_name() {
+  return new URLSearchParams(window.location.search).get("calc") || "second_year_marks"
+}
+
+function path_to_data_map() {
+  const path = get_calc_name()
+  let json_data;
+  switch (path) {
+    case "overall_meng_calculator":
+      json_data = "./overall_grade_data.json"
+      break;
+    default:
+      json_data = "./second_year_grade_data.json"
+      break;
+  }
+  return json_data;
+}
 
 function examinable_module_pass(examinable_module_frac) {
   return examinable_module_frac >= 0.4;
-}
-
-function laboratory_component_pass(lab_component_frac) {
-  return lab_component_frac >= 0.4;
-}
-
-function overall_pass(overall_frac) {
-  return overall_frac >= 0.4;
 }
 
 function progress_to_MEng(overall_frac) {
@@ -51,7 +59,7 @@ function gen_user_data(components) {
   }
 }
 
-const PRECISION = 3;
+const PRECISION = 4;
 
 function get_optional_map(components, first_selected_default) {
   for (const component of components) {
@@ -66,11 +74,34 @@ function get_optional_map(components, first_selected_default) {
 export default {
   data() {
     return {
-      grade_data: grade_data,
-      user_data: gen_user_data(grade_data)
+      grade_data: [],
+      user_data: gen_user_data([])
     }
   },
+  created() {
+    this.loadGradeData()
+  },
   methods: {
+    async loadGradeData() {
+      let grade_data_file = path_to_data_map()
+      try {
+        const module = await import(`${grade_data_file}`);
+        this.loaded_data = module.default
+        this.grade_data = this.loaded_data["year_components"];
+        this.pass_percent = this.loaded_data["pass_percent"];
+        this.progress_to_meng = this.loaded_data["progress_to_meng"]
+        this.user_data = gen_user_data(this.grade_data);
+      } catch (error) {
+        console.error('Failed to load grade data:', error);
+      }
+    },
+    laboratory_component_pass(lab_component_frac) {
+      return lab_component_frac >= this.pass_percent;
+    },
+    overall_pass(overall_frac) {
+      return overall_frac >= this.pass_percent;
+    },
+
     getPC(num) {
       return (num * 100).toPrecision(PRECISION) + "%";
     },
@@ -119,6 +150,10 @@ export default {
       return this.format_so_far_output("examinable_pass", "examinable_pass_so_far", format_booleans)
     },
     is_selected_module(name) {
+      if(!this.user_data['optional']) {
+        return true
+      }
+
       // it is a selected module if either it's not an optional module, or is optional and is also selected
       return !(name in this.user_data['optional']) || this.user_data['optional'][name];
     }
@@ -126,7 +161,7 @@ export default {
   watch: {
     user_data: {
       handler() {
-        localStorage.setItem('user_data', JSON.stringify(this.user_data))
+        localStorage.setItem(`${get_calc_name()}_user_data`, JSON.stringify(this.user_data))
       },
       deep: true
     }
@@ -166,7 +201,7 @@ export default {
           let so_far_weight = 0;
           let weighted_user_total_marks = 0;
 
-          const coursework_multiplier = part_data["coursework_weight"];
+          const coursework_multiplier = part_data["coursework_weight"] || 0;
           const exam_multiplier = 1 - coursework_multiplier;
 
           for (const [name, data] of courseworks) {
@@ -177,9 +212,9 @@ export default {
             // with number we use it appropriately
             const raw_value = this.user_data[component_name][part_name][name];
             const numeric_value = parseFloat(raw_value);
-            if(typeof raw_value == "boolean" || !isNaN(numeric_value)) {
+            if (typeof raw_value == "boolean" || !isNaN(numeric_value)) {
               let val = undefined;
-              if(typeof raw_value == "boolean") {
+              if (typeof raw_value == "boolean") {
                 val = raw_value ? cw_weight : 0;
               } else {
                 val = numeric_value;
@@ -187,12 +222,12 @@ export default {
 
               if ("marks" in data) {
                 weighted_user_total_marks += (val / data["marks"]) * cw_weight;
-              } else if(data.is_percent) {
+              } else if (data.is_percent) {
                 weighted_user_total_marks += (val / 100) * cw_weight;
               } else {
                 weighted_user_total_marks += val;
               }
-              
+
               total_weight += cw_weight;
               so_far_weight += cw_weight;
             } else {
@@ -203,6 +238,7 @@ export default {
           for (const [name, data] of exams) {
             const val = parseFloat(this.user_data[component_name][part_name][name]);
             const ex_weight = exam_multiplier * data["weight"] * component["weight"] * part_data["weight"];
+            
             if (!isNaN(val)) {
               if ("marks" in data) {
                 weighted_user_total_marks += val / data["marks"] * ex_weight;
@@ -256,8 +292,8 @@ export default {
         const so_far_grade = this.get_grade(so_far_frac);
 
         if (component["type"] == 'laboratory') {
-          lab_pass &= laboratory_component_pass(total_component_frac);
-          lab_pass_so_far &= laboratory_component_pass(so_far_frac);
+          lab_pass &= this.laboratory_component_pass(total_component_frac);
+          lab_pass_so_far &= this.laboratory_component_pass(so_far_frac);
         }
 
         overall_total += total_component_frac * component["weight"];
@@ -279,8 +315,8 @@ export default {
       const so_far_pc = this.getPC(so_far_frac);
       const so_far_grade = this.get_grade(so_far_frac);
 
-      const overall_pass_year = overall_pass(overall_total);
-      const overall_pass_year_so_far = overall_pass(so_far_frac);
+      const overall_pass_year = this.overall_pass(overall_total);
+      const overall_pass_year_so_far = this.overall_pass(so_far_frac);
 
       const progress_MEng = progress_to_MEng(overall_total);
       const progress_MEng_so_far = progress_to_MEng(so_far_frac);
@@ -477,7 +513,7 @@ table td {
                 </template>
                 <td>{{ getPC(coursework_data.weight * part_data.weight * part_data.coursework_weight) }}</td>
                 <td>{{ getPC(coursework_data.weight * part_data.weight * component.weight * part_data.coursework_weight)
-                }}
+                  }}
                 </td>
               </tr>
             </template>
@@ -485,7 +521,10 @@ table td {
               <tr class="exam">
                 <td>{{ exam_name }}</td>
                 <template v-if="exam_data.is_percent">
-                  <td colspan="2">percent</td>
+                  <td colspan="2">
+                    <va-input class="mark-input" label="Percentage mark"
+                      v-model="user_data[component['name']][part_name][exam_name]" />
+                  </td>
                 </template>
                 <template v-else>
                   <td>
@@ -493,9 +532,9 @@ table td {
                   </td>
                   <td>{{ exam_data.marks }}</td>
                 </template>
-                <td>{{ getPC(exam_data.weight * part_data.weight * (1 - part_data.coursework_weight)) }}</td>
-                <td>{{ getPC(exam_data.weight * part_data.weight * component.weight * (1 - part_data.coursework_weight))
-                }}
+                <td>{{ getPC(exam_data.weight * part_data.weight * (1 - (part_data.coursework_weight || 0))) }}</td>
+                <td>{{ getPC(exam_data.weight * part_data.weight * component.weight * (1 - (part_data.coursework_weight || 0)))
+                  }}
                 </td>
               </tr>
             </template>
@@ -538,21 +577,25 @@ table td {
         <td colspan="2">{{ format_overall_grade_output() }}</td>
       </tr>
       <tr class="overall-grade">
-        <td>Pass all examinable modules:</td>
+        <td>Pass all:</td>
         <td colspan="2">{{ format_examinable_pass_output() }}</td>
       </tr>
-      <tr class="overall-grade">
-        <td>Pass laboratory:</td>
-        <td colspan="2">{{ format_lab_pass_output() }}</td>
-      </tr>
+      <template v-if="'Practical Component' in user_data">
+        <tr class="overall-grade">
+          <td>Pass laboratory:</td>
+          <td colspan="2">{{ format_lab_pass_output() }}</td>
+        </tr>
+      </template>
       <tr class="overall-grade">
         <td>Pass year:</td>
         <td colspan="2">{{ format_pass_output() }}</td>
       </tr>
-      <tr class="overall-grade">
-        <td>Progress to MEng:</td>
-        <td colspan="2">{{ format_progress_MEng_output() }}</td>
-      </tr>
+      <template v-if="this.progress_to_meng">
+        <tr class="overall-grade">
+          <td>Progress to MEng:</td>
+          <td colspan="2">{{ format_progress_MEng_output() }}</td>
+        </tr>
+      </template>
       <tr>
         <td class="space"></td>
       </tr>
