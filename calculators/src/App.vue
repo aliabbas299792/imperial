@@ -1,20 +1,16 @@
 <script>
+const query_json_map = {
+  "overall_meng_calculator": "./overall_grade_data.json",
+  "second_year_marks": "./second_year_grade_data"
+};
+
 function get_calc_name() {
-  return new URLSearchParams(window.location.search).get("calc") || "second_year_marks"
+  return new URLSearchParams(window.location.search).get("calc") || "overall_meng_calculator"
 }
 
 function path_to_data_map() {
-  const path = get_calc_name()
-  let json_data;
-  switch (path) {
-    case "overall_meng_calculator":
-      json_data = "./overall_grade_data.json"
-      break;
-    default:
-      json_data = "./second_year_grade_data.json"
-      break;
-  }
-  return json_data;
+  const calc_name = get_calc_name()
+  return query_json_map[calc_name] || query_json_map["overall_meng_calculator"];
 }
 
 function examinable_module_pass(examinable_module_frac) {
@@ -79,10 +75,10 @@ export default {
     }
   },
   created() {
-    this.loadGradeData()
+    this.load_grade_data()
   },
   methods: {
-    async loadGradeData() {
+    async load_grade_data() {
       let grade_data_file = path_to_data_map()
       try {
         const module = await import(`${grade_data_file}`);
@@ -94,6 +90,12 @@ export default {
       } catch (error) {
         console.error('Failed to load grade data:', error);
       }
+    },
+    handle_calculator_select(event) {
+      const selected_value = event.target.value
+      const params = new URLSearchParams(window.location.search)
+      params.set('calc', selected_value)
+      window.location.href = `${window.location.pathname}?${params.toString()}`
     },
     laboratory_component_pass(lab_component_frac) {
       return lab_component_frac >= this.pass_percent;
@@ -167,6 +169,9 @@ export default {
     }
   },
   computed: {
+    selected_calculator() {
+      return get_calc_name();
+    },
     calculated_grade_values() {
       const pc_values = {};
 
@@ -440,10 +445,21 @@ table td {
   border-radius: 5px;
   margin: 5px;
 }
+
+#calculator_selector {
+    display: block;
+    margin: 10px 0px 20px 0px;
+    padding: 10px;
+    border-radius: 5px;
+}
 </style>
 
 <template>
   <div id="main">
+    <select id="calculator_selector" v-model="selected_calculator" @change="handle_calculator_select">
+      <option value="overall_meng_calculator">Overall MEng Grade Calculator</option>
+      <option value="second_year_marks">Second Year Calculator</option>
+    </select>
     <table>
       <thead>
         <tr class="table_head_floating">
