@@ -28,7 +28,7 @@ function format_booleans(bool) {
 const default_text_formatter = (a) => a;
 
 function gen_user_data(components) {
-  const local_data = localStorage.getItem('user_data');
+  const local_data = localStorage.getItem(`${get_calc_name()}_user_data`);
   if (local_data) {
     return JSON.parse(local_data);
   } else {
