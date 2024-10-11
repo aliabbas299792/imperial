@@ -108,12 +108,12 @@ export default {
       return (num * 100).toPrecision(PRECISION) + "%";
     },
     get_grade(frac) {
-      if (frac >= 0.8) return 'A*';
-      if (frac >= 0.7) return 'A';
-      if (frac >= 0.6) return 'B';
-      if (frac >= 0.5) return 'C';
-      if (frac >= 0.4) return 'D';
-      if (frac >= 0.3) return 'E';
+      if (frac >= 0.795) return 'A*';
+      if (frac >= 0.695) return 'A';
+      if (frac >= 0.595) return 'B';
+      if (frac >= 0.495) return 'C';
+      if (frac >= 0.395) return 'D';
+      if (frac >= 0.295) return 'E';
       return 'F';
     },
     format_so_far_output(something, something_so_far, formatter = default_text_formatter, cell = this.calculated_grade_values["__TOTAL__"]) {
