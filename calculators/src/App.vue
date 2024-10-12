@@ -14,7 +14,7 @@ function path_to_data_map() {
 }
 
 function examinable_module_pass(examinable_module_frac) {
-  return examinable_module_frac >= 0.4;
+  return Math.round(examinable_module_frac * 10**8) / 10**8 >= 0.4;
 }
 
 function progress_to_MEng(overall_frac) {
@@ -98,10 +98,10 @@ export default {
       window.location.href = `${window.location.pathname}?${params.toString()}`
     },
     laboratory_component_pass(lab_component_frac) {
-      return lab_component_frac >= this.pass_percent;
+      return lab_component_frac >= this.pass_percent / 100;
     },
     overall_pass(overall_frac) {
-      return overall_frac >= this.pass_percent;
+      return overall_frac >= this.pass_percent / 100;
     },
 
     getPC(num) {
@@ -140,7 +140,7 @@ export default {
       return this.format_so_far_output("total_grade", "so_far_grade", default_text_formatter, this.calculated_grade_values[component_name][part_name])
     },
     format_pass_output() {
-      return this.format_so_far_output("overall_pass_year", "overall_pass_year_so_far", format_booleans)
+      return this.format_so_far_output("overall_pass", "overall_pass_so_far", format_booleans)
     },
     format_progress_MEng_output() {
       return this.format_so_far_output("progress_MEng", "progress_MEng_so_far", format_booleans)
@@ -275,6 +275,8 @@ export default {
           if (exams.length > 0) { // has an exam so is an examinable module
             examinable_pass &= examinable_module_pass(total_frac);
             examinable_pass_so_far &= examinable_module_pass(so_far_frac);
+
+            console.log(total_frac, so_far_frac)
           }
 
           total_component_frac += total_frac * part_data["weight"];
@@ -320,14 +322,14 @@ export default {
       const so_far_pc = this.getPC(so_far_frac);
       const so_far_grade = this.get_grade(so_far_frac);
 
-      const overall_pass_year = this.overall_pass(overall_total);
-      const overall_pass_year_so_far = this.overall_pass(so_far_frac);
+      const overall_pass = this.overall_pass(overall_total);
+      const overall_pass_so_far = this.overall_pass(so_far_frac);
 
       const progress_MEng = progress_to_MEng(overall_total);
       const progress_MEng_so_far = progress_to_MEng(so_far_frac);
 
       pc_values["__TOTAL__"] = {
-        total_pc, total_grade, so_far_pc, so_far_grade, overall_pass_year, overall_pass_year_so_far, progress_MEng,
+        total_pc, total_grade, so_far_pc, so_far_grade, overall_pass, overall_pass_so_far, progress_MEng,
         progress_MEng_so_far, lab_pass, lab_pass_so_far, examinable_pass, examinable_pass_so_far
       };
       return pc_values;
@@ -592,20 +594,24 @@ table td {
         <td><b>Overall</b> Grade:</td>
         <td colspan="2">{{ format_overall_grade_output() }}</td>
       </tr>
+      <template v-if="this.progress_to_meng">
       <tr class="overall-grade">
         <td>Pass all:</td>
         <td colspan="2">{{ format_examinable_pass_output() }}</td>
       </tr>
+      </template>
       <template v-if="'Practical Component' in user_data">
         <tr class="overall-grade">
           <td>Pass laboratory:</td>
           <td colspan="2">{{ format_lab_pass_output() }}</td>
         </tr>
       </template>
+      <template v-if="typeof this.pass_percent == 'number'">
       <tr class="overall-grade">
-        <td>Pass year:</td>
+        <td>Overall pass:</td>
         <td colspan="2">{{ format_pass_output() }}</td>
       </tr>
+    </template>
       <template v-if="this.progress_to_meng">
         <tr class="overall-grade">
           <td>Progress to MEng:</td>
