@@ -1,0 +1,14 @@
+[project]
+authors = ["Ali Abbas <ali.abbas21@imperial.ac.uk>"]
+channels = ["conda-forge"]
+description = "70017 Tutorial 1"
+name = "tutorial1"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+pydantic = ">=2.9.2,<3"
+ruff = ">=0.6.9,<0.7"
+pre-commit = ">=4.0.1,<5"
