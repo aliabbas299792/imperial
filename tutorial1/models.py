@@ -72,12 +72,24 @@ class DictRootModel[K, V](ContainerRootModel[dict[K, V], K, V]):
 
 
 class Blockchain(ListRootModel[Block]):
+    """
+    A list of `Block` objects
+    """
+
     pass
 
 
 class Mempool(ListRootModel[Transaction]):
+    """
+    A list of `Transaction` objects
+    """
+
     pass
 
 
 class Accounts(DictRootModel[HexType, HexType]):
+    """
+    A dictionary which maps account numbers, to their private keys
+    """
+
     pass
