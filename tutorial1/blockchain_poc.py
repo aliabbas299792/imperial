@@ -6,9 +6,10 @@ from utils import load_json_gz
 from models import Blockchain, Mempool, Accounts
 from procedures.generate_proof import generate_proof
 from procedures.generate_txs import generate_txs
-from procedures.get_tx_hash import get_tx_hash
+from procedures.get_tx_hash import print_tx_hash
 from procedures.produce_blocks import produce_blocks
 from procedures.verify_proof import verify_proof
+from procedures.newest_block_header_hash import newest_block_header_hash
 
 
 def main():
@@ -95,42 +96,46 @@ def main():
         "-a", "--accounts", required=True, type=str, help="Path to the accounts file"
     )
 
+    # newest-block-header-hash
+    parser_get_tx_hash = subparsers.add_parser(
+        "newest-block-header-hash", help="Get the header hash from the newest block"
+    )
+
     # parse the arguments and load them into variables to use
     args = parser.parse_args()
 
-    blockchain_state = Blockchain.model_validate(
-        load_json_gz(Path(args.blockchain_state))
-    )
+    blockchain = Blockchain.model_validate(load_json_gz(Path(args.blockchain_state)))
 
     if args.command == "produce-blocks":
         mempool = Mempool.model_validate(load_json_gz(Path(args.mempool)))
         blockchain_output = Path(args.blockchain_output)
         mempool_output = Path(args.mempool_output)
         number = args.number
-        produce_blocks(
-            blockchain_state, mempool, blockchain_output, mempool_output, number
-        )
+        produce_blocks(blockchain, mempool, blockchain_output, mempool_output, number)
 
     elif args.command == "get-tx-hash":
         block_number = args.block_number
         transaction_number = args.transaction_number
-        get_tx_hash(blockchain_state, block_number, transaction_number)
+        print_tx_hash(blockchain, block_number, transaction_number)
 
     elif args.command == "generate-proof":
         block_number = args.block_number
         transaction_hash = int(args.transaction_hash, 16)
         output = Path(args.output)
-        generate_proof(blockchain_state, block_number, transaction_hash, output)
+        generate_proof(blockchain, block_number, transaction_hash, output)
 
     elif args.command == "verify-proof":
         output_path = args.output_path
-        verify_proof(blockchain_state, output_path)
+        verify_proof(blockchain, output_path)
 
     elif args.command == "generate-txs":
         number = args.number
         output = Path(args.output)
         accounts = Accounts.model_validate(load_json_gz(Path(args.accounts)))
-        generate_txs(blockchain_state, number, output, accounts)
+        generate_txs(blockchain, number, output, accounts)
+
+    elif args.command == "newest-block-header-hash":
+        newest_block_header_hash(blockchain)
 
 
 if __name__ == "__main__":
