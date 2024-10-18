@@ -1,5 +1,6 @@
 from pathlib import Path
+from models import Blockchain
 
 
-def verify_proof(blockchain_state: list, output_path: Path):
+def verify_proof(blockchain: Blockchain, output_path: Path):
     pass

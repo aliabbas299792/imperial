@@ -2,7 +2,8 @@ import argparse
 
 from pathlib import Path
 
-from utils import load_json
+from utils import load_json_gz
+from models import Blockchain, Mempool, Accounts, validate_hex_str
 from procedures.generate_proof import generate_proof
 from procedures.generate_txs import generate_txs
 from procedures.get_tx_hash import get_tx_hash
@@ -96,10 +97,13 @@ def main():
 
     # parse the arguments and load them into variables to use
     args = parser.parse_args()
-    blockchain_state = load_json(Path(args.blockchain_state))
+
+    blockchain_state = Blockchain.model_validate(
+        load_json_gz(Path(args.blockchain_state))
+    )
 
     if args.command == "produce-blocks":
-        mempool = load_json(Path(args.mempool))
+        mempool = Mempool.model_validate(load_json_gz(Path(args.mempool)))
         blockchain_output = Path(args.blockchain_output)
         mempool_output = Path(args.mempool_output)
         number = args.number
@@ -114,7 +118,7 @@ def main():
 
     elif args.command == "generate-proof":
         block_number = args.block_number
-        transaction_hash = args.transaction_hash
+        transaction_hash = validate_hex_str(args.transaction_hash)
         output = Path(args.output)
         generate_proof(blockchain_state, block_number, transaction_hash, output)
 
@@ -125,7 +129,7 @@ def main():
     elif args.command == "generate-txs":
         number = args.number
         output = Path(args.output)
-        accounts = load_json(Path(args.accounts))
+        accounts = Accounts.model_validate(load_json_gz(Path(args.accounts)))
         generate_txs(blockchain_state, number, output, accounts)
 
 

@@ -1,5 +1,6 @@
 from pathlib import Path
+from models import Blockchain, Accounts
 
 
-def generate_txs(blockchain_state: list, number: int, output: Path, accounts: list):
+def generate_txs(blockchain: Blockchain, number: int, output: Path, accounts: Accounts):
     pass
