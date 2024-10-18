@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 from utils import load_json_gz
-from models import Blockchain, Mempool, Accounts, validate_hex_str
+from models import Blockchain, Mempool, Accounts
 from procedures.generate_proof import generate_proof
 from procedures.generate_txs import generate_txs
 from procedures.get_tx_hash import get_tx_hash
@@ -118,7 +118,7 @@ def main():
 
     elif args.command == "generate-proof":
         block_number = args.block_number
-        transaction_hash = validate_hex_str(args.transaction_hash)
+        transaction_hash = int(args.transaction_hash, 16)
         output = Path(args.output)
         generate_proof(blockchain_state, block_number, transaction_hash, output)
 

@@ -1,17 +1,15 @@
 import re
 from typing import Annotated, TypeAlias, Iterator, ItemsView, KeysView, ValuesView
-from pydantic import BaseModel, RootModel, ValidationInfo, PlainValidator
+from pydantic import BaseModel, RootModel, PlainValidator, PlainSerializer
 
 HEX_PATTERN = re.compile(r"^0x[A-Fa-f0-9]+$")
 
 
-def validate_hex_str(value: str, _: ValidationInfo = None):
-    if not HEX_PATTERN.match(value):
-        raise ValueError(f"{value} isn't a valid hex string")
-    return value
-
-
-HexType: TypeAlias = Annotated[str, PlainValidator(validate_hex_str)]
+HexType: TypeAlias = Annotated[
+    str,
+    PlainValidator(lambda v: int(v, 16)),
+    PlainSerializer(lambda v: hex(v), return_type=str),
+]
 
 
 class Header(BaseModel):
