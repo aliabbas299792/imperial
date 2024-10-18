@@ -1,4 +1,11 @@
+from pathlib import Path
+
+
 def produce_blocks(
-    blockchain_state, mempool, blockchain_output, mempool_output, number
+    blockchain_state: list,
+    mempool: list,
+    blockchain_output: Path,
+    mempool_output: Path,
+    number: int,
 ):
     pass

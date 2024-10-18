@@ -1,5 +1,8 @@
 import argparse
 
+from pathlib import Path
+
+from utils import load_json
 from procedures.generate_proof import generate_proof
 from procedures.generate_txs import generate_txs
 from procedures.get_tx_hash import get_tx_hash
@@ -93,12 +96,12 @@ def main():
 
     # parse the arguments and load them into variables to use
     args = parser.parse_args()
-    blockchain_state = args.blockchain_state
+    blockchain_state = load_json(Path(args.blockchain_state))
 
     if args.command == "produce-blocks":
-        mempool = args.mempool
-        blockchain_output = args.blockchain_output
-        mempool_output = args.mempool_output
+        mempool = load_json(Path(args.mempool))
+        blockchain_output = Path(args.blockchain_output)
+        mempool_output = Path(args.mempool_output)
         number = args.number
         produce_blocks(
             blockchain_state, mempool, blockchain_output, mempool_output, number
@@ -112,7 +115,7 @@ def main():
     elif args.command == "generate-proof":
         block_number = args.block_number
         transaction_hash = args.transaction_hash
-        output = args.output
+        output = Path(args.output)
         generate_proof(blockchain_state, block_number, transaction_hash, output)
 
     elif args.command == "verify-proof":
@@ -121,8 +124,8 @@ def main():
 
     elif args.command == "generate-txs":
         number = args.number
-        output = args.output
-        accounts = args.accounts
+        output = Path(args.output)
+        accounts = load_json(Path(args.accounts))
         generate_txs(blockchain_state, number, output, accounts)
 
 
