@@ -7,8 +7,8 @@ HEX_PATTERN = re.compile(r"^0x[A-Fa-f0-9]+$")
 
 HexType: TypeAlias = Annotated[
     str,
-    PlainValidator(lambda v: int(v, 16)),
-    PlainSerializer(lambda v: hex(v), return_type=str),
+    PlainValidator(lambda v: int(v, 16) if isinstance(v, str) else v),
+    PlainSerializer(lambda v: hex(v if isinstance(v, int) else 0), return_type=str),
 ]
 
 
@@ -17,7 +17,7 @@ class Header(BaseModel):
     height: int
     miner: HexType
     nonce: int
-    hash: HexType
+    hash: HexType | None
     previous_block_header_hash: HexType
     timestamp: int
     transactions_count: int
