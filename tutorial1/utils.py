@@ -10,6 +10,11 @@ def load_json_gz(path: Path) -> list | dict:
         return json.load(f)
 
 
+def save_json_gz(path: Path, obj: list | dict) -> None:
+    with gzip.open(path, "rt") as f:
+        json.dump(obj, f)
+
+
 def model_hash(model: BaseModel):
     fields_sorted_by_key = sorted(model.model_dump().items())
     values = ",".join([str(v) for _, v in fields_sorted_by_key])
