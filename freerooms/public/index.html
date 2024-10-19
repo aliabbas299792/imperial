@@ -41,6 +41,27 @@
     color: indianred;
   }
 
+  .thenModal {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #22222263;  
+  }
+
+  .thenModal > div {
+    padding: 10px;
+    background: white;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 5px;
+    overflow: scroll;
+  }
+
   #top {
     color: #555;
     text-align: center;
@@ -71,7 +92,7 @@
   }
 </style>
 <div id="top">
-  Primary sort prioritises Huxley, secondary sort is how far ahead are they free till
+  Rooms are sorted by how soon they won't be unoccupied
   <div>
     Time to view at:
     <input type="time" id="viewTime" min="07:00" max="00:00" required />
@@ -82,6 +103,9 @@
   </div>
   <input type="button" id="searchTimes" value="Submit" />
   <input type="button" id="resetTime" value="Reset Time" />
+  <div>
+    <input type="text" id="roomFilter" placeholder="Filter By Room..." />
+  </div>
 </div>
 <table id="free_now">
   <tr>
