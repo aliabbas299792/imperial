@@ -11,7 +11,13 @@ const OpeningOffset = 7 * 3600 * 1000;
 const locale = 'en-GB';
 
 const days_ahead = 10;
-const queries = ["HXLY", "SHER", "BLKT", "SAF", "SKEM"];
+
+const queries = [
+  "HXLY", "SHER", "BLKT", "SAF", "BESS",
+  "BEIT", "CAGB", "ACEX", "BONE", "RODH",
+  "CHEM", "RSM", "ICBS", "EENG"
+];
+
 let rooms_to_dates_and_free_times = [];
 
 
