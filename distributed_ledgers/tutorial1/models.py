@@ -1,18 +1,43 @@
 import re
+from hashlib import sha256
 from typing import Annotated, TypeAlias, Iterator, ItemsView, KeysView, ValuesView
-from pydantic import BaseModel, RootModel, PlainValidator, PlainSerializer
+from pydantic import BaseModel, RootModel, PlainValidator
+
+from utils import to_hex
+
 
 HEX_PATTERN = re.compile(r"^0x[A-Fa-f0-9]+$")
 
 
+def validate_hex(s):
+    if not re.fullmatch(HEX_PATTERN, s):
+        raise ValueError("Invalid Hex string")
+    return s
+
+
 HexType: TypeAlias = Annotated[
     str,
-    PlainValidator(lambda v: int(v, 16) if isinstance(v, str) else v),
-    PlainSerializer(lambda v: hex(v if isinstance(v, int) else 0), return_type=str),
+    PlainValidator(validate_hex),
 ]
 
 
-class Header(BaseModel):
+class HashableModel(BaseModel):
+    def serialise(self, fields_to_exclude: list = None) -> str:
+        fields_to_exclude = set(fields_to_exclude or [])
+        fields_sorted_by_key = sorted(self.model_dump().items())
+        values = [str(v) for k, v in fields_sorted_by_key if k not in fields_to_exclude]
+        return ",".join(values)
+
+    def compute_hash(self, fields_to_exclude: list = None) -> bytes:
+        serialised = self.serialise(fields_to_exclude)
+        hashed = sha256(serialised.encode()).digest()
+        return hashed
+
+    def compute_hash_hex(self, fields_to_exclude: list = None) -> str:
+        return to_hex(self.compute_hash(fields_to_exclude))
+
+
+class Header(HashableModel):
     difficulty: int
     height: int
     miner: HexType
@@ -24,7 +49,7 @@ class Header(BaseModel):
     transactions_merkle_root: HexType
 
 
-class Transaction(BaseModel):
+class Transaction(HashableModel):
     amount: int
     lock_time: int
     receiver: HexType

@@ -1,7 +1,7 @@
 import ecdsa
 from pathlib import Path
 from collections import defaultdict
-from utils import model_hash, save_json_gz
+from utils import save_json_gz, from_hex
 from models import Blockchain, Mempool, Transaction, Block, Header, HexType
 
 
@@ -18,18 +18,13 @@ def construct_merkle_tree_root(transactions: list[Transaction]):
 
 
 def valid_transaction(tx: Transaction) -> bool:
-    """
-    TODO: verify that this is the correct way to verify the transactions
-    """
     try:
         der_hex_pub_key, hex_signed_hash = tx.signature.split(",")
-        der_pub_key = bytes.fromhex(der_hex_pub_key[2:])
-        signed_hash = bytes.fromhex(hex_signed_hash[2:])
-        computed_hash = model_hash(tx, fields_to_exclude=["signature"])
-        pub_key = ecdsa.VerifyingKey.from_der(der_pub_key)
+        computed_hash = tx.compute_hash(fields_to_exclude=["signature"])
+        pub_key = ecdsa.VerifyingKey.from_der(from_hex(der_hex_pub_key))
         return pub_key.verify_digest(
-            signed_hash,
-            bytes.fromhex(computed_hash[2:]),
+            from_hex(hex_signed_hash),
+            computed_hash,
             sigdecode=ecdsa.util.sigdecode_der,
         )
     except ecdsa.BadSignatureError:
@@ -84,6 +79,7 @@ def produce_blocks(
 
         # sort the transactions by lock time
         valid_txs.sort(key=lambda tx: tx.lock_time)
+        i = 0
         for i, tx in enumerate(valid_txs):
             if tx.lock_time > next_timestamp:
                 break
@@ -117,7 +113,7 @@ def produce_blocks(
         )
 
         # calculate and set the header's hash once it's been computed
-        next_hash = model_hash(new_block.header, fields_to_exclude=["hash"])
+        next_hash = new_block.header.compute_hash_hex(fields_to_exclude=["hash"])
         new_block.header.hash = next_hash
 
         # adjust the nonce value until the new block respects the chain difficulty

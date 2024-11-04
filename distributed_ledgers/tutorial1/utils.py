@@ -1,8 +1,6 @@
 import gzip
 import json
-from hashlib import sha256
 from pathlib import Path
-from pydantic import BaseModel
 
 
 def load_json_gz(path: Path) -> list | dict:
@@ -15,15 +13,9 @@ def save_json_gz(path: Path, obj: list | dict) -> None:
         json.dump(obj, f)
 
 
-def model_hash(model: BaseModel, fields_to_exclude: list = None):
-    if not fields_to_exclude:
-        fields_to_exclude = set()
-    else:
-        fields_to_exclude = set(fields_to_exclude)
+def from_hex(hex_string: str) -> bytes:
+    return bytes.fromhex(hex_string[2:])
 
-    fields_sorted_by_key = sorted(model.model_dump().items())
-    values = ",".join(
-        [str(v) for k, v in fields_sorted_by_key if k not in fields_to_exclude]
-    )
-    hashed = sha256(values.encode()).hexdigest()
-    return hashed
+
+def to_hex(b: bytes) -> str:
+    return "0x" + b.hex()
