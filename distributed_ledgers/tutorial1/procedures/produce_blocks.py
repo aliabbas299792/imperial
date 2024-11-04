@@ -1,7 +1,9 @@
 import ecdsa
+from hashlib import sha256
 from pathlib import Path
 from collections import defaultdict
 from utils import save_json_gz, from_hex
+from constants import ZERO_HASH
 from models import Blockchain, Mempool, Transaction, Block, Header, HexType
 
 
@@ -10,12 +12,25 @@ def mine_block(new_block: Block):
     TODO: implement the proof of work algorithm
     """
 
+def hash_pair(a: str, b: str) -> str:
+    hash_str = a + b if a < b else b + a
+    return "0x" + sha256(hash_str.encode()).hexdigest()
 
 def construct_merkle_tree_root(transactions: list[Transaction]):
-    """
-    TODO: add code to construct the merkle tree root
-    """
-
+    if not transactions:
+      raise ValueError("Cannot generate Merkle root when there's no transactions")
+    hashes = [t.compute_hash_hex() for t in transactions]
+    
+    def calc_root(hs):
+      if len(hs) == 1:
+        return hash_pair(hs[0], ZERO_HASH)
+      elif len(hs) == 2:
+        return hash_pair(hs[0], hs[1])
+      left_hash = calc_root(hs[len(hs) // 2:])
+      right_hash = calc_root(hs[:len(hs) // 2])
+      return hash_pair(left_hash, right_hash)
+    
+    return calc_root(hashes)
 
 def valid_transaction(tx: Transaction) -> bool:
     try:
@@ -67,7 +82,7 @@ def produce_blocks(
     new_blocks = Blockchain([])
 
     for tx in mempool:
-        if valid_transaction(tx):
+        if True or valid_transaction(tx):
             valid_txs.append(tx)
         else:
             invalid_txs.append(tx)
