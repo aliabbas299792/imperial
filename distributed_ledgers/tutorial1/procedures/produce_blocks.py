@@ -7,10 +7,21 @@ from constants import ZERO_HASH
 from models import Blockchain, Mempool, Transaction, Block, Header, HexType
 
 
-def mine_block(new_block: Block):
+def mine_block(new_block: Block) -> None:
     """
-    TODO: implement the proof of work algorithm
+    Mines blocks via Proof-of-Work - adjusting the block's nonce until the
+    hash meets the required difficulty level
+    Modifies the new block in-place
     """
+    new_block.header.nonce = 0
+    header_hash = ""
+    target_pre = "0" * new_block.header.difficulty
+    
+    while not header_hash.startswith(target_pre):
+        header_hash = sha256(new_block.header.compute_hash(fields_to_exclude=["hash"])).hexdigest()
+        new_block.header.nonce += 1
+    
+    new_block.header.hash = "0x" + header_hash
 
 def hash_pair(a: str, b: str) -> str:
     hash_str = a + b if a < b else b + a
@@ -141,7 +152,6 @@ def produce_blocks(
         last_timestamp = next_timestamp
 
     # the overall remaining transactions
-    print(f"There are {len(invalid_txs)} invalid transactions in the mempool")
     remaining_mempool = Mempool(valid_txs + invalid_txs)
 
     save_json_gz(blockchain_output, new_blocks.model_dump())
