@@ -59,14 +59,11 @@ class Transaction(HashableModel):
     signature: str | None
     transaction_fee: int
 
-    def compute_transaction_hash(self):
+    def compute_signing_hash(self):
         return self.compute_model_hash(fields_to_exclude=["signature"])
 
-    def compute_transaction_hash_hex(self):
-        return to_hex(self.compute_transaction_hash())
-
     def sign(self, private_key: ecdsa.SigningKey):
-        hash_to_sign = self.compute_transaction_hash()
+        hash_to_sign = self.compute_signing_hash()
         hex_signed_hash = private_key.sign_digest(
             hash_to_sign, sigencode=ecdsa.util.sigencode_der
         )
@@ -153,3 +150,4 @@ class Accounts(DictRootModel[HexType, HexType]):
 
     def get_as_private_key(self, account: HexType) -> ecdsa.SigningKey:
         return ecdsa.SigningKey.from_der(from_hex(self[account]))
+

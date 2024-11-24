@@ -26,3 +26,19 @@ def hash_pair(a: str, b: str) -> str:
     hash_str = a + b if a < b else b + a
     return "0x" + sha256(hash_str.encode()).hexdigest()
 
+
+def pair_iter(lst):
+    if len(lst) % 2 == 1:
+        lst.append(None)
+
+    for e1, e2 in zip(lst[::2], lst[1::2]):
+        yield e1, e2
+
+
+def enumerated_pair_iter(lst):
+    if len(lst) % 2 == 1:
+        lst.append(None)
+
+    idxs = pair_iter(range(0, len(lst)))
+    elems = pair_iter(lst)
+    return zip(idxs, elems)

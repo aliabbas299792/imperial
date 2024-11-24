@@ -120,7 +120,7 @@ def main():
 
     elif args.command == "generate-proof":
         block_number = args.block_number
-        transaction_hash = int(args.transaction_hash, 16)
+        transaction_hash = args.transaction_hash
         output = Path(args.output)
         generate_proof(blockchain, block_number, transaction_hash, output)
 
