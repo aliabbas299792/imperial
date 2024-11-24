@@ -1,44 +1,55 @@
-import ecdsa
+from hashlib import sha256
 from pathlib import Path
 from collections import defaultdict
-from utils import model_hash, save_json_gz
+from utils import save_json_gz, hash_pair
+from constants import ZERO_HASH
 from models import Blockchain, Mempool, Transaction, Block, Header, HexType
 
 
-def mine_block(new_block: Block):
+def mine_block(new_block: Block) -> None:
     """
-    TODO: implement the proof of work algorithm
+    Mines blocks via Proof-of-Work - adjusting the block's nonce until the
+    hash meets the required difficulty level
+    Modifies the new block in-place
     """
+    new_block.header.nonce = 0
+    header_hash = ""
+    target_pre = "0" * new_block.header.difficulty
+
+    while not header_hash.startswith(target_pre):
+        header_hash = sha256(
+            new_block.header.compute_model_hash(fields_to_exclude=["hash"])
+        ).hexdigest()
+        new_block.header.nonce += 1
+
+    new_block.header.hash = "0x" + header_hash
 
 
 def construct_merkle_tree_root(transactions: list[Transaction]):
-    """
-    TODO: add code to construct the merkle tree root
-    """
+    if not transactions:
+        raise ValueError("Cannot generate Merkle root when there's no transactions")
 
+    hashes = [t.compute_model_hash_hex() for t in transactions]
+    while len(hashes) > 1:
+        next_hashes = []
 
-def valid_transaction(tx: Transaction) -> bool:
-    """
-    TODO: verify that this is the correct way to verify the transactions
-    """
-    try:
-        der_hex_pub_key, hex_signed_hash = tx.signature.split(",")
-        der_pub_key = bytes.fromhex(der_hex_pub_key[2:])
-        signed_hash = bytes.fromhex(hex_signed_hash[2:])
-        computed_hash = model_hash(tx, fields_to_exclude=["signature"])
-        pub_key = ecdsa.VerifyingKey.from_der(der_pub_key)
-        return pub_key.verify_digest(
-            signed_hash,
-            bytes.fromhex(computed_hash[2:]),
-            sigdecode=ecdsa.util.sigdecode_der,
-        )
-    except ecdsa.BadSignatureError:
-        return False  # invalid transaction if anything failed
+        if len(hashes) % 2 == 1:
+            hashes.append(ZERO_HASH)
+
+        for h1, h2 in zip(hashes[::2], hashes[1::2]):
+            next_hashes.append(hash_pair(h1, h2))
+
+        hashes = next_hashes
+
+    return hashes[0]
 
 
 def execute_transaction(
     tx: Transaction, miner_address: HexType, balances: dict
 ) -> None:
+    """
+    Simulating the execution of a transaction
+    """
     balances[tx.sender] -= tx.amount + tx.transaction_fee
     balances[tx.receiver] += tx.amount
     balances[miner_address] += tx.transaction_fee
@@ -72,7 +83,7 @@ def produce_blocks(
     new_blocks = Blockchain([])
 
     for tx in mempool:
-        if valid_transaction(tx):
+        if tx.verify_signature():
             valid_txs.append(tx)
         else:
             invalid_txs.append(tx)
@@ -84,6 +95,7 @@ def produce_blocks(
 
         # sort the transactions by lock time
         valid_txs.sort(key=lambda tx: tx.lock_time)
+        i = 0
         for i, tx in enumerate(valid_txs):
             if tx.lock_time > next_timestamp:
                 break
@@ -117,7 +129,7 @@ def produce_blocks(
         )
 
         # calculate and set the header's hash once it's been computed
-        next_hash = model_hash(new_block.header, fields_to_exclude=["hash"])
+        next_hash = new_block.header.compute_model_hash_hex(fields_to_exclude=["hash"])
         new_block.header.hash = next_hash
 
         # adjust the nonce value until the new block respects the chain difficulty
@@ -130,7 +142,6 @@ def produce_blocks(
         last_timestamp = next_timestamp
 
     # the overall remaining transactions
-    print(f"There are {len(invalid_txs)} invalid transactions in the mempool")
     remaining_mempool = Mempool(valid_txs + invalid_txs)
 
     save_json_gz(blockchain_output, new_blocks.model_dump())

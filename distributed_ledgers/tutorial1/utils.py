@@ -1,8 +1,12 @@
 import gzip
 import json
-from hashlib import sha256
 from pathlib import Path
-from pydantic import BaseModel
+from hashlib import sha256
+
+
+def load_json(path: Path) -> list | dict:
+    with open(path, "rt") as f:
+        return json.load(f)
 
 
 def load_json_gz(path: Path) -> list | dict:
@@ -15,15 +19,31 @@ def save_json_gz(path: Path, obj: list | dict) -> None:
         json.dump(obj, f)
 
 
-def model_hash(model: BaseModel, fields_to_exclude: list = None):
-    if not fields_to_exclude:
-        fields_to_exclude = set()
-    else:
-        fields_to_exclude = set(fields_to_exclude)
+def from_hex(hex_string: str) -> bytes:
+    return bytes.fromhex(hex_string[2:])
 
-    fields_sorted_by_key = sorted(model.model_dump().items())
-    values = ",".join(
-        [str(v) for k, v in fields_sorted_by_key if k not in fields_to_exclude]
-    )
-    hashed = sha256(values.encode()).hexdigest()
-    return hashed
+
+def to_hex(b: bytes) -> str:
+    return "0x" + b.hex()
+
+
+def hash_pair(a: str, b: str) -> str:
+    hash_str = a + b if a < b else b + a
+    return "0x" + sha256(hash_str.encode()).hexdigest()
+
+
+def pair_iter(lst):
+    if len(lst) % 2 == 1:
+        lst.append(None)
+
+    for e1, e2 in zip(lst[::2], lst[1::2]):
+        yield e1, e2
+
+
+def enumerated_pair_iter(lst):
+    if len(lst) % 2 == 1:
+        lst.append(None)
+
+    idxs = pair_iter(range(0, len(lst)))
+    elems = pair_iter(lst)
+    return zip(idxs, elems)
