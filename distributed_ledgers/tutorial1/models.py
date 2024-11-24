@@ -148,7 +148,5 @@ class Accounts(DictRootModel[HexType, HexType]):
     A dictionary which maps account numbers, to their private keys
     """
 
-    pass
-
     def get_as_private_key(self, account: HexType) -> ecdsa.SigningKey:
         return ecdsa.SigningKey.from_der(from_hex(self[account]))
