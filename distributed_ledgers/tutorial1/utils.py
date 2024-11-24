@@ -4,6 +4,11 @@ from pathlib import Path
 from hashlib import sha256
 
 
+def load_json(path: Path) -> list | dict:
+    with open(path, "rt") as f:
+        return json.load(f)
+
+
 def load_json_gz(path: Path) -> list | dict:
     with gzip.open(path, "rt") as f:
         return json.load(f)

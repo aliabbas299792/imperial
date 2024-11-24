@@ -2,8 +2,8 @@ import argparse
 
 from pathlib import Path
 
-from utils import load_json_gz
-from models import Blockchain, Mempool, Accounts
+from utils import load_json_gz, load_json
+from models import Blockchain, Mempool, Accounts, BlockInclusionProof
 from procedures.generate_proof import generate_proof
 from procedures.generate_txs import generate_txs
 from procedures.get_tx_hash import print_tx_hash
@@ -71,7 +71,7 @@ def main():
     # verify-proof
     parser_verify_proof = subparsers.add_parser("verify-proof", help="Verify a proof")
     parser_verify_proof.add_argument(
-        "output_path", type=str, help="Path to the proof file"
+        "proof_path", type=str, help="Path to the proof file"
     )
 
     # generate-txs
@@ -125,8 +125,8 @@ def main():
         generate_proof(blockchain, block_number, transaction_hash, output)
 
     elif args.command == "verify-proof":
-        output_path = args.output_path
-        verify_proof(blockchain, output_path)
+        proof = BlockInclusionProof.model_validate(load_json(args.proof_path))
+        verify_proof(blockchain, proof)
 
     elif args.command == "generate-txs":
         number = args.number

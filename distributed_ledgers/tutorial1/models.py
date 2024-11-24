@@ -151,3 +151,9 @@ class Accounts(DictRootModel[HexType, HexType]):
     def get_as_private_key(self, account: HexType) -> ecdsa.SigningKey:
         return ecdsa.SigningKey.from_der(from_hex(self[account]))
 
+
+class BlockInclusionProof(BaseModel):
+    block_number: int
+    transaction_hash: HexType
+    proof: list[HexType]
+    merkle_root: HexType
