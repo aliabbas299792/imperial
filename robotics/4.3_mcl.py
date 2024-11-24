@@ -142,7 +142,6 @@ def find_dist_to_closest_wall(x, y, theta) -> Tuple[float, Tuple[float, float]]:
 
     ms = []
     for wall in walls.values():
-
         m = wall_dist(x, y, theta, wall)
         ms.append(m)
         if m < 0:

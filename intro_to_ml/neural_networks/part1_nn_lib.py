@@ -361,7 +361,7 @@ class MultiLayerNetwork(object):
         Arguments:
             - input_dim {int} -- Number of features in the input (excluding
                 the batch dimension).
-            - neurons {list} -- Number of neurons in each linear layer
+        - neurons {list} -- Number of neurons in each linear layer
                 represented as a list. The length of the list determines the
                 number of linear layers.
             - activations {list} -- List of the activation functions to apply

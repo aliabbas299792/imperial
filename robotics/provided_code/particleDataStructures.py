@@ -9,6 +9,7 @@ from common import WEB_PRINT
 
 printFn = print
 
+
 # Functions to generate some dummy particles data:
 def calcX():
     return random.gauss(80, 3) + 70 * (math.sin(t))  # in cm
