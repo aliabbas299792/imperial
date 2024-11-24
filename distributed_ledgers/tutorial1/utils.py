@@ -1,6 +1,7 @@
 import gzip
 import json
 from pathlib import Path
+from hashlib import sha256
 
 
 def load_json_gz(path: Path) -> list | dict:
@@ -19,3 +20,9 @@ def from_hex(hex_string: str) -> bytes:
 
 def to_hex(b: bytes) -> str:
     return "0x" + b.hex()
+
+
+def hash_pair(a: str, b: str) -> str:
+    hash_str = a + b if a < b else b + a
+    return "0x" + sha256(hash_str.encode()).hexdigest()
+

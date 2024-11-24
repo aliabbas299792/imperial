@@ -3,7 +3,7 @@ from models import Blockchain
 
 def get_tx_hash(blockchain: Blockchain, block_number: int, transaction_number: int):
     transaction = blockchain[block_number].transactions[transaction_number]
-    return transaction.compute_hash_hex(fields_to_exclude=["signature"])
+    return transaction.compute_transaction_hash_hex()
 
 
 def print_tx_hash(blockchain: Blockchain, block_number: int, transaction_number: int):

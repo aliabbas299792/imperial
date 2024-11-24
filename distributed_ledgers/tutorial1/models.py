@@ -30,13 +30,13 @@ class HashableModel(BaseModel):
         values = [str(v) for k, v in fields_sorted_by_key if k not in fields_to_exclude]
         return ",".join(values)
 
-    def compute_hash(self, fields_to_exclude: list = None) -> bytes:
+    def compute_model_hash(self, fields_to_exclude: list = None) -> bytes:
         serialised = self.serialise(fields_to_exclude)
         hashed = sha256(serialised.encode()).digest()
         return hashed
 
-    def compute_hash_hex(self, fields_to_exclude: list = None) -> str:
-        return to_hex(self.compute_hash(fields_to_exclude))
+    def compute_model_hash_hex(self, fields_to_exclude: list = None) -> str:
+        return to_hex(self.compute_model_hash(fields_to_exclude))
 
 
 class Header(HashableModel):
@@ -59,11 +59,14 @@ class Transaction(HashableModel):
     signature: str | None
     transaction_fee: int
 
-    def compute_hash_to_sign(self):
-        return self.compute_hash(fields_to_exclude=["signature"])
+    def compute_transaction_hash(self):
+        return self.compute_model_hash(fields_to_exclude=["signature"])
+
+    def compute_transaction_hash_hex(self):
+        return to_hex(self.compute_transaction_hash())
 
     def sign(self, private_key: ecdsa.SigningKey):
-        hash_to_sign = self.compute_hash_to_sign()
+        hash_to_sign = self.compute_transaction_hash()
         hex_signed_hash = private_key.sign_digest(
             hash_to_sign, sigencode=ecdsa.util.sigencode_der
         )
@@ -82,7 +85,7 @@ class Transaction(HashableModel):
         try:
             return pub_key.verify_digest(
                 from_hex(hex_signed_hash),
-                self.compute_hash_to_sign(),
+                self.compute_transaction_hash(),
                 sigdecode=ecdsa.util.sigdecode_der,
             )
         except ecdsa.BadSignatureError:

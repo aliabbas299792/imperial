@@ -1,8 +1,7 @@
-import ecdsa
 from hashlib import sha256
 from pathlib import Path
 from collections import defaultdict
-from utils import save_json_gz, from_hex
+from utils import save_json_gz, hash_pair
 from constants import ZERO_HASH
 from models import Blockchain, Mempool, Transaction, Block, Header, HexType
 
@@ -19,38 +18,38 @@ def mine_block(new_block: Block) -> None:
 
     while not header_hash.startswith(target_pre):
         header_hash = sha256(
-            new_block.header.compute_hash(fields_to_exclude=["hash"])
+            new_block.header.compute_model_hash(fields_to_exclude=["hash"])
         ).hexdigest()
         new_block.header.nonce += 1
 
     new_block.header.hash = "0x" + header_hash
 
 
-def hash_pair(a: str, b: str) -> str:
-    hash_str = a + b if a < b else b + a
-    return "0x" + sha256(hash_str.encode()).hexdigest()
-
-
 def construct_merkle_tree_root(transactions: list[Transaction]):
     if not transactions:
         raise ValueError("Cannot generate Merkle root when there's no transactions")
-    hashes = [t.compute_hash_hex() for t in transactions]
 
-    def calc_root(hs):
-        if len(hs) == 1:
-            return hash_pair(hs[0], ZERO_HASH)
-        elif len(hs) == 2:
-            return hash_pair(hs[0], hs[1])
-        left_hash = calc_root(hs[len(hs) // 2 :])
-        right_hash = calc_root(hs[: len(hs) // 2])
-        return hash_pair(left_hash, right_hash)
+    hashes = [t.compute_model_hash_hex() for t in transactions]
+    while len(hashes) > 1:
+        next_hashes = []
 
-    return calc_root(hashes)
+        if len(hashes) % 2 == 1:
+            hashes.append(ZERO_HASH)
+
+        for h1, h2 in zip(hashes[::2], hashes[1::2]):
+            next_hashes.append(hash_pair(h1, h2))
+
+        hashes = next_hashes
+
+    return hashes[0]
 
 
 def execute_transaction(
     tx: Transaction, miner_address: HexType, balances: dict
 ) -> None:
+    """
+    Simulating the execution of a transaction
+    """
     balances[tx.sender] -= tx.amount + tx.transaction_fee
     balances[tx.receiver] += tx.amount
     balances[miner_address] += tx.transaction_fee
@@ -130,7 +129,7 @@ def produce_blocks(
         )
 
         # calculate and set the header's hash once it's been computed
-        next_hash = new_block.header.compute_hash_hex(fields_to_exclude=["hash"])
+        next_hash = new_block.header.compute_model_hash_hex(fields_to_exclude=["hash"])
         new_block.header.hash = next_hash
 
         # adjust the nonce value until the new block respects the chain difficulty
