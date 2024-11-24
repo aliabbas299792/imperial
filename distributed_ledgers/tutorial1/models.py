@@ -1,9 +1,11 @@
 import re
+import ecdsa
 from hashlib import sha256
 from typing import Annotated, TypeAlias, Iterator, ItemsView, KeysView, ValuesView
+import ecdsa.util
 from pydantic import BaseModel, RootModel, PlainValidator
 
-from utils import to_hex
+from utils import to_hex, from_hex
 
 
 HEX_PATTERN = re.compile(r"^0x[A-Fa-f0-9]+$")
@@ -54,8 +56,37 @@ class Transaction(HashableModel):
     lock_time: int
     receiver: HexType
     sender: HexType
-    signature: str
+    signature: str | None
     transaction_fee: int
+
+    def compute_hash_to_sign(self):
+        return self.compute_hash(fields_to_exclude=["signature"])
+
+    def sign(self, private_key: ecdsa.SigningKey):
+        hash_to_sign = self.compute_hash_to_sign()
+        hex_signed_hash = private_key.sign_digest(
+            hash_to_sign, sigencode=ecdsa.util.sigencode_der
+        )
+        public_key = private_key.verifying_key
+        der_hex_pub_key = to_hex(public_key.to_der())
+        full_signature = f"{der_hex_pub_key},{to_hex(hex_signed_hash)}"
+        self.signature = full_signature
+
+    def verify_signature(self) -> bool:
+        if not self.signature:
+            return False
+
+        der_hex_pub_key, hex_signed_hash = self.signature.split(",")
+        pub_key = ecdsa.VerifyingKey.from_der(from_hex(der_hex_pub_key))
+
+        try:
+            return pub_key.verify_digest(
+                from_hex(hex_signed_hash),
+                self.compute_hash_to_sign(),
+                sigdecode=ecdsa.util.sigdecode_der,
+            )
+        except ecdsa.BadSignatureError:
+            return False  # invalid transaction if anything failed
 
 
 class Block(BaseModel):
@@ -118,3 +149,6 @@ class Accounts(DictRootModel[HexType, HexType]):
     """
 
     pass
+
+    def get_as_private_key(self, account: HexType) -> ecdsa.SigningKey:
+        return ecdsa.SigningKey.from_der(from_hex(self[account]))

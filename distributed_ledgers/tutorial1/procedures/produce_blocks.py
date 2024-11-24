@@ -16,45 +16,36 @@ def mine_block(new_block: Block) -> None:
     new_block.header.nonce = 0
     header_hash = ""
     target_pre = "0" * new_block.header.difficulty
-    
+
     while not header_hash.startswith(target_pre):
-        header_hash = sha256(new_block.header.compute_hash(fields_to_exclude=["hash"])).hexdigest()
+        header_hash = sha256(
+            new_block.header.compute_hash(fields_to_exclude=["hash"])
+        ).hexdigest()
         new_block.header.nonce += 1
-    
+
     new_block.header.hash = "0x" + header_hash
+
 
 def hash_pair(a: str, b: str) -> str:
     hash_str = a + b if a < b else b + a
     return "0x" + sha256(hash_str.encode()).hexdigest()
 
+
 def construct_merkle_tree_root(transactions: list[Transaction]):
     if not transactions:
-      raise ValueError("Cannot generate Merkle root when there's no transactions")
+        raise ValueError("Cannot generate Merkle root when there's no transactions")
     hashes = [t.compute_hash_hex() for t in transactions]
-    
-    def calc_root(hs):
-      if len(hs) == 1:
-        return hash_pair(hs[0], ZERO_HASH)
-      elif len(hs) == 2:
-        return hash_pair(hs[0], hs[1])
-      left_hash = calc_root(hs[len(hs) // 2:])
-      right_hash = calc_root(hs[:len(hs) // 2])
-      return hash_pair(left_hash, right_hash)
-    
-    return calc_root(hashes)
 
-def valid_transaction(tx: Transaction) -> bool:
-    try:
-        der_hex_pub_key, hex_signed_hash = tx.signature.split(",")
-        computed_hash = tx.compute_hash(fields_to_exclude=["signature"])
-        pub_key = ecdsa.VerifyingKey.from_der(from_hex(der_hex_pub_key))
-        return pub_key.verify_digest(
-            from_hex(hex_signed_hash),
-            computed_hash,
-            sigdecode=ecdsa.util.sigdecode_der,
-        )
-    except ecdsa.BadSignatureError:
-        return False  # invalid transaction if anything failed
+    def calc_root(hs):
+        if len(hs) == 1:
+            return hash_pair(hs[0], ZERO_HASH)
+        elif len(hs) == 2:
+            return hash_pair(hs[0], hs[1])
+        left_hash = calc_root(hs[len(hs) // 2 :])
+        right_hash = calc_root(hs[: len(hs) // 2])
+        return hash_pair(left_hash, right_hash)
+
+    return calc_root(hashes)
 
 
 def execute_transaction(
@@ -93,7 +84,7 @@ def produce_blocks(
     new_blocks = Blockchain([])
 
     for tx in mempool:
-        if True or valid_transaction(tx):
+        if tx.verify_signature():
             valid_txs.append(tx)
         else:
             invalid_txs.append(tx)
