@@ -11,3 +11,4 @@ Courseworks and tools related to my time at imperial
 - [Distributed Ledgers](./distributed_ledgers/): labs and courseworks implementing basic ideas relating to distributed ledgers
 - [Intro to ML](./intro_to_ml/): courseworks involving decision trees and neural networks
 - [Robotics](./robotics/): robotics coursework, culminating in a Monte Carlo Localisation implementation
+- [Statistical Information Theory](./stat_info/): coursework involving generating and using Hamming codes
