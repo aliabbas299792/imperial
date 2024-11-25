@@ -1,0 +1,268 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "operation": "onnx",
+      "due_date": 172
+    },
+    {
+      "id": 1,
+      "operation": "muse",
+      "due_date": 82
+    },
+    {
+      "id": 2,
+      "operation": "emboss",
+      "due_date": 18
+    },
+    {
+      "id": 3,
+      "operation": "emboss",
+      "due_date": 61
+    },
+    {
+      "id": 4,
+      "operation": "blur",
+      "due_date": 93
+    },
+    {
+      "id": 5,
+      "operation": "emboss",
+      "due_date": 71
+    },
+    {
+      "id": 6,
+      "operation": "vii",
+      "due_date": 217
+    },
+    {
+      "id": 7,
+      "operation": "blur",
+      "due_date": 295
+    },
+    {
+      "id": 8,
+      "operation": "wave",
+      "due_date": 290
+    },
+    {
+      "id": 9,
+      "operation": "blur",
+      "due_date": 287
+    },
+    {
+      "id": 10,
+      "operation": "blur",
+      "due_date": 253
+    },
+    {
+      "id": 11,
+      "operation": "emboss",
+      "due_date": 307
+    },
+    {
+      "id": 12,
+      "operation": "onnx",
+      "due_date": 279
+    },
+    {
+      "id": 13,
+      "operation": "onnx",
+      "due_date": 73
+    },
+    {
+      "id": 14,
+      "operation": "blur",
+      "due_date": 355
+    },
+    {
+      "id": 15,
+      "operation": "wave",
+      "due_date": 34
+    },
+    {
+      "id": 16,
+      "operation": "wave",
+      "due_date": 233
+    },
+    {
+      "id": 17,
+      "operation": "wave",
+      "due_date": 77
+    },
+    {
+      "id": 18,
+      "operation": "emboss",
+      "due_date": 88
+    },
+    {
+      "id": 19,
+      "operation": "onnx",
+      "due_date": 122
+    },
+    {
+      "id": 20,
+      "operation": "emboss",
+      "due_date": 71
+    },
+    {
+      "id": 21,
+      "operation": "onnx",
+      "due_date": 181
+    },
+    {
+      "id": 22,
+      "operation": "vii",
+      "due_date": 340
+    },
+    {
+      "id": 23,
+      "operation": "blur",
+      "due_date": 141
+    },
+    {
+      "id": 24,
+      "operation": "night",
+      "due_date": 209
+    },
+    {
+      "id": 25,
+      "operation": "muse",
+      "due_date": 217
+    },
+    {
+      "id": 26,
+      "operation": "emboss",
+      "due_date": 256
+    },
+    {
+      "id": 27,
+      "operation": "onnx",
+      "due_date": 144
+    },
+    {
+      "id": 28,
+      "operation": "wave",
+      "due_date": 307
+    },
+    {
+      "id": 29,
+      "operation": "emboss",
+      "due_date": 329
+    },
+    {
+      "id": 30,
+      "operation": "muse",
+      "due_date": 269
+    }
+  ],
+  "operation_processing_time": {
+    "onnx": 3,
+    "wave": 6,
+    "muse": 10,
+    "emboss": 2,
+    "blur": 5,
+    "vii": 14,
+    "night": 18
+  },
+  "adjacency_graph": {
+    "0": [
+      30
+    ],
+    "1": [
+      0
+    ],
+    "2": [
+      7
+    ],
+    "3": [
+      2
+    ],
+    "4": [
+      1
+    ],
+    "5": [
+      15
+    ],
+    "6": [
+      5
+    ],
+    "7": [
+      6
+    ],
+    "8": [
+      7
+    ],
+    "9": [
+      8
+    ],
+    "10": [
+      0
+    ],
+    "11": [
+      4
+    ],
+    "12": [
+      11
+    ],
+    "13": [
+      12
+    ],
+    "14": [
+      10
+    ],
+    "15": [
+      4
+    ],
+    "16": [
+      14,
+      15
+    ],
+    "17": [
+      16
+    ],
+    "18": [
+      17
+    ],
+    "19": [
+      18
+    ],
+    "20": [
+      17
+    ],
+    "21": [
+      20
+    ],
+    "22": [
+      21
+    ],
+    "23": [
+      4
+    ],
+    "24": [
+      23
+    ],
+    "25": [
+      24
+    ],
+    "26": [
+      25
+    ],
+    "27": [
+      25
+    ],
+    "28": [
+      26,
+      27
+    ],
+    "29": [
+      3,
+      9,
+      13,
+      19,
+      22,
+      28
+    ],
+    "30": []
+  }
+}
