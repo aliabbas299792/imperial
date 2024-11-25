@@ -96,11 +96,14 @@ def hamming_generator(m: int) -> np.ndarray:
       k-by-n generator matrix
     """
     parity_bit_mask = parity_bit_positions(m)
-    G = np.zeros((2**m - 1, m + 1), dtype=int)
+    k = 2**m - 1
+    n = k - m
+
+    G = np.zeros((k, n), dtype=int)
     H = parity_matrix(m)
 
     G[parity_bit_mask] = H.T[~parity_bit_mask].T
-    G[~parity_bit_mask] = np.eye(m + 1)
+    G[~parity_bit_mask] = np.eye(n)
 
     return G.T
 
@@ -173,7 +176,8 @@ def binary_symmetric_channel(data: np.ndarray, p: float) -> np.ndarray:
       data with a number of bits flipped
     """
 
-    raise NotImplementedError
+    flip_mask = np.random.rand(len(data)) < p
+    return data ^ flip_mask.astype(int)  # flip some bits
 
 
 def decoder_accuracy(m: int, p: float) -> float:
@@ -188,4 +192,20 @@ def decoder_accuracy(m: int, p: float) -> float:
       Hamming code, using the noisy channel of probability p
     """
 
-    raise NotImplementedError
+    n = 2**m - 1
+    k = n - m
+    trials = 1000
+
+    correct_decodings = 0
+
+    for _ in range(trials):
+        data = np.random.randint(0, 1, size=k)
+
+        codeword = hamming_encode(data, m)
+        noisy_codeword = binary_symmetric_channel(codeword, p)
+        decoded_data = hamming_decode(noisy_codeword, m)
+
+        if np.array_equal(data, decoded_data):
+            correct_decodings += 1
+
+    return correct_decodings / trials
