@@ -60,6 +60,15 @@ def bits2text(bits: np.ndarray) -> str:
     return ''.join(chrs)
 
 
+
+def parity_bit_positions(m):
+    select_cols = 2**np.arange(m) - 1
+    seq = np.arange(2**m - 1)
+    return np.isin(seq, select_cols)
+  
+def binary_vec_to_dec(bin: np.array):
+    return int(sum([2**i * e for i, e in enumerate(bin)]))
+
 def parity_matrix(m : int) -> np.ndarray:
     """
     m : int
@@ -73,8 +82,7 @@ def parity_matrix(m : int) -> np.ndarray:
     row_vec = np.arange(m)
     col_vec = np.atleast_2d(np.arange(1,n + 1)).T
     H = col_vec >> row_vec & 1
-    return H
-
+    return (H.T).astype(int)
 
 def hamming_generator(m : int) -> np.ndarray:
     """
@@ -84,8 +92,14 @@ def hamming_generator(m : int) -> np.ndarray:
     return : np.ndarray
       k-by-n generator matrix
     """
-
-    raise NotImplementedError
+    parity_bit_mask = parity_bit_positions(m)
+    G = np.zeros((2**m-1, m+1), dtype=int)
+    H = parity_matrix(m)
+    
+    G[parity_bit_mask] = H.T[~parity_bit_mask].T
+    G[~parity_bit_mask] = np.eye(m+1)
+    
+    return G.T
 
 
 def hamming_encode(data : np.ndarray, m : int) -> np.ndarray:
@@ -100,8 +114,7 @@ def hamming_encode(data : np.ndarray, m : int) -> np.ndarray:
       array of shape (n,) with the corresponding Hamming codeword
     """
     assert( data.shape[0] == 2**m - m - 1 )
-
-    raise NotImplementedError
+    return (data @ hamming_generator(m) % 2).astype(int)
 
 
 def hamming_decode(code : np.ndarray, m : int) -> np.ndarray:
@@ -115,8 +128,19 @@ def hamming_decode(code : np.ndarray, m : int) -> np.ndarray:
       Array of shape (k,) with the decoded and corrected data
     """
     assert(np.log2(len(code) + 1) == int(np.log2(len(code) + 1)) == m)
+    H = parity_matrix(m)
+    parity_bit_mask = parity_bit_positions(m)
+    code = code.copy()
 
-    raise NotImplementedError
+    syndrome = H @ code % 2
+    error_position = binary_vec_to_dec(syndrome)
+    print(code)
+    
+    # correct single-bit error
+    if error_position:
+        code[error_position - 1] ^= 1
+
+    return code[~parity_bit_mask] # extract data bits
 
 
 def decode_secret(msg : np.ndarray) -> str:
