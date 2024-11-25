@@ -137,7 +137,6 @@ def hamming_decode(code: np.ndarray, m: int) -> np.ndarray:
 
     syndrome = H @ code % 2
     error_position = binary_vec_to_dec(syndrome)
-    print(code)
 
     # correct single-bit error
     if error_position:
@@ -154,9 +153,13 @@ def decode_secret(msg: np.ndarray) -> str:
     return : str
       String with decoded text
     """
-    m = np.nan  # <-- Your guess goes here
+    m = 4
+    n = 2**m - 1
 
-    raise NotImplementedError
+    chunks = msg.reshape(-1, n)  # chunked
+    decoded_chunks = map(lambda c: hamming_decode(c, m), chunks)
+    decoded_bits = np.concatenate(list(decoded_chunks))
+    return bits2text(decoded_bits)
 
 
 def binary_symmetric_channel(data: np.ndarray, p: float) -> np.ndarray:
