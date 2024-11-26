@@ -12,6 +12,7 @@
 \begin{document}
   \maketitle
   \section{Question 1}
+  Everything in this section will use 0-based indexing.
   \subsection{LCL Proof}
   The $Least\ Cost\ Last$ ($LCL$) rule solves the scheduling problem $1 | prec | f_{\text{max}}$ optimally, in $O(n^2)$ time, by constructing
   an optimal schedule from back to front.
@@ -156,7 +157,6 @@
     \end{itemize}
 
     \subsection{LCL Implementation}
-    These iterations use 0-based indexing.
     \paragraph{Iterations}
     \begin{enumerate}
       \item[0.] Available jobs: $V = \{ 0, 30 \}$ (no successors) \\
@@ -225,8 +225,6 @@
     \end{enumerate}
 
     Note: the tie breaking doesn't specify any ordering in the current implementation (since the set of available jobs is backed by a hash table).
-
-  \subsection{LCL Implementation}
 
   \section{Question 2}
   \subsection{Tabu Search}

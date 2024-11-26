@@ -20,13 +20,11 @@ function skipComments(text) {
   return text.split("\n").filter(l => !l.trim().startsWith("//")).join("\n")
 }
 
-// -1 here since we use 0-based indexing but this uses 1-based indexing
 const node_data = [...skipComments(node_data_text).matchAll(/(\d+) (\w+) (\d+) (\d+)/g)]
-  .map(m => [parseInt(m[1]) - 1, m[2], parseInt(m[3]), parseInt(m[4])])
+  .map(m => [parseInt(m[1]), m[2], parseInt(m[3]), parseInt(m[4])])
 
-// -1 here since we use 0-based indexing but this uses 1-based indexing
 const incidence_matrix = [...skipComments(matlab_incidence_mat).matchAll(/(\d+),(\d+)/g)]
-  .map(m => m.slice(1, 3).map(d => parseInt(d) - 1))
+  .map(m => m.slice(1, 3).map(d => parseInt(d)))
 
 const nodes = node_data.reduce((acc, curr) => {
   const idx = curr[0]

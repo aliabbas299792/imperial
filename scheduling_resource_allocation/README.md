@@ -11,6 +11,8 @@ Run `poetry run pytest test/lcl.py` to heuristically verify that the LCL schedul
 - The `data/` directory contains the data describing DAGs and their incidence matrices
 - `artefacts/` contains any output, including the DAG JSON files
 
+The data was mostly copied from the PDF, but I switched it to 0-based indexing for consistency.
+
 `1.1.example_node_data.txt` and `node_data.txt` both follow the format in the coursework specification, as do the incidence matricies `matlab_incidence_matrix.txt` and `1.1.example_incidence_matrix.txt`.
 
 Run this to generate the DAG JSON for this coursework:
