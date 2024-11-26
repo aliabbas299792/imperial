@@ -1,0 +1,34 @@
+// Column headers: Index, Type, Processing time, Due date
+// The Index is the same as the one used in `matlab_incidence_matrix.txt`
+
+1 onnx 3 172
+2 muse 10 82
+3 emboss 2 18
+4 emboss 2 61
+5 blur 5 93
+6 emboss 2 71
+7 vii 14 217
+8 blur 5 295
+9 wave 6 290
+10 blur 5 287
+11 blur 5 253
+12 emboss 2 307
+13 onnx 3 279
+14 onnx 3 73
+15 blur 5 355
+16 wave 6 34
+17 wave 6 233
+18 wave 6 77
+19 emboss 2 88
+20 onnx 3 122
+21 emboss 2 71
+22 onnx 3 181
+23 vii 14 340
+24 blur 5 141
+25 night 18 209
+26 muse 10 217
+27 emboss 2 256
+28 onnx 3 144
+29 wave 6 307
+30 emboss 2 329
+31 muse 10 269

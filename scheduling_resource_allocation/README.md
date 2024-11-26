@@ -1,9 +1,13 @@
 # Scheduling and Resource Allocation Coursework
 This contains the coursework for COMP70068 Scheduling and Resource allocation, which involved implementing the LCL rule as well as Tabu Search.
 ## Usage
+### Data Generation
+- `data/node_data_text.txt` contains the text data copied from the specification PDF
+- `data/matlab_incidence_matrix.txt` contains the incidence matrix copied from the same PDF
+- `data/directed_acyclic_graph.json` contains a generated DAG in JSON format
 
-## Misc
-`preprocessing.js` can be run with `node` and can be used to regenerate `directed_acyclic_graph.json`, with i.e.:
-```sh
-node preprocessing/preprocessing.js
-```
+The DAG is generated using `node preprocessing/preprocessing.js`, so if you want to, you can modify those text files to alter the generated graph.
+
+The format of the DAG is in `common/models.py`.
+
+> The reason for this separation between the preprocessing and usage is to make it easier to switch to using a potentially different set of tools to process the DAG in the future
