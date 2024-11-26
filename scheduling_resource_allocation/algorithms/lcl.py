@@ -1,4 +1,5 @@
 from itertools import accumulate
+from typing import Callable
 
 from common.models import DirectedAcyclicGraph
 
@@ -9,16 +10,22 @@ def schedule_completion_times(
     return list(accumulate([dag.node_processing_time(n_id) for n_id in schedule]))
 
 
-def schedule_tardiness(schedule: list[int], dag: DirectedAcyclicGraph) -> list[int]:
-    completion_times = schedule_completion_times(schedule, dag)
+def schedule_tardiness(
+    schedule: list[int], dag: DirectedAcyclicGraph, starting_time: int = 0
+) -> list[int]:
+    completion_times = [
+        starting_time + C_j for C_j in schedule_completion_times(schedule, dag)
+    ]
     return [
         tardiness_cost_fn(C_j, dag.nodes[n_id].due_date)
         for n_id, C_j in zip(schedule, completion_times)
     ]
 
 
-def schedule_maximum_cost(schedule: list[int], dag: DirectedAcyclicGraph) -> int:
-    return max(schedule_tardiness(schedule, dag))
+def schedule_maximum_cost(
+    schedule: list[int], dag: DirectedAcyclicGraph, starting_time: int = 0
+) -> int:
+    return max(schedule_tardiness(schedule, dag, starting_time))
 
 
 def tardiness_cost_fn(C_j: int, d_j: int):
@@ -46,7 +53,14 @@ def select_minimising_job(
     )
 
 
-def lcl(dag: DirectedAcyclicGraph) -> list[int]:
+IterationCallback = Callable[
+    [set[int], int, int, int, list[int]], None
+]  # available jobs/successor set, p(N), p(N - {j}), scheduled job id j, partial schedule
+
+
+def lcl(
+    dag: DirectedAcyclicGraph, callback: IterationCallback | None = None
+) -> list[int]:
     """
     Constructs an LCL schedule for a given DAG
     """
@@ -58,13 +72,15 @@ def lcl(dag: DirectedAcyclicGraph) -> list[int]:
     reverse_schedule = []
     while successorless:
         scheduled = None
+        previous_successorless = successorless.copy()
+
         if len(successorless) == 1:
             scheduled = successorless.pop()
         else:
             scheduled = select_minimising_job(cumulative_cost, successorless, dag)
             successorless.remove(scheduled)
 
-        cumulative_cost -= dag.node_processing_time(scheduled)
+        new_cumulative_cost = cumulative_cost - dag.node_processing_time(scheduled)
         reverse_schedule.append(scheduled)
 
         update_successorless_nodes(
@@ -73,5 +89,16 @@ def lcl(dag: DirectedAcyclicGraph) -> list[int]:
             successorless_nodes=successorless,
             dag=dag,
         )
+
+        if callback is not None:
+            callback(
+                previous_successorless,
+                cumulative_cost,
+                new_cumulative_cost,
+                scheduled,
+                reverse_schedule[::-1],
+            )
+
+        cumulative_cost = new_cumulative_cost
 
     return reverse_schedule[::-1]

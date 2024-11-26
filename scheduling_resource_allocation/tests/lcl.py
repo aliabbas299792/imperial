@@ -1,7 +1,7 @@
 import random
 import pytest
 
-from common.constants import DAG_FILE_PATH
+from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
 from algorithms.lcl import lcl, schedule_maximum_cost
 
@@ -26,7 +26,7 @@ def generate_random_topological_schedule(dag: DirectedAcyclicGraph) -> list[int]
 
 @pytest.fixture
 def dag():
-    return DirectedAcyclicGraph.load_from_file(DAG_FILE_PATH)
+    return DirectedAcyclicGraph.load_from_file(CW_DAG_PATH)
 
 
 def test_lcl_schedule_cost(dag: DirectedAcyclicGraph):

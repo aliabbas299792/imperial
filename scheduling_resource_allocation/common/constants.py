@@ -1,3 +1,4 @@
 from pathlib import Path
 
-DAG_FILE_PATH = Path("data/directed_acyclic_graph.json")
+CW_DAG_PATH = Path("artefacts/cw_dag.json")
+EXAMPLE_DAG_PATH = Path("artefacts/example_dag.json")
