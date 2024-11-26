@@ -1,7 +1,7 @@
 // Both chunks of text below were copied directly from the PDF
 // This script transforms and combines them into a more usable format
 
-const fs = require('fs'); 
+const fs = require('fs');
 
 const dag_file_name = "artefacts/directed_acyclic_graph.json"
 
@@ -61,37 +61,51 @@ G[29, 22]=1;
 G[29, 28]=1;`
 
 const node_data = [...node_data_text.matchAll(/(\d+) (\w+) (\d+) (\d+)/g)]
-    .map(m => [parseInt(m[1]), m[2], parseInt(m[3]), parseInt(m[4])])
+  .map(m => [parseInt(m[1]), m[2], parseInt(m[3]), parseInt(m[4])])
 
 const incidence_matrix = [...incidence_matrix_text.matchAll(/(\d+), (\d+)/g)]
-    .map(m => m.slice(1,3).map(d => parseInt(d)))
+  .map(m => m.slice(1, 3).map(d => parseInt(d)))
 
 const nodes = node_data.reduce((acc, curr) => {
-    const idx = curr[0] - 1
-    acc[idx] = {
-        "id": idx,
-        "operation": curr[1],
-        "due_date": curr[3]
-    }
-    return acc
+  const idx = curr[0] - 1
+  acc[idx] = {
+    "id": idx,
+    "operation": curr[1],
+    "due_date": curr[3]
+  }
+  return acc
 }, new Array(node_data.length))
 
 const operation_processing_time = node_data.reduce((acc, curr) => {
-    acc[curr[1]] = curr[2]
-    return acc
+  acc[curr[1]] = curr[2]
+  return acc
 }, {})
 
-const adjacency_graph = incidence_matrix.reduce((acc, curr) => {
-    if(!acc[curr[0]]) acc[curr[0]] = []
-    if(!acc[curr[1]]) acc[curr[1]] = []
-    acc[curr[0]].push(curr[1])
-    return acc
+const adjacency_matrix = incidence_matrix.reduce((acc, curr) => {
+  if (!acc[curr[0]]) acc[curr[0]] = []
+  if (!acc[curr[1]]) acc[curr[1]] = []
+  acc[curr[0]].push(curr[1])
+  return acc
+}, {})
+
+const reverse_adjacency_matrix = incidence_matrix.reduce((acc, curr) => {
+  if (!acc[curr[0]]) acc[curr[0]] = []
+  if (!acc[curr[1]]) acc[curr[1]] = []
+  acc[curr[1]].push(curr[0])
+  return acc
+}, {})
+
+const node_in_degrees = Object.entries(reverse_adjacency_matrix).reduce((acc, [n, parents]) => {
+  acc[n] = parents.length
+  return acc
 }, {})
 
 const directed_acyclic_graph = {
-    nodes,
-    operation_processing_time,
-    adjacency_graph
+  nodes,
+  operation_processing_time,
+  adjacency_matrix,
+  reverse_adjacency_matrix,
+  node_in_degrees
 }
 
 fs.writeFileSync(dag_file_name, JSON.stringify(directed_acyclic_graph, null, 2))
