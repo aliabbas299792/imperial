@@ -2,10 +2,16 @@
 // This script transforms and combines them into a more usable format
 
 const fs = require('fs');
+const path = require('path');
 
-const node_data_path = "data/node_data_text.txt"
-const matlab_incidence_mat_path = "data/matlab_incidence_matrix.txt"
-const dag_file_path = "data/directed_acyclic_graph.json"
+const node_data_path = process.argv[2];
+const matlab_incidence_mat_path = process.argv[3];
+const dag_file_path = process.argv[4];
+
+if (!node_data_path || !matlab_incidence_mat_path || !dag_file_path) {
+  console.error("Usage: node script.js <node_data_path> <matlab_incidence_mat_path> <output_dag_file_path>");
+  process.exit(1);
+}
 
 const node_data_text = fs.readFileSync(node_data_path, 'utf8')
 const matlab_incidence_mat = fs.readFileSync(matlab_incidence_mat_path, 'utf8')
@@ -69,5 +75,8 @@ const directed_acyclic_graph = {
   node_in_degrees,
   node_out_degrees
 }
+
+const dag_dir = path.dirname(dag_file_path);
+fs.mkdirSync(dag_dir, { recursive: true });
 
 fs.writeFileSync(dag_file_path, JSON.stringify(directed_acyclic_graph, null, 2))

@@ -1,0 +1,6 @@
+// Format is G(x,y) where x and y are the same as the Indices used in `1.1.example_node_data.txt`,
+//   indicating the existence of a directed edge between the nodes with indices x and y
+
+G(1,2)=1;
+G(1,3)=1;
+G(4,5)=1;
