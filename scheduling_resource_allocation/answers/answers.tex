@@ -50,6 +50,16 @@
       \item[-] Since $J_l$ is found in $O(n)$ time, then with $n$, repeated applications of the LCL rule yields the optimal schedule in $O(n^2)$ time
     \end{itemize}
   \end{enumerate}
+
+  You can also show that $LCL$ is optimal by using the \textit{adjacent pairwise interchange argument}:
+  \begin{itemize}
+    \item You take an optimal schedule $S$ and assume it isn't an $LCL$ schedule
+    \item Since it's not an $LCL$ schedule, there must exist at least one pair where a lower cost job precedes a higher cost one
+    \item It can then be shown that swapping these jobs yields a lower cost schedule, which is a contradiction since we took an optimal schedule
+    \item So by virtue of the fact that a lower cost job can precede a higher cost one leads to a contradiction
+    \item And so such pairs cannot exist for an optimal schedule, so we can reject the assumption that this isn't an $LCL$ schedule
+    \item And by contradiction then we have that $LCL$ is optimal for $1|prec|f_{\text{max}}$
+  \end{itemize}
   
   \subsubsection*{Small Example}
   Example Setup:
@@ -114,7 +124,7 @@
       Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
     \end{enumerate}
     
-    \subsection*{Results}
+    \paragraph{Results}
     \begin{itemize}
         \item Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
         \item Completion times:
