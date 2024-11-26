@@ -64,13 +64,13 @@
   \subsubsection*{Small Example}
   Example Setup:
 
-    Jobs: J1, J2, J3, J4, J5
+    Jobs: J0, J1, J2, J3, J4
 
     Processing Times: p=[2,3,1,2,3]
 
     Dude Dates: d=[6,5,7,4,9]
 
-    Precedence Constraints (DAG): J1 $\to$ J2, J1 $\to$ J3, J4 $\to$ J5
+    Precedence Constraints (DAG): J0 $\to$ J1, J0 $\to$ J2, J3 $\to$ J4
 
     Cost Function: $f_j(C_j) = T_j = max(0, C_j - d_j)$
     
@@ -78,69 +78,153 @@
     We can schedule jobs in reverse order using the $Least\ Cost\ Last$ ($LCL$) rule:
     
     \begin{enumerate}
-      \item Available jobs: $V = \{J_2, J_3, J_5\}$ (no successors) \\
+      \item[0.] Available jobs: $V = \{ 1, 2, 4 \}$ (no successors) \\
       $p(N) = 11$
       \[
-      f_2(p(N)) = \max(0, 11 - 5) = 6, \quad f_3(p(N)) = \max(0, 11 - 7) = 4, \quad f_5(p(N)) = \max(0, 11 - 9) = 2
+      f_{1}(p(N)) = \max(0, 11 - 5) = 6, \quad f_{2}(p(N)) = \max(0, 11 - 4) = 7, \quad f_{4}(p(N)) = \max(0, 11 - 9) = 2
       \]    
-      Select $J_5$ (minimises $f_j(p(N))$)
+      Select $J_{4}$ (minimises $f_j(p(N))$)
 
-      Updated schedule: $[J_5]$
-      
-      \item Available jobs: $V = \{J_2, J_3, J_4\}$ \\
+      Partial schedule cost: 2
+
+      Updated schedule: $[4]$
+        
+
+      \item[1.] Available jobs: $V = \{ 1, 2, 3 \}$ (no successors) \\
       $p(N) = 8$
       \[
-      f_2(p(N)) = \max(0, 8 - 5) = 3, \quad f_3(p(N)) = \max(0, 8 - 7) = 1, \quad f_4(p(N)) = \max(0, 8 - 4) = 4
+      f_{1}(p(N)) = \max(0, 8 - 5) = 3, \quad f_{2}(p(N)) = \max(0, 8 - 4) = 4, \quad f_{3}(p(N)) = \max(0, 8 - 7) = 1
       \]    
-      Select $J_3$
+      Select $J_{3}$ (minimises $f_j(p(N))$)
 
-      Updated schedule: $[J_3, J_5]$
-      
-      \item Available jobs: $V = \{J_2, J_4\}$ \\
-      $p(N) = 7$
+      Partial schedule cost: 2
+
+      Updated schedule: $[3, 4]$
+        
+
+      \item[2.] Available jobs: $V = \{ 1, 2 \}$ (no successors) \\
+      $p(N) = 6$
       \[
-      f_2(p(N)) = \max(0, 7 - 5) = 2, \quad f_4(p(N)) = \max(0, 7 - 4) = 3
+      f_{1}(p(N)) = \max(0, 6 - 5) = 1, \quad f_{2}(p(N)) = \max(0, 6 - 4) = 2
       \]    
-      Select $J_2$
+      Select $J_{1}$ (minimises $f_j(p(N))$)
 
-      Updated schedule: $[J_2, J_3, J_5]$
-      
-      \item Available jobs: $V = \{J_1, J_4\}$ \\
-      $p(N) = 4$
+      Partial schedule cost: 2
+
+      Updated schedule: $[1, 3, 4]$
+        
+
+      \item[3.] Available jobs: $V = \{ 2 \}$ (no successors) \\
+      $p(N) = 3$
       \[
-      f_1(p(N)) = \max(0, 4 - 5) = 0, \quad f_4(p(N)) = \max(0, 4 - 4) = 0
+      f_{2}(p(N)) = \max(0, 3 - 4) = 0
       \]    
-      Select $J_4$ (breaking the tie arbitrarily)
+      Select $J_{2}$
 
-      Updated schedule: $[J_4, J_2, J_3, J_5]$
-      
-      \item Available jobs: $V = \{J_1\}$ \\
+      Partial schedule cost: 2
+
+      Updated schedule: $[2, 1, 3, 4]$
+        
+
+      \item[4.] Available jobs: $V = \{ 0 \}$ (no successors) \\
       $p(N) = 2$
       \[
-      f_1(p(N)) = \max(0, 2 - 5) = 0
+      f_{0}(p(N)) = \max(0, 2 - 6) = 0
       \]    
-      Select $J_1$
+      Select $J_{0}$
 
-      Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
+      Partial schedule cost: 2
+
+      Updated schedule: $[0, 2, 1, 3, 4]$
     \end{enumerate}
     
     \paragraph{Results}
     \begin{itemize}
-        \item Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
+        \item Final schedule: $[J_0, J_2, J_1, J_3, J_4]$
         \item Completion times:
         \[
-        C_1 = 2, \, C_4 = 4, \, C_2 = 7, \, C_3 = 8, \, C_5 = 11
+        C_0 = 2, \, C_2 = 3, \, C_1 = 6, \, C_3 = 8, \, C_4 = 11
         \]
         \item Tardiness:
         \[
-        T_1 = 0, \, T_4 = 0, \, T_2 = 2, \, T_3 = 1, \, T_5 = 2
+        T_0 = 0, \, T_2 = 0, \, T_1 = 1, \, T_3 = 1, \, T_4 = 2
         \]
         \item Maximum cost:
         \[
-        f_{\text{max}} = \max(T_1, T_2, T_4, T_3, T_5) = 2
+        f_{\text{max}} = \max(T_0, T_2, T_1, T_3, T_4) = 2
         \]
     \end{itemize}
 
+    \subsection{LCL Implementation}
+    These iterations use 0-based indexing.
+    \paragraph{Iterations}
+    \begin{enumerate}
+      \item[0.] Available jobs: $V = \{ 0, 30 \}$ (no successors) \\
+      $p(N) = 170$
+      \[
+      f_{0}(p(N)) = \max(0, 170 - 172) = 0, \quad f_{30}(p(N)) = \max(0, 170 - 269) = 0
+      \]    
+      Select $J_{30}$ (minimises $f_j(p(N))$) \\
+      Partial schedule cost: 0
+
+      Updated schedule: $[30]$
+        
+
+      \item[1.] Available jobs: $V = \{ 0, 1, 10 \}$ (no successors) \\
+      $p(N) = 160$
+      \[
+      f_{0}(p(N)) = \max(0, 160 - 172) = 0, \quad f_{1}(p(N)) = \max(0, 160 - 82) = 78, \quad f_{10}(p(N)) = \max(0, 160 - 253) = 0
+      \]    
+      Select $J_{0}$ (minimises $f_j(p(N))$) \\
+      Partial schedule cost: 0
+
+      Updated schedule: $[0, 30]$
+
+      \item[...]
+        
+
+      \item[4.] Available jobs: $V = \{ 1, 4 \}$ (no successors) \\
+      $p(N) = 147$
+      \[
+      f_{1}(p(N)) = \max(0, 147 - 82) = 65, \quad f_{4}(p(N)) = \max(0, 147 - 93) = 54
+      \]    
+      Select $J_{1}$ (minimises $f_j(p(N))$) \
+      Partial schedule cost: 65
+
+      Updated schedule: $[1, 14, 10, 0, 30]$
+      
+      This iteration was noteable since it incurred the maximum tardiness incurred for this problem.
+
+      \item[...]
+
+      \item[17.] Available jobs: $V = \{ 17, 18, 20, 5 \}$ (no successors) \\
+      $p(N) = 68$
+      \[
+      f_{17}(p(N)) = \max(0, 68 - 77) = 0, \quad f_{18}(p(N)) = \max(0, 68 - 88) = 0,
+      \]
+      \[
+      \quad f_{20}(p(N)) = \max(0, 68 - 71) = 0, \quad f_{5}(p(N)) = \max(0, 68 - 71) = 0
+      \] 
+      \\   
+      Select $J_{17}$ (arbitrarily breaking the tie) \\
+      Partial schedule cost: 65
+
+      Updated schedule: $[17, 16, 15, 13, 28, 12, 27, 26, 25, 24, 23, 11, 4, 1, 14, 10, 0, 30]$
+
+      \item[...]
+
+      \item[30.] Available jobs: $V = \{ 29 \}$ (no successors) \\
+      $p(N) = 2$
+      \[
+      f_{29}(p(N)) = \max(0, 2 - 329) = 0
+      \]    
+      Select $J_{29}$ (minimises $f_j(p(N))$) \\
+      Final schedule cost: 65
+
+      Final schedule: $[29, 9, 8, 3, 2, 7, 6, 22, 21, 5, 20, 19, 18, 17, 16, 15, 13, 28, 12, 27, 26, 25, 24, 23, 11, 4, 1, 14, 10, 0, 30]$
+    \end{enumerate}
+
+    Note: the tie breaking doesn't specify any ordering in the current implementation (since the set of available jobs is backed by a hash table).
 
   \subsection{LCL Implementation}
 
