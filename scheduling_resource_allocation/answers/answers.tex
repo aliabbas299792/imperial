@@ -13,6 +13,124 @@
   \maketitle
   \section{Question 1}
   \subsection{LCL Proof}
+  The $Least\ Cost\ Last$ ($LCL$) rule solves the scheduling problem $1 | prec | f_{\text{max}}$ optimally, in $O(n^2)$ time, by constructing
+  an optimal schedule from back to front.
+
+  \subsubsection*{Definitions}
+  \begin{itemize}
+    \item $N = \{ 1, 2, \dots, n \}$ is the index set of all jobs
+    \item $L \subseteq N$ is the subset of jobs without successors (which can be scheduled last)
+    \item $p(S) = \sum_{j \in S} p_j$ is the total processing time of a subset $S$
+    \item $f^*_{\text{max}}(S)$ is the cost of the optimal schedule for subset $S$
+    \item $f_{\text{max}}$ denotes the maximum (not necessarly optimal) cost across all jobs in a schedule
+    \item $f_j(p(N))$ is a cost function which assigns a penalty/cost depending on job $j$ and the time at which the machine has finished processing, $p(N)$
+    \begin{itemize}
+      \item In the notation of the coursework specification $g_j(\cdot) = f_j(\cdot)$
+      \item In the next section we'll use $g_j(C_j) = T_j = \max(0, C_j - d_j)$ (tardiness)
+    \end{itemize}
+  \end{itemize}
+  \subsubsection*{Proof and Discussion}
+  \begin{enumerate}
+    \item One job in $L$ must be scheduled last. A job can be
+    selected for the final job which minimises $f_j(p(N))$, but it can never result in a cost lower than the cost of the optimal schedule, otherwise that would be the optimal schedule. This is expressed as such: \begin{align*}
+      f^*_{\text{max}}(N) \ge \min_{j \in L}f_j (p(N))
+    \end{align*}
+    \item And removing a job $j \in N$ can't increase the optimal cost any more, since the cost of scheduling a job last is $\ge 0$, so omitting it cannot result in a more expensive schedule: \begin{align*}
+      f^*_{\text{max}}(N) \ge f^*_{\text{max}}(N - \{ j \}), \ \forall j \in N
+    \end{align*}
+    \item We can then select a $J_l \in L$ that minimises $f_j(p(N))$: \begin{align*}
+      f_l(p(N)) = \min_{j \in L}f_j(p(N))
+    \end{align*}
+    Which gives us: \begin{align*}
+      f^*_{\text{max}}(N) \ge \max \{ f_l(p(N)), f_{\text{max}}^*(N - \{ l \}) \}
+    \end{align*}
+    \item The right hand side of the above inequality is the cost of an optimal schedule, where $J_l$ is processed last,
+    so you can recursively apply the LCL rule to $N - \{ J_l \}$ and construct a schedule in reverse order
+    \begin{itemize}
+      \item[-] Since $J_l$ is found in $O(n)$ time, then with $n$, repeated applications of the LCL rule yields the optimal schedule in $O(n^2)$ time
+    \end{itemize}
+  \end{enumerate}
+  
+  \subsubsection*{Small Example}
+  Example Setup:
+
+    Jobs: J1, J2, J3, J4, J5
+
+    Processing Times: p=[2,3,1,2,3]
+
+    Dude Dates: d=[6,5,7,4,9]
+
+    Precedence Constraints (DAG): J1 $\to$ J2, J1 $\to$ J3, J4 $\to$ J5
+
+    Cost Function: $f_j(C_j) = T_j = max(0, C_j - d_j)$
+    
+    \paragraph{Iterations}
+    We can schedule jobs in reverse order using the $Least\ Cost\ Last$ ($LCL$) rule:
+    
+    \begin{enumerate}
+      \item Available jobs: $V = \{J_2, J_3, J_5\}$ (no successors) \\
+      $p(N) = 11$
+      \[
+      f_2(p(N)) = \max(0, 11 - 5) = 6, \quad f_3(p(N)) = \max(0, 11 - 7) = 4, \quad f_5(p(N)) = \max(0, 11 - 9) = 2
+      \]    
+      Select $J_5$ (minimises $f_j(p(N))$)
+
+      Updated schedule: $[J_5]$
+      
+      \item Available jobs: $V = \{J_2, J_3, J_4\}$ \\
+      $p(N) = 8$
+      \[
+      f_2(p(N)) = \max(0, 8 - 5) = 3, \quad f_3(p(N)) = \max(0, 8 - 7) = 1, \quad f_4(p(N)) = \max(0, 8 - 4) = 4
+      \]    
+      Select $J_3$
+
+      Updated schedule: $[J_3, J_5]$
+      
+      \item Available jobs: $V = \{J_2, J_4\}$ \\
+      $p(N) = 7$
+      \[
+      f_2(p(N)) = \max(0, 7 - 5) = 2, \quad f_4(p(N)) = \max(0, 7 - 4) = 3
+      \]    
+      Select $J_2$
+
+      Updated schedule: $[J_2, J_3, J_5]$
+      
+      \item Available jobs: $V = \{J_1, J_4\}$ \\
+      $p(N) = 4$
+      \[
+      f_1(p(N)) = \max(0, 4 - 5) = 0, \quad f_4(p(N)) = \max(0, 4 - 4) = 0
+      \]    
+      Select $J_4$ (breaking the tie arbitrarily)
+
+      Updated schedule: $[J_4, J_2, J_3, J_5]$
+      
+      \item Available jobs: $V = \{J_1\}$ \\
+      $p(N) = 2$
+      \[
+      f_1(p(N)) = \max(0, 2 - 5) = 0
+      \]    
+      Select $J_1$
+
+      Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
+    \end{enumerate}
+    
+    \subsection*{Results}
+    \begin{itemize}
+        \item Final schedule: $[J_1, J_4, J_2, J_3, J_5]$
+        \item Completion times:
+        \[
+        C_1 = 2, \, C_4 = 4, \, C_2 = 7, \, C_3 = 8, \, C_5 = 11
+        \]
+        \item Tardiness:
+        \[
+        T_1 = 0, \, T_4 = 0, \, T_2 = 2, \, T_3 = 1, \, T_5 = 2
+        \]
+        \item Maximum cost:
+        \[
+        f_{\text{max}} = \max(T_1, T_2, T_4, T_3, T_5) = 2
+        \]
+    \end{itemize}
+
 
   \subsection{LCL Implementation}
 
