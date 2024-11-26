@@ -3,7 +3,7 @@ import pytest
 
 from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
-from algorithms.lcl import lcl, schedule_maximum_cost
+from algorithms.lcl import LowestCostLastScheduler
 
 
 def generate_random_topological_schedule(dag: DirectedAcyclicGraph) -> list[int]:
@@ -35,13 +35,14 @@ def test_lcl_schedule_cost(dag: DirectedAcyclicGraph):
     Heuristically checks that the found LCL schedule really is optimal
     """
 
-    schedule = lcl(dag)
-    found_schedule_cost = schedule_maximum_cost(schedule, dag)
+    scheduler = LowestCostLastScheduler(dag)
+    schedule = scheduler.lcl()
+    found_schedule_cost = scheduler.schedule_maximum_cost(schedule)
 
     costs = []
     for _ in range(10000):
         random_schedule = generate_random_topological_schedule(dag)
-        costs.append(schedule_maximum_cost(random_schedule, dag))
+        costs.append(scheduler.schedule_maximum_cost(random_schedule))
 
     assert found_schedule_cost <= min(costs), (
         "Found schedule found to be less optimal than a randomly generated schedule"

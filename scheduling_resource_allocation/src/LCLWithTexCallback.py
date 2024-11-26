@@ -1,17 +1,18 @@
 from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
-from algorithms.lcl import lcl, tardiness_cost_fn, schedule_maximum_cost
+from algorithms.lcl import LowestCostLastScheduler, tardiness_cost_fn
 
 
 class LCLWithTexCallback:
     def __init__(self, dag: DirectedAcyclicGraph):
-        self.dag = dag
+        self._dag = dag
+        self._scheduler = LowestCostLastScheduler(dag)
         self._iteration_data = []
         self._iteration_num = 0
 
     def _job_costs_str(self, available_jobs, cumulative_cost):
         def job_str(n_id):
-            due_date = self.dag.nodes[n_id].due_date
+            due_date = self._dag.nodes[n_id].due_date
             cost = tardiness_cost_fn(cumulative_cost, due_date)
             return f"f_{{{n_id}}}(p(N)) = \\max(0, {cumulative_cost} - {due_date}) = {cost}"
 
@@ -40,7 +41,7 @@ class LCLWithTexCallback:
       \\]    
       Select $J_{{{selected}}}$ (minimises $f_j(p(N))$)
 
-      Partial schedule cost: {schedule_maximum_cost(partial_schedule, self.dag, new_cumulative_cost)}
+      Partial schedule cost: {self._scheduler.schedule_maximum_cost(partial_schedule, new_cumulative_cost)}
 
       Updated schedule: ${new_schedule}$
         """
@@ -51,5 +52,4 @@ class LCLWithTexCallback:
     def run_lcl(self) -> tuple[list[int], list[str]]:
         self._iteration_data = []
         self._iteration_num = 0
-
-        return lcl(self.dag, self._lcl_callback), self._iteration_data
+        return self._scheduler.lcl(self._lcl_callback), self._iteration_data
