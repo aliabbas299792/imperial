@@ -33,3 +33,6 @@ class DirectedAcyclicGraph(BaseModel):
         with open(file_path, "r") as f:
             data = json.load(f)
         return DirectedAcyclicGraph.model_validate(data)
+
+    def node_processing_time(self, node_id: int) -> int:
+        return self.operation_processing_time[self.nodes[node_id].operation]
