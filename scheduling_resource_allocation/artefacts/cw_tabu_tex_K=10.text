@@ -1,0 +1,80 @@
+
+      \item[0.] \textbf{Candidate schedule costs}: [341, 341, 341, 341, 341, 341, 338, 343, 341, 341, 341, 339, 351, 331, 359, 341, 336, 346, 336, 346, 336] \\
+      \textbf{Tabu list}: \{ (17, 25) \} \\
+      \textbf{Best cost so far}: 331 \\
+      \textbf{Tabu list used?}: No \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 24, 16, 14, 5, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 331
+        
+
+      \item[1.] \textbf{Candidate schedule costs}: [331, 331, 331, 331, 331, 331, 328, 333, 331, 331, 331, 329, 341, 331, 326, 336, 326, 336, 326] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14) \} \\
+      \textbf{Best cost so far}: 326 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 24, 16, 5, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 326
+        
+
+      \item[2.] \textbf{Candidate schedule costs}: [326, 326, 326, 326, 326, 323, 328, 326, 326, 326, 324, 336, 326, 320, 331, 326, 321, 331, 321, 326] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16) \} \\
+      \textbf{Best cost so far}: 320 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 24, 5, 16, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 320
+        
+
+      \item[3.] \textbf{Candidate schedule costs}: [320, 320, 320, 320, 317, 322, 320, 320, 320, 318, 330, 302, 326, 320, 315, 325, 315, 320, 320] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24) \} \\
+      \textbf{Best cost so far}: 302 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 5, 24, 16, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 302
+        
+
+      \item[4.] \textbf{Candidate schedule costs}: [302, 302, 302, 302, 299, 304, 302, 302, 302, 300, 312, 292, 320, 302, 302, 297, 307, 297, 302, 302] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25) \} \\
+      \textbf{Best cost so far}: 292 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 5, 25, 24, 16, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 292
+        
+
+      \item[5.] \textbf{Candidate schedule costs}: [292, 292, 292, 289, 294, 292, 292, 292, 290, 288, 302, 292, 292, 287, 297, 287, 292, 292, 292] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25), (15, 23) \} \\
+      \textbf{Best cost so far}: 287 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 5, 25, 24, 16, 14, 15, 23, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 287
+        
+
+      \item[6.] \textbf{Candidate schedule costs}: [287, 287, 287, 284, 289, 287, 287, 287, 285, 283, 297, 287, 282, 292, 292, 282, 287, 287, 287] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25), (15, 23), (14, 15) \} \\
+      \textbf{Best cost so far}: 282 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 5, 25, 24, 16, 15, 14, 23, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 282
+        
+
+      \item[7.] \textbf{Candidate schedule costs}: [282, 282, 282, 279, 284, 282, 282, 282, 280, 278, 292, 282, 287, 282, 287, 277, 282, 282, 282] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25), (15, 23), (14, 15), (1, 10) \} \\
+      \textbf{Best cost so far}: 277 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 5, 25, 24, 16, 15, 14, 23, 4, 1, 10, 0, 30] \\
+      \textbf{Selected neighbour cost}: 277
+        
+
+      \item[8.] \textbf{Candidate schedule costs}: [277, 277, 274, 279, 277, 277, 277, 275, 273, 287, 277, 282, 277, 282, 277, 277, 277, 277] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25), (15, 23), (14, 15), (1, 10), (5, 17) \} \\
+      \textbf{Best cost so far}: 273 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 5, 17, 25, 24, 16, 15, 14, 23, 4, 1, 10, 0, 30] \\
+      \textbf{Selected neighbour cost}: 273
+        
+
+      \item[9.] \textbf{Candidate schedule costs}: [273, 270, 275, 273, 273, 273, 271, 273, 277, 283, 273, 278, 273, 278, 273, 273, 273, 273, 273] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25), (15, 23), (14, 15), (1, 10), (5, 17), (2, 21) \} \\
+      \textbf{Best cost so far}: 270 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 2, 21, 26, 27, 7, 6, 18, 20, 5, 17, 25, 24, 16, 15, 14, 23, 4, 1, 10, 0, 30] \\
+      \textbf{Selected neighbour cost}: 270
+        

@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "scheduling-resource-allocation"
+version = "0.1.0"
+description = "Scheduling and Resource Allocation Coursework"
+authors = ["Ali Abbas <aliabbas.299792@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^2.10.1"
+pytest = "^8.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "."

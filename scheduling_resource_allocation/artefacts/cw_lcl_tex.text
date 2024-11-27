@@ -1,0 +1,60 @@
+
+      \item[0.] Available jobs: $V = \{ 30 \}$ (no successors) \\
+      $p(N) = 170$
+      \[
+      f_{30}(p(N)) = \max(0, 170 - 269) = 0
+      \]    
+      Select $J_{30}$ (minimises $f_j(p(N))$)
+
+      Partial schedule cost: 0
+
+      Updated schedule: $[30]$
+        
+
+      \item[1.] Available jobs: $V = \{ 0 \}$ (no successors) \\
+      $p(N) = 160$
+      \[
+      f_{0}(p(N)) = \max(0, 160 - 172) = 0
+      \]    
+      Select $J_{0}$ (minimises $f_j(p(N))$)
+
+      Partial schedule cost: 0
+
+      Updated schedule: $[0, 30]$
+        
+
+      \item[4.] Available jobs: $V = \{ 1 \}$ (no successors) \\
+      $p(N) = 147$
+      \[
+      f_{1}(p(N)) = \max(0, 147 - 82) = 65
+      \]    
+      Select $J_{1}$ (minimises $f_j(p(N))$)
+
+      Partial schedule cost: 65
+
+      Updated schedule: $[1, 14, 10, 0, 30]$
+        
+
+      \item[17.] Available jobs: $V = \{ 17, 5 \}$ (no successors) \\
+      $p(N) = 68$
+      \[
+      f_{17}(p(N)) = \max(0, 68 - 77) = 0, \quad f_{5}(p(N)) = \max(0, 68 - 71) = 0
+      \]    
+      Select $J_{17}$ (minimises $f_j(p(N))$)
+
+      Partial schedule cost: 65
+
+      Updated schedule: $[17, 16, 15, 13, 28, 12, 27, 26, 25, 24, 23, 11, 4, 1, 14, 10, 0, 30]$
+        
+
+      \item[30.] Available jobs: $V = \{ 29 \}$ (no successors) \\
+      $p(N) = 2$
+      \[
+      f_{29}(p(N)) = \max(0, 2 - 329) = 0
+      \]    
+      Select $J_{29}$ (minimises $f_j(p(N))$)
+
+      Partial schedule cost: 65
+
+      Updated schedule: $[29, 9, 8, 3, 2, 7, 6, 22, 21, 5, 20, 19, 18, 17, 16, 15, 13, 28, 12, 27, 26, 25, 24, 23, 11, 4, 1, 14, 10, 0, 30]$
+        
