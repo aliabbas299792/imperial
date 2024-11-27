@@ -883,12 +883,27 @@
     \textbf{3. Threshold for Accepting Worse Solutions ($\gamma$):}
     \begin{itemize}
         \item Smaller values of $\gamma$ (e.g., $\gamma=10$) caused the algorithm to become stuck in local optima, as fewer worse solutions were accepted, reducing exploration
-        \item Larger values of $\gamma$ (e.g., $\gamma=30$) allowed too much exploration, which slowed convergence and resulted in noisy search behavior, but did sometimes find better solutions
+        \item Larger values of $\gamma$ (e.g., $\gamma=30$) allowed too much exploration, which slowed convergence and resulted in noisy search behavior (i.e. frequent fluctuations), but did sometimes find better solutions
         \item $\gamma=20$ provided a good tradeoff between exploration and exploitation, letting the algorithm escape local optima while still converging efficiently
     \end{itemize}
 
+    \subsubsection*{Edge Case Analysis}
+    When \(L < 30\), the tabu list is too small to avoid revisits, which lead to slower improvement and cycling.
+    For \(L > 80\), excessive restrictions on moves resulted in skipped promising neighbors and worse solutions.
+    Setting \(K < 300\) often terminated the search prematurely before escaping local optima, while increasing \(K\) beyond
+    500 provided diminishing returns with no significant improvement in tardiness.
+    
+    \subsubsection*{Limitations}
+    The tabu search implementation performs well for the given problem size, but its efficiency may degrade for
+    significantly larger DAGs or job counts. The parameter tuning process relied on manual exploration and could benefit
+    from automated methods, such as Bayesian optimisation using a tool like Optuna. Additionally, revisiting solutions and
+    cycling occasionally occurred when \(L\) was not large enough.
+
     \subsubsection*{Conclusion}
-    The best schedule was found with $L=60$, $K=500$, and $\gamma=20$, achieving a total tardiness of \textbf{158}. These parameters provided a good balance between avoiding cycling, allowing sufficient exploration, and converging efficiently. Parameter tuning revealed that values for $L$ and $\gamma$ which were too small or too large degraded performance, and $K$ needed to be just large enough to allow full convergence without unnecessary runtime overhead.
+    The best schedule was found with $L=60$, $K=500$, and $\gamma=20$, achieving a total tardiness of \textbf{158}.
+    These parameters provided a good balance between avoiding cycling, allowing sufficient exploration, and converging efficiently.
+    Parameter tuning revealed that values for $L$ and $\gamma$ which were too small or too large degraded performance,
+    and $K$ needed to be just large enough to allow full convergence without unnecessary runtime overhead.
 
 
 \end{document}
