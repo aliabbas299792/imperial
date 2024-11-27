@@ -86,7 +86,11 @@ if __name__ == "__main__":
     example_dag = DirectedAcyclicGraph.load_from_file(EXAMPLE_DAG_PATH)
     cw_dag = DirectedAcyclicGraph.load_from_file(CW_DAG_PATH)
 
+    print("Generating LCL iterations for example DAG")
     generate_iterations_for_lcl_example(example_dag)
+    
+    print("\n\n\n----------------------\n\n")
+    print("Generating LCL iterations for Coursework DAG")
     lcl_schedule = generate_iterations_for_lcl_cw(cw_dag)
 
     print(
@@ -94,15 +98,22 @@ if __name__ == "__main__":
     )
     print("")
 
+    print("\n\n\n----------------------\n\n")
+    print("Generating Tabu iterations for Coursework DAG using the mandated initial solution")
     generate_iterations_for_tabu_with_mandated_initial_solution(cw_dag)
 
+    print("\n\n\n----------------------\n\n")
+    print("Generating Tabu iterations for Coursework DAG using a random initial solution")
     random_schedule = generate_random_tardy_topological_schedule(cw_dag)
     # sanity check, the schedule obeys the topological constraints
     assert is_topologically_valid(random_schedule, cw_dag)
+
     generate_iterations_tabu_iterations(
         cw_dag, random_schedule, "artefacts/cw_tabu_tex_random.text"
     )
 
+    print("\n\n\n----------------------\n\n")
+    print("Generating Tabu iterations for Coursework DAG using the best found initial solution")
     # initial schedule and parameters I've found to give what seems to be an optimal solution
     L = 60
     K = 500

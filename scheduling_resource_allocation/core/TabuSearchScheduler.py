@@ -147,5 +147,7 @@ class TabuSearchScheduler:
 
             if not best_neighbor:
                 break
+              
+            print(f"Iteration: {iteration}\n\t -> Current solution: {best_neighbor}\n\t -> Cost: {best_neighbor.total_cost()}")
 
         return self.best_schedule

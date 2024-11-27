@@ -5,7 +5,7 @@ This contains the coursework for COMP70068 Scheduling and Resource allocation, w
 Make sure you have Python 3.10, and [poetry](https://python-poetry.org/), then run `poetry install` to set up the project and its dependencies.
 
 ### Tests
-Run `poetry run pytest test/lcl.py` to heuristically verify that the LCL schedule is indeed optimal.
+Run `poetry run pytest test/LowestCostLastSchedulerTests.py` to heuristically verify that the LCL schedule is indeed optimal.
 
 ### Data Generation
 - The `data/` directory contains the data describing DAGs and their incidence matrices
@@ -32,7 +32,12 @@ The format of the DAG is in `common/models.py`.
 
 > The reason for this separation between the preprocessing and usage is to make it easier to switch to using a potentially different set of tools to process the DAG in the future.
 ### Reproducing Iteration Data
-To reproduce the iteration data for question 1 in the answers PDF, run:
+To reproduce the iteration data for question 1 and 2 in the answers PDF, run:
 ```sh
 poetry run python main.py
+```
+
+To reproduce the `printout.txt` file (which contains the iteration data for LCL and Tabu Search), run this:
+```sh
+poetry run python main.py > printout.txt 
 ```

@@ -49,6 +49,7 @@ class LowestCostLastScheduler:
         }
 
         reverse_schedule = []
+        iteration = 0
         while successorless:
             scheduled = None
             previous_successorless = successorless.copy()
@@ -81,6 +82,9 @@ class LowestCostLastScheduler:
                 )
 
             cumulative_cost = new_cumulative_cost
+            iteration += 1
+            
+            print(f"Iteration: {iteration}\n\t -> Current solution: {reverse_schedule[::-1]}\n\t -> Cost: {cumulative_cost}")
 
         schedule.set_schedule(reverse_schedule[::-1])
         return TardySchedule(reverse_schedule[::-1], self._dag)
