@@ -2,12 +2,14 @@ import random
 import pytest
 
 from common.constants import CW_DAG_PATH
-from common.models import DirectedAcyclicGraph
 from core.LowestCostLassScheduler import LowestCostLastScheduler
-from core.Schedule import TardySchedule
+from models.TardySchedule import TardySchedule
+from models.DirectedAcyclicGraph import DirectedAcyclicGraph
 
 
-def generate_random_tardy_topological_schedule(dag: DirectedAcyclicGraph) -> TardySchedule:
+def generate_random_tardy_topological_schedule(
+    dag: DirectedAcyclicGraph,
+) -> TardySchedule:
     in_degrees = dag.node_in_degrees.copy()
     predecessorless = [n for n in dag.nodes if dag.node_in_degrees[n] == 0]
     random_schedule = []
@@ -21,7 +23,6 @@ def generate_random_tardy_topological_schedule(dag: DirectedAcyclicGraph) -> Tar
             in_degrees[child] -= 1
             if in_degrees[child] == 0:
                 predecessorless.append(child)
-
 
     return TardySchedule(random_schedule, dag)
 

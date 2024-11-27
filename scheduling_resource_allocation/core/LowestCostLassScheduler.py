@@ -1,12 +1,14 @@
 from typing import Callable
 
 from common.common import tardiness_cost_fn
-from common.models import DirectedAcyclicGraph
-from core.Schedule import TardySchedule
+from models.Schedule import Schedule
+from models.TardySchedule import TardySchedule
+from models.DirectedAcyclicGraph import DirectedAcyclicGraph
 
 IterationCallback = Callable[
-    [set[int], int, int, int, TardySchedule], None
+    [set[int], int, int, int, Schedule], None
 ]  # available jobs/successor set, p(N), p(N - {j}), scheduled job id j, partial schedule
+
 
 class LowestCostLastScheduler:
     def __init__(self, dag: DirectedAcyclicGraph):
@@ -28,16 +30,14 @@ class LowestCostLastScheduler:
     ):
         return min(
             successorless_nodes,
-            key=lambda n_id: tardiness_cost_fn(
-                cumulative_cost, self._dag.nodes[n_id]
-            ),
+            key=lambda n_id: tardiness_cost_fn(cumulative_cost, self._dag.nodes[n_id]),
         )
 
-    def lcl(self, callback: IterationCallback | None = None) -> TardySchedule:
+    def lcl(self, callback: IterationCallback | None = None) -> Schedule:
         """
         Constructs an LCL schedule for a given DAG
         """
-        
+
         schedule = TardySchedule([], self._dag)
 
         running_out_degs = self._dag.node_out_degrees.copy()

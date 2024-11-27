@@ -1,5 +1,5 @@
 from common.constants import CW_DAG_PATH, EXAMPLE_DAG_PATH
-from common.models import DirectedAcyclicGraph
+from models.DirectedAcyclicGraph import DirectedAcyclicGraph
 from core.LCLWithTexCallback import LCLWithTexCallback
 
 

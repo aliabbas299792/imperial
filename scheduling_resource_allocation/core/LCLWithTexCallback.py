@@ -1,8 +1,8 @@
 from common.constants import CW_DAG_PATH
-from common.models import DirectedAcyclicGraph
 from common.common import tardiness_cost_fn
 from core.LowestCostLassScheduler import LowestCostLastScheduler
-from core.Schedule import Schedule
+from models.Schedule import Schedule
+from models.DirectedAcyclicGraph import DirectedAcyclicGraph
 
 
 class LCLWithTexCallback:

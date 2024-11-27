@@ -1,23 +1,9 @@
+import json
 from pathlib import Path
 from pydantic import BaseModel
-from enum import Enum
-import json
 
-
-class OperationType(Enum):
-    ONNX = "onnx"
-    MUSE = "muse"
-    EMBOSS = "emboss"
-    BLUR = "blur"
-    WAVE = "wave"
-    VII = "vii"
-    NIGHT = "night"
-
-
-class Node(BaseModel):
-    id: int
-    operation: OperationType
-    due_date: int
+from models.Node import Node
+from models.OperationType import OperationType
 
 
 class DirectedAcyclicGraph(BaseModel):
