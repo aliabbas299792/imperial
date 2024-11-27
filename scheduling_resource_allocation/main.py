@@ -21,7 +21,7 @@ def generate_iterations_for_lcl_example(dag: DirectedAcyclicGraph):
 
 
 def generate_iterations_for_lcl_cw(dag: DirectedAcyclicGraph):
-    _, tex_data = LCLWithTexCallback(dag).run_lcl()
+    schedule, tex_data = LCLWithTexCallback(dag).run_lcl()
 
     select_iterations = [
         tex_data[0],
@@ -36,6 +36,8 @@ def generate_iterations_for_lcl_cw(dag: DirectedAcyclicGraph):
     with open("artefacts/cw_lcl_tex.text", "w") as f:
         f.write(selected_data)
 
+    return schedule
+
 
 def generate_iterations_tabu_iterations(
     dag: DirectedAcyclicGraph,
@@ -48,7 +50,7 @@ def generate_iterations_tabu_iterations(
     best, iteration_data = TabuWithTexCallback(dag, L, K, Y).run_tabu(schedule)
 
     with open(output_path, "w") as f:
-        f.write("\n".join(iteration_data))
+        f.write("\n".join([tex for _, tex in iteration_data]))
 
     return best
 
@@ -62,15 +64,22 @@ def generate_iterations_for_tabu_with_mandated_initial_solution(
 
     for K in [10, 100, 1000]:
         _, iteration_data = TabuWithTexCallback(dag, 20, K, 10).run_tabu(schedule)
-        select_iterations = [
-            iteration_data[0],
-            iteration_data[1],
-            iteration_data[4],
-            iteration_data[-1],
-        ]
+
+        previous_cost = None
+        iterations_with_changes = []
+
+        for iteration, entry in enumerate(iteration_data):
+            current_cost = entry[0]
+            if (
+                previous_cost is None
+                or current_cost != previous_cost
+                or iteration == len(iteration_data) - 1
+            ):
+                iterations_with_changes.append(entry[1])
+                previous_cost = current_cost
 
         with open(f"artefacts/cw_tabu_tex_K={K}.text", "w") as f:
-            f.write("\n".join(select_iterations))
+            f.write("\n".join(iterations_with_changes))
 
 
 if __name__ == "__main__":
@@ -78,7 +87,13 @@ if __name__ == "__main__":
     cw_dag = DirectedAcyclicGraph.load_from_file(CW_DAG_PATH)
 
     generate_iterations_for_lcl_example(example_dag)
-    generate_iterations_for_lcl_cw(cw_dag)
+    lcl_schedule = generate_iterations_for_lcl_cw(cw_dag)
+
+    print(
+        f"Optimal solution using LCL: {lcl_schedule}\n\tWith cost: {lcl_schedule.maximum_cost()}"
+    )
+    print("")
+
     generate_iterations_for_tabu_with_mandated_initial_solution(cw_dag)
 
     random_schedule = generate_random_tardy_topological_schedule(cw_dag)
@@ -131,4 +146,7 @@ if __name__ == "__main__":
     best = generate_iterations_tabu_iterations(
         cw_dag, initial_schedule, "artefacts/cw_tabu_tex_optimal.text", L, K, Y
     )
-    print(best.total_cost())
+
+    print(
+        f"Optimal solution using Tabu Search: {best}\n\tWith cost: {best.total_cost()}"
+    )

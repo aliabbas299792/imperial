@@ -33,19 +33,22 @@ class TabuWithTexCallback:
         )
 
         self._iteration_data.append(
-            f"""
+            (
+                best_cost,
+                f"""
       \\item[{iteration}.] \\textbf{{Candidate schedule costs}}: {total_costs} \\\\
       \\textbf{{Tabu list}}: \\{{ {tabu_list_str} \\}} \\\\
       \\textbf{{Best cost so far}}: {best_cost} \\\\
       \\textbf{{Tabu list used?}}: {'Yes' if any(was_tabu_list_used) else 'No'} \\\\
       \\textbf{{Selected neighbour}}: {best_neighbour_str} \\\\
       \\textbf{{Selected neighbour cost}}: {best_neighbour.total_cost() if best_neighbour else 'None'}
-        """
+        """,
+            )
         )
 
     def run_tabu(
         self, initial_schedule_numeric: list[int]
-    ) -> tuple[Schedule, list[str]]:
+    ) -> tuple[Schedule, tuple[int, list[str]]]:
         self._iteration_data = []
         schedule = TardySchedule(initial_schedule_numeric, self._dag)
         return self._scheduler.tabu_search(
