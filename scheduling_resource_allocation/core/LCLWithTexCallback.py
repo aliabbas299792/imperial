@@ -2,6 +2,7 @@ from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
 from common.common import tardiness_cost_fn
 from core.LowestCostLassScheduler import LowestCostLastScheduler
+from core.Schedule import Schedule
 
 
 class LCLWithTexCallback:
@@ -50,7 +51,7 @@ class LCLWithTexCallback:
 
         self._iteration_num += 1
 
-    def run_lcl(self) -> tuple[list[int], list[str]]:
+    def run_lcl(self) -> tuple[Schedule, list[str]]:
         self._iteration_data = []
         self._iteration_num = 0
         return self._scheduler.lcl(self._lcl_callback), self._iteration_data
