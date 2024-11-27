@@ -3,10 +3,11 @@ import pytest
 
 from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
-from algorithms.lcl import LowestCostLastScheduler
+from core.LowestCostLassScheduler import LowestCostLastScheduler
+from core.Schedule import TardySchedule
 
 
-def generate_random_topological_schedule(dag: DirectedAcyclicGraph) -> list[int]:
+def generate_random_tardy_topological_schedule(dag: DirectedAcyclicGraph) -> TardySchedule:
     in_degrees = dag.node_in_degrees.copy()
     predecessorless = [n for n in dag.nodes if dag.node_in_degrees[n] == 0]
     random_schedule = []
@@ -21,7 +22,8 @@ def generate_random_topological_schedule(dag: DirectedAcyclicGraph) -> list[int]
             if in_degrees[child] == 0:
                 predecessorless.append(child)
 
-    return random_schedule
+
+    return TardySchedule(random_schedule, dag)
 
 
 @pytest.fixture
@@ -37,12 +39,12 @@ def test_lcl_schedule_cost(dag: DirectedAcyclicGraph):
 
     scheduler = LowestCostLastScheduler(dag)
     schedule = scheduler.lcl()
-    found_schedule_cost = scheduler.schedule_maximum_cost(schedule)
+    found_schedule_cost = schedule.maximum_cost()
 
     costs = []
     for _ in range(10000):
-        random_schedule = generate_random_topological_schedule(dag)
-        costs.append(scheduler.schedule_maximum_cost(random_schedule))
+        random_schedule = generate_random_tardy_topological_schedule(dag)
+        costs.append(random_schedule.maximum_cost())
 
     assert found_schedule_cost <= min(costs), (
         "Found schedule found to be less optimal than a randomly generated schedule"

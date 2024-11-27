@@ -1,6 +1,6 @@
 from common.constants import CW_DAG_PATH, EXAMPLE_DAG_PATH
 from common.models import DirectedAcyclicGraph
-from src.LCLWithTexCallback import LCLWithTexCallback
+from core.LCLWithTexCallback import LCLWithTexCallback
 
 
 def generate_iterations_for_lcl_example():

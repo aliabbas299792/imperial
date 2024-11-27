@@ -1,6 +1,7 @@
 from common.constants import CW_DAG_PATH
 from common.models import DirectedAcyclicGraph
-from algorithms.lcl import LowestCostLastScheduler, tardiness_cost_fn
+from common.common import tardiness_cost_fn
+from core.LowestCostLassScheduler import LowestCostLastScheduler
 
 
 class LCLWithTexCallback:
@@ -12,9 +13,9 @@ class LCLWithTexCallback:
 
     def _job_costs_str(self, available_jobs, cumulative_cost):
         def job_str(n_id):
-            due_date = self._dag.nodes[n_id].due_date
-            cost = tardiness_cost_fn(cumulative_cost, due_date)
-            return f"f_{{{n_id}}}(p(N)) = \\max(0, {cumulative_cost} - {due_date}) = {cost}"
+            node = self._dag.nodes[n_id]
+            cost = tardiness_cost_fn(cumulative_cost, node)
+            return f"f_{{{n_id}}}(p(N)) = \\max(0, {cumulative_cost} - {node.due_date}) = {cost}"
 
         return ", \\quad ".join([job_str(n_id) for n_id in available_jobs])
 
@@ -41,7 +42,7 @@ class LCLWithTexCallback:
       \\]    
       Select $J_{{{selected}}}$ (minimises $f_j(p(N))$)
 
-      Partial schedule cost: {self._scheduler.schedule_maximum_cost(partial_schedule, new_cumulative_cost)}
+      Partial schedule cost: {partial_schedule.maximum_cost(new_cumulative_cost)}
 
       Updated schedule: ${new_schedule}$
         """
