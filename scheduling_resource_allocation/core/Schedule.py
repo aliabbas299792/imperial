@@ -18,6 +18,9 @@ class Schedule:
       
     def maximum_cost(self, starting_time: int = 0) -> int:
       return max(self.costs(starting_time))
+    
+    def total_cost(self, starting_time: int = 0) -> int:
+      return sum(self.costs(starting_time))
       
     def completion_times(self) -> list[int]:
         return list(
@@ -33,9 +36,24 @@ class Schedule:
                 self._cost_fn(C_j, self._dag.nodes[n_id])
                 for n_id, C_j in zip(self._schedule, completion_times)
             ]
+            
+    def copy(self):
+        return Schedule(self._schedule.copy(), self._dag, self._cost_fn)
+
+    def __iter__(self):
+        return iter(self._schedule)
+      
+    def __len__(self) -> int:
+        return len(self._schedule)
 
     def __str__(self) -> str:
         return str(self._schedule)
+      
+    def __getitem__(self, idx: int) -> int:
+        return self._schedule[idx]
+      
+    def __setitem__(self, idx: int, value: int):
+        self._schedule[idx] = value
             
 class TardySchedule(Schedule):
     def __init__(self, schedule: list[int], dag: DirectedAcyclicGraph):
