@@ -22,6 +22,7 @@ class TabuSearchScheduler:
         self._tabu_length = tabu_length  # L in the slides
         self._max_iterations = max_iterations  # K in the slides
         self._gamma = gamma  # gamma in the slides
+        self._last_start_index = 0
 
     def is_swap_valid(self, node_a: Node, node_b: Node, schedule: Schedule) -> bool:
         """
@@ -72,9 +73,12 @@ class TabuSearchScheduler:
         Generates valid neighbouring solutions, and respects the topological constraints of the DAG
         """
         neighbors = []
+        n = len(schedule)
 
-        for i in range(len(schedule) - 1):
+        for k in range(n - 1):
+            i = (self._last_start_index + k) % (n - 1)
             j = i + 1
+
             node_a, node_b = schedule[i], schedule[j]
             swap = (min(node_a, node_b), max(node_a, node_b))
 
@@ -85,6 +89,7 @@ class TabuSearchScheduler:
             new_schedule[i], new_schedule[j] = new_schedule[j], new_schedule[i]
             neighbors.append((new_schedule, swap))
 
+        self._last_start_index = (self._last_start_index + 1) % (n - 1)
         return neighbors
 
     def tabu_search(
