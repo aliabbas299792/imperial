@@ -4,7 +4,7 @@ from models.DirectedAcyclicGraph import DirectedAcyclicGraph
 from models.Node import Node
 from models.Schedule import Schedule
 
-# (iteration, candidate schedules, total cost, tabu list, best cost, was tabu list used, best neighbour | None) -> None
+# (iteration, candidate schedules, total costs, tabu list, best cost, was tabu list used, best neighbour | None) -> None
 IterationCallback = Callable[
     [int, list[Schedule], int, list[tuple[int, int]], int, bool], None
 ]
@@ -73,23 +73,23 @@ class TabuSearchScheduler:
         """
         neighbors = []
 
-        for i in range(len(schedule)):
-            for j in range(i + 1, len(schedule)):
-                node_a, node_b = schedule[i], schedule[j]
-                swap = (min(node_a, node_b), max(node_a, node_b))
+        for i in range(len(schedule) - 1):
+            j = i + 1
+            node_a, node_b = schedule[i], schedule[j]
+            swap = (min(node_a, node_b), max(node_a, node_b))
 
-                if not self.is_swap_valid(node_a, node_b, schedule):
-                    continue
+            if not self.is_swap_valid(node_a, node_b, schedule):
+                continue
 
-                new_schedule = schedule.copy()
-                new_schedule[i], new_schedule[j] = new_schedule[j], new_schedule[i]
-                neighbors.append((new_schedule, swap))
+            new_schedule = schedule.copy()
+            new_schedule[i], new_schedule[j] = new_schedule[j], new_schedule[i]
+            neighbors.append((new_schedule, swap))
 
         return neighbors
 
     def tabu_search(
         self, initial_schedule: Schedule, callback: IterationCallback | None = None
-    ) -> tuple[Schedule, int]:
+    ) -> Schedule:
         # initial_schedule is x_0 in the slides
 
         self.best_schedule = None
@@ -114,9 +114,7 @@ class TabuSearchScheduler:
                 # if the improvement is good enough and it's not in the tabu list
                 #   or if the solution is better than the global best (aspiration criteria),
                 #   then accept this solution is accepted
-                if (
-                    delta > -self._gamma and swap not in tabu_list
-                ) or tardiness < g_best:
+                if delta > -self._gamma and swap not in tabu_list:
                     if tardiness < best_neighbor_tardiness:
                         best_neighbor = neighbor
                         best_neighbor_tardiness = tardiness
@@ -135,15 +133,14 @@ class TabuSearchScheduler:
             if callback is not None:
                 callback(
                     iteration,
-                    [s for s, _ in neighbors],
                     [s.total_cost() for s, _ in neighbors],
                     list(tabu_list.keys()),
                     self.best_tardiness,
-                    [swap in tabu_list for _, swap in neighbors],
+                    [swap != best_swap and swap in tabu_list for _, swap in neighbors],
                     best_neighbor,
                 )
 
             if not best_neighbor:
                 break
 
-        return self.best_schedule, self.best_tardiness
+        return self.best_schedule

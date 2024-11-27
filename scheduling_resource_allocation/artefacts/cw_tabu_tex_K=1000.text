@@ -1,0 +1,32 @@
+
+      \item[0.] \textbf{Candidate schedule costs}: [341, 341, 341, 341, 341, 341, 338, 343, 341, 341, 341, 339, 351, 331, 359, 341, 336, 346, 336, 346, 336] \\
+      \textbf{Tabu list}: \{ (17, 25) \} \\
+      \textbf{Best cost so far}: 331 \\
+      \textbf{Tabu list used?}: No \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 24, 16, 14, 5, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 331
+        
+
+      \item[1.] \textbf{Candidate schedule costs}: [331, 331, 331, 331, 331, 331, 328, 333, 331, 331, 331, 329, 341, 331, 326, 336, 326, 336, 326] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14) \} \\
+      \textbf{Best cost so far}: 326 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 25, 24, 16, 5, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 326
+        
+
+      \item[4.] \textbf{Candidate schedule costs}: [302, 302, 302, 302, 302, 302, 299, 304, 302, 302, 302, 300, 312, 292, 320, 302, 302, 297, 307, 297] \\
+      \textbf{Tabu list}: \{ (17, 25), (5, 14), (5, 16), (5, 24), (5, 25) \} \\
+      \textbf{Best cost so far}: 292 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 28, 22, 9, 8, 13, 12, 11, 3, 19, 21, 2, 26, 27, 7, 6, 18, 20, 17, 5, 25, 24, 16, 14, 23, 15, 4, 10, 1, 0, 30] \\
+      \textbf{Selected neighbour cost}: 292
+        
+
+      \item[999.] \textbf{Candidate schedule costs}: [230, 230, 231, 230, 230, 230, 230, 230, 230, 230, 230, 236, 232, 240, 230, 235, 230, 235] \\
+      \textbf{Tabu list}: \{ (3, 13), (12, 26), (12, 28), (12, 22), (2, 12), (3, 12), (9, 26), (9, 28), (9, 22), (2, 9), (3, 9), (9, 12), (9, 13), (11, 26), (11, 28), (11, 22), (22, 28), (22, 26), (22, 27), (26, 27) \} \\
+      \textbf{Best cost so far}: 230 \\
+      \textbf{Tabu list used?}: Yes \\
+      \textbf{Selected neighbour}: [29, 9, 13, 12, 3, 2, 11, 28, 27, 26, 22, 8, 19, 21, 7, 20, 6, 5, 18, 17, 25, 24, 16, 15, 14, 23, 4, 1, 10, 0, 30] \\
+      \textbf{Selected neighbour cost}: 230
+        

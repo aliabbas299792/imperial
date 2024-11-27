@@ -1,31 +1,13 @@
-import random
 import pytest
 
 from common.constants import CW_DAG_PATH
-from common.common import is_topologically_valid
+from common.common import (
+    is_topologically_valid,
+    generate_random_tardy_topological_schedule,
+)
 from core.LowestCostLassScheduler import LowestCostLastScheduler
 from models.TardySchedule import TardySchedule
 from models.DirectedAcyclicGraph import DirectedAcyclicGraph
-
-
-def generate_random_tardy_topological_schedule(
-    dag: DirectedAcyclicGraph,
-) -> TardySchedule:
-    in_degrees = dag.node_in_degrees.copy()
-    predecessorless = [n for n in dag.nodes if dag.node_in_degrees[n] == 0]
-    random_schedule = []
-
-    while predecessorless:
-        selected_node = random.choice(predecessorless)
-        random_schedule.append(selected_node)
-        predecessorless.remove(selected_node)
-
-        for child in dag.adjacency_matrix.get(selected_node, []):
-            in_degrees[child] -= 1
-            if in_degrees[child] == 0:
-                predecessorless.append(child)
-
-    return TardySchedule(random_schedule, dag)
 
 
 @pytest.fixture
