@@ -10,3 +10,6 @@
 [submodule "distributed_ledgers/coursework/lib/v3-periphery"]
 	path = distributed_ledgers/coursework/lib/v3-periphery
 	url = https://github.com/uniswap/v3-periphery
+[submodule "distributed_ledgers/coursework/lib/openzeppelin-contracts"]
+	path = distributed_ledgers/coursework/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
