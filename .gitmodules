@@ -1,3 +1,6 @@
 [submodule "distributed_ledgers/coursework/lib/forge-std"]
 	path = distributed_ledgers/coursework/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "distributed_ledgers/coursework/lib/chainlink"]
+	path = distributed_ledgers/coursework/lib/chainlink
+	url = https://github.com/smartcontractkit/chainlink
