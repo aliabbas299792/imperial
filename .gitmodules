@@ -4,3 +4,6 @@
 [submodule "distributed_ledgers/coursework/lib/chainlink"]
 	path = distributed_ledgers/coursework/lib/chainlink
 	url = https://github.com/smartcontractkit/chainlink
+[submodule "distributed_ledgers/coursework/lib/v3-core"]
+	path = distributed_ledgers/coursework/lib/v3-core
+	url = https://github.com/uniswap/v3-core
