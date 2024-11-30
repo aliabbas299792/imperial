@@ -2,10 +2,10 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {HumanResources} from "@src/HumanResources.sol";
 
 contract CounterScript is Script {
-    Counter public counter;
+    HumanResources public counter;
 
     function setUp() public {}
 
@@ -13,7 +13,7 @@ contract CounterScript is Script {
         uint256 deployerKey = vm.envUint("PRIVATE_KEY");
 
         vm.startBroadcast(deployerKey);
-        counter = new Counter();
+        counter = new HumanResources(msg.sender);
 
         console.log("Deployed at: ", address(counter));
         vm.stopBroadcast();
