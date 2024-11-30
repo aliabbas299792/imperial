@@ -10,7 +10,6 @@ if [[ -z "$PRIVATE_KEY" || -z "$OPTIMISM_RPC_URL" ]]; then
     exit 1
 fi
 
-# simulates the deployment
 forge script "$DEPLOY_SCRIPT" \
     --rpc-url "$OPTIMISM_RPC_URL" \
     --private-key "$PRIVATE_KEY" \

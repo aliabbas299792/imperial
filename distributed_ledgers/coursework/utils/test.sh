@@ -4,9 +4,9 @@
 set -e
 source .env
 
-if [[ -z "$OPTIMISM_ALCHEMY_RPC_URL" ]]; then
-    echo "Error: OPTIMISM_ALCHEMY_RPC_URL must be set in .env"
+if [[ -z "$ETH_RPC_URL" ]]; then
+    echo "Error: ETH_RPC_URL must be set in .env"
     exit 1
 fi
 
-forge test --fork-url "$OPTIMISM_ALCHEMY_RPC_URL"
+forge test --fork-url "$ETH_RPC_URL"
