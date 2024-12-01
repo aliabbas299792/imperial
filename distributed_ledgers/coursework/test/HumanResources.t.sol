@@ -40,6 +40,12 @@ contract HumanResourcesTest is Test {
     uint256 public aliceSalary = 2100e18;
     uint256 public bobSalary = 700e18;
 
+    // events to test against
+    event EmployeeRegistered(address indexed employee, uint256 weeklyUsdSalary);
+    event EmployeeTerminated(address indexed employee);
+    event SalaryWithdrawn(address indexed employee, bool isEth, uint256 amount);
+    event CurrencySwitched(address indexed employee, bool isEth);
+
     uint256 ethPrice;
 
     function setUp() public {
@@ -171,6 +177,131 @@ contract HumanResourcesTest is Test {
         );
     }
 
+    //
+    // --- Role Management Tests ---
+    //
+
+    function test_onlyHrManagerCanRegister() public {
+        // test unauthorized registration attempt
+        vm.prank(alice);
+        vm.expectRevert(IHumanResources.NotAuthorized.selector);
+        humanResources.registerEmployee(bob, bobSalary);
+    }
+
+    function test_onlyHrManagerCanTerminate() public {
+        _registerEmployee(alice, aliceSalary);
+
+        // test unauthorized termination attempt
+        vm.prank(bob);
+        vm.expectRevert(IHumanResources.NotAuthorized.selector);
+        humanResources.terminateEmployee(alice);
+    }
+
+    function test_onlyEmployeeCanSwitchCurrency() public {
+        // test non-employee attempt
+        vm.prank(alice);
+        vm.expectRevert(IHumanResources.NotAuthorized.selector);
+        humanResources.switchCurrency();
+
+        // register and terminate employee
+        _registerEmployee(alice, aliceSalary);
+        vm.prank(hrManager);
+        humanResources.terminateEmployee(alice);
+
+        // test terminated employee attempt
+        vm.prank(alice);
+        vm.expectRevert(IHumanResources.NotAuthorized.selector);
+        humanResources.switchCurrency();
+    }
+
+    //
+    // --- Registration and Termination Tests ---
+    //
+
+    function test_registration_emitsEvent() public {
+        vm.expectEmit(true, true, true, true);
+        emit EmployeeRegistered(alice, aliceSalary);
+        _registerEmployee(alice, aliceSalary);
+    }
+
+    function test_termination_emitsEvent() public {
+        _registerEmployee(alice, aliceSalary);
+
+        vm.expectEmit(true, true, true, true);
+        emit EmployeeTerminated(alice);
+        vm.prank(hrManager);
+        humanResources.terminateEmployee(alice);
+    }
+
+    function test_terminateEmployee_stopsAccrual() public {
+        _registerEmployee(alice, aliceSalary);
+        skip(2 days);
+
+        vm.prank(hrManager);
+        humanResources.terminateEmployee(alice);
+
+        uint256 salaryAtTermination = humanResources.salaryAvailable(alice);
+        skip(3 days);
+        assertEq(humanResources.salaryAvailable(alice), salaryAtTermination);
+    }
+
+    //
+    // --- Salary Calculation and Withdrawal Tests ---
+    //
+    
+    function test_salaryAccrual_linearTime() public {
+        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _registerEmployee(alice, aliceSalary);
+
+        // test 1 day accrual
+        skip(1 days);
+        uint256 oneDaySalary = humanResources.salaryAvailable(alice);
+
+        // reset and test 2 days accrual
+        vm.prank(alice);
+        humanResources.withdrawSalary();
+        skip(2 days);
+        uint256 twoDaysSalary = humanResources.salaryAvailable(alice);
+
+        // two days should be exactly double one day since it's linear
+        assertEq(twoDaysSalary, oneDaySalary * 2);
+    }
+
+    function test_switchCurrency_withdrawsFirst() public {
+        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _registerEmployee(alice, aliceSalary);
+        skip(2 days);
+
+        uint256 expectedUsdc = humanResources.salaryAvailable(alice);
+        vm.expectEmit(true, true, true, true);
+        emit SalaryWithdrawn(alice, false, expectedUsdc);
+        vm.expectEmit(true, true, true, true);
+        emit CurrencySwitched(alice, true);
+
+        vm.prank(alice);
+        humanResources.switchCurrency();
+    }
+
+    function test_reregistration_currencyPreference() public {
+        _mintTokensFor(_USDC, address(humanResources), 10_000e6); // Add this line
+        _registerEmployee(alice, aliceSalary);
+
+        // switch to eth
+        vm.prank(alice);
+        humanResources.switchCurrency();
+
+        // terminate and re-register
+        vm.prank(hrManager);
+        humanResources.terminateEmployee(alice);
+        _registerEmployee(alice, aliceSalary);
+
+        // verify preference reset to usdc
+        skip(1 days);
+        uint256 available = humanResources.salaryAvailable(alice);
+        vm.prank(alice);
+        humanResources.withdrawSalary();
+        assertEq(IERC20(_USDC).balanceOf(alice), available);
+    }
     function _registerEmployee(address employeeAddress, uint256 salary) public {
         vm.prank(hrManager);
         humanResources.registerEmployee(employeeAddress, salary);
