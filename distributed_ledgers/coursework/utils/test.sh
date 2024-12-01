@@ -9,4 +9,4 @@ if [[ -z "$ETH_RPC_URL" ]]; then
     exit 1
 fi
 
-forge test --fork-url "$ETH_RPC_URL"
+forge test --fork-url "$ETH_RPC_URL" -vvv

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.24;
 
 import {IHumanResources} from "./IHumanResources.sol";
+import {PriceUtilities} from "./PriceUtilities.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
-import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
 // used to protect against reentrancy attacks
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -14,23 +14,11 @@ interface IWETH is IERC20 {
     function withdraw(uint256) external;
 }
 
-contract HumanResources is IHumanResources, ReentrancyGuard {
+contract HumanResources is PriceUtilities, IHumanResources, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    // Constants for contract addresses and configuration
-    address private constant WETH = 0x4200000000000000000000000000000000000006;
-    address private constant USDC = 0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85;
     uint24 private constant POOL_FEE = 3000;
     uint256 private constant WEEK = 7 days;
-    uint256 private constant USDC_DECIMALS = 6;
-    uint256 private constant ETH_DECIMALS = 18;
-    uint256 private constant SLIPPAGE_THRESHOLD = 102; // 2% maximum slippage
-
-    // External contracts
-    ISwapRouter private constant swapRouter =
-        ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
-    AggregatorV3Interface private constant ethUsdFeed =
-        AggregatorV3Interface(0x13e3Ee699D1909E989722E753853AE30b17e08c5);
 
     address public immutable hrManager;
 
@@ -113,14 +101,6 @@ contract HumanResources is IHumanResources, ReentrancyGuard {
 
     function getActiveEmployeeCount() external view returns (uint256) {
         return activeEmployeeCount;
-    }
-
-    function employeePrefersEth(address employee)
-        external
-        view
-        returns (bool)
-    {
-        return employees[employee].prefersEth;
     }
 
     function getEmployeeInfo(
@@ -291,24 +271,6 @@ contract HumanResources is IHumanResources, ReentrancyGuard {
         } else {
             return totalAmount;
         }
-    }
-
-    function _convertToUsdcDecimals(
-        uint256 amount
-    ) internal pure returns (uint256) {
-        return amount / (10 ** (ETH_DECIMALS - USDC_DECIMALS));
-    }
-
-    function _convertFromUsdcDecimals(
-        uint256 amount
-    ) internal pure returns (uint256) {
-        return amount * (10 ** (ETH_DECIMALS - USDC_DECIMALS));
-    }
-
-    function _accountForSlippage(
-        uint256 amount
-    ) internal pure returns (uint256) {
-        return (amount * SLIPPAGE_THRESHOLD) / 100;
     }
 
     receive() external payable {}

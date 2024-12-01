@@ -13,27 +13,18 @@
 pragma solidity ^0.8.24;
 
 /// @notice You may need to change these import statements depending on your project structure and where you use this test
-import {Test, console, stdStorage, StdStorage} from "forge-std/Test.sol";
+import {Test, stdStorage, StdStorage} from "forge-std/Test.sol";
 import {HumanResources, IHumanResources} from "@src/HumanResources.sol";
+import {PriceUtilities} from "@src/PriceUtilities.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
-import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
-contract HumanResourcesTest is Test {
+contract HumanResourcesTest is PriceUtilities, Test {
     using stdStorage for StdStorage;
-
-    address internal constant _WETH =
-        0x4200000000000000000000000000000000000006;
-    address internal constant _USDC =
-        0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85;
-    AggregatorV3Interface internal constant _ETH_USD_FEED =
-        AggregatorV3Interface(0x13e3Ee699D1909E989722E753853AE30b17e08c5);
 
     HumanResources public humanResources;
 
     address public hrManager;
-
     address public alice = makeAddr("alice");
     address public bob = makeAddr("bob");
 
@@ -54,8 +45,8 @@ contract HumanResourcesTest is Test {
         hrManager = msg.sender;
         humanResources = new HumanResources(hrManager);
 
-        (, int256 answer, , , ) = _ETH_USD_FEED.latestRoundData();
-        uint256 feedDecimals = _ETH_USD_FEED.decimals();
+        (, int256 answer, , , ) = ethUsdFeed.latestRoundData();
+        uint256 feedDecimals = ethUsdFeed.decimals();
         ethPrice = uint256(answer) * 10 ** (18 - feedDecimals);
     }
 
@@ -93,7 +84,7 @@ contract HumanResourcesTest is Test {
         _registerEmployee(alice, aliceSalary);
     }
 
-    function test_salaryAvailable_usdc() public {
+    function test_salaryAvailableUSDC() public {
         _registerEmployee(alice, aliceSalary);
         skip(2 days);
         assertEq(
@@ -125,25 +116,25 @@ contract HumanResourcesTest is Test {
         );
     }
 
-    function test_withdrawSalary_usdc() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+    function test_withdrawSalaryUSDC() public {
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
         skip(2 days);
         vm.prank(alice);
         humanResources.withdrawSalary();
         assertEq(
-            IERC20(_USDC).balanceOf(address(alice)),
+            IERC20(USDC).balanceOf(address(alice)),
             ((aliceSalary / 1e12) * 2) / 7
         );
 
         skip(5 days);
         vm.prank(alice);
         humanResources.withdrawSalary();
-        assertEq(IERC20(_USDC).balanceOf(address(alice)), aliceSalary / 1e12);
+        assertEq(IERC20(USDC).balanceOf(address(alice)), aliceSalary / 1e12);
     }
 
     function test_withdrawSalary_eth() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
         uint256 expectedSalary = (aliceSalary * 1e18 * 2) / ethPrice / 7;
         vm.prank(alice);
@@ -160,7 +151,7 @@ contract HumanResourcesTest is Test {
     }
 
     function test_reregisterEmployee() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
         skip(2 days);
         vm.prank(hrManager);
@@ -174,7 +165,7 @@ contract HumanResourcesTest is Test {
         uint256 expectedSalary = ((aliceSalary * 2) / 7) +
             ((aliceSalary * 2 * 5) / 7);
         assertEq(
-            IERC20(_USDC).balanceOf(address(alice)),
+            IERC20(USDC).balanceOf(address(alice)),
             expectedSalary / 1e12
         );
     }
@@ -252,7 +243,7 @@ contract HumanResourcesTest is Test {
     //
 
     function test_salaryAccrual_linearTime() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
 
         // test 1 day accrual
@@ -270,7 +261,7 @@ contract HumanResourcesTest is Test {
     }
 
     function test_switchCurrency_withdrawsFirst() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6);
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
         skip(2 days);
 
@@ -285,7 +276,7 @@ contract HumanResourcesTest is Test {
     }
 
     function test_reregistration_currencyPreference() public {
-        _mintTokensFor(_USDC, address(humanResources), 10_000e6); // Add this line
+        _mintTokensFor(USDC, address(humanResources), 10_000e6); // Add this line
         _registerEmployee(alice, aliceSalary);
 
         // switch to eth
@@ -302,7 +293,7 @@ contract HumanResourcesTest is Test {
         uint256 available = humanResources.salaryAvailable(alice);
         vm.prank(alice);
         humanResources.withdrawSalary();
-        assertEq(IERC20(_USDC).balanceOf(alice), available);
+        assertEq(IERC20(USDC).balanceOf(alice), available);
     }
 
     //
