@@ -106,6 +106,38 @@ contract HumanResources is IHumanResources, ReentrancyGuard {
         employee.prefersEth = !employee.prefersEth;
         emit CurrencySwitched(msg.sender, employee.prefersEth);
     }
+
+    function salaryAvailable(address employee) external view returns (uint256) {
+        return _calculateAvailableSalary(employee);
+    }
+
+    function getActiveEmployeeCount() external view returns (uint256) {
+        return activeEmployeeCount;
+    }
+
+    function employeePrefersEth(address employee)
+        external
+        view
+        returns (bool)
+    {
+        return employees[employee].prefersEth;
+    }
+
+    function getEmployeeInfo(
+        address employee
+    )
+        external
+        view
+        returns (
+            uint256 weeklyUsdSalary,
+            uint256 employedSince,
+            uint256 terminatedAt
+        )
+    {
+        Employee memory emp = employees[employee];
+        return (emp.weeklyUsdSalary, emp.employedSince, emp.terminatedAt);
+    }
+
     function _withdrawUsdc(uint256 amount) internal {
         IERC20(USDC).safeTransfer(msg.sender, amount);
         emit SalaryWithdrawn(msg.sender, false, amount);

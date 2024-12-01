@@ -11,11 +11,7 @@ fi
 
 forge build
 
-forge_out=$(forge script "$DEPLOY_SCRIPT" \
+forge script "$DEPLOY_SCRIPT" \
     --rpc-url "$ETH_RPC_URL" \
     --private-key "$PRIVATE_KEY" \
-    --broadcast)
-
-replacement=$(echo $forge_out | sed -n "s/^.*Deployed at: \(0x[A-Za-z0-9]*\).*/\1/p")
-
-sed -i "" "s/HR_CONTRACT=0x.*/HR_CONTRACT=$replacement/" "./.env"
+    --broadcast

@@ -14,7 +14,7 @@ pragma solidity ^0.8.24;
 
 /// @notice You may need to change these import statements depending on your project structure and where you use this test
 import {Test, console, stdStorage, StdStorage} from "forge-std/Test.sol";
-import {HumanResources, IHumanResources} from "../src/HumanResources.sol";
+import {HumanResources, IHumanResources} from "@src/HumanResources.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
@@ -50,11 +50,13 @@ contract HumanResourcesTest is Test {
 
     function setUp() public {
         vm.createSelectFork(vm.envString("ETH_RPC_URL"));
-        humanResources = HumanResources(payable(vm.envAddress("HR_CONTRACT")));
+
+        hrManager = msg.sender;
+        humanResources = new HumanResources(hrManager);
+
         (, int256 answer, , , ) = _ETH_USD_FEED.latestRoundData();
         uint256 feedDecimals = _ETH_USD_FEED.decimals();
         ethPrice = uint256(answer) * 10 ** (18 - feedDecimals);
-        hrManager = humanResources.hrManager();
     }
 
     function test_registerEmployee() public {
@@ -248,7 +250,7 @@ contract HumanResourcesTest is Test {
     //
     // --- Salary Calculation and Withdrawal Tests ---
     //
-    
+
     function test_salaryAccrual_linearTime() public {
         _mintTokensFor(_USDC, address(humanResources), 10_000e6);
         _registerEmployee(alice, aliceSalary);
@@ -302,6 +304,37 @@ contract HumanResourcesTest is Test {
         humanResources.withdrawSalary();
         assertEq(IERC20(_USDC).balanceOf(alice), available);
     }
+
+    //
+    // --- View Function Tests ---
+    //
+
+    function test_getEmployeeInfo_nonexistentEmployee() public view {
+        (uint256 salary, uint256 since, uint256 terminated) = humanResources
+            .getEmployeeInfo(address(0xdead));
+        assertEq(salary, 0);
+        assertEq(since, 0);
+        assertEq(terminated, 0);
+    }
+
+    function test_activeEmployeeCount() public {
+        assertEq(humanResources.getActiveEmployeeCount(), 0);
+
+        // Register multiple employees
+        _registerEmployee(alice, aliceSalary);
+        _registerEmployee(bob, bobSalary);
+        assertEq(humanResources.getActiveEmployeeCount(), 2);
+
+        // Terminate one
+        vm.prank(hrManager);
+        humanResources.terminateEmployee(bob);
+        assertEq(humanResources.getActiveEmployeeCount(), 1);
+
+        // Re-register terminated employee
+        _registerEmployee(bob, bobSalary);
+        assertEq(humanResources.getActiveEmployeeCount(), 2);
+    }
+
     function _registerEmployee(address employeeAddress, uint256 salary) public {
         vm.prank(hrManager);
         humanResources.registerEmployee(employeeAddress, salary);
