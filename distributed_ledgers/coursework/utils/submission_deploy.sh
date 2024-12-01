@@ -3,7 +3,6 @@
 
 set -e
 source .env
-source utils/common.env
 
 if [[ -z "$PRIVATE_KEY" || -z "$OPTIMISM_RPC_URL" ]]; then
     echo "Error: PRIVATE_KEY and OPTIMISM_RPC_URL must be set in .env"

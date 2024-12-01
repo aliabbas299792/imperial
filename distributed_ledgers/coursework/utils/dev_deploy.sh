@@ -3,7 +3,6 @@
 
 set -e
 source .env
-source utils/common.env
 
 if [[ -z "$PRIVATE_KEY" || -z "$ALCHEMY_RPC_URL" ]]; then
     echo "Error: PRIVATE_KEY and ALCHEMY_RPC_URL must be set in .env"

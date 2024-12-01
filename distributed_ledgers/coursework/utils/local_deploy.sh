@@ -3,15 +3,9 @@
 
 set -e
 source .env
-source utils/common.env
 
-if [[ -z "$ETH_RPC_URL" || -z "$PRIVATE_KEY" ]]; then
-    echo "Error: ETH_RPC_URL and PRIVATE_KEY must be set in .env"
-    exit 1
-fi
-
-if [[ -z "$DEPLOY_CONTRACT_PATH" || -z "$DEPLOY_CONTRACT_NAME" ]]; then
-    echo "Error: DEPLOY_CONTRACT_PATH and DEPLOY_CONTRACT_NAME must be set in utils/common.env"
+if [[ -z "$ETH_RPC_URL" || -z "$PRIVATE_KEY" || -z "$DEPLOY_SCRIPT" ]]; then
+    echo "Error: ETH_RPC_URL, PRIVATE_KEY and DEPLOY_SCRIPT must be set in .env"
     exit 1
 fi
 
