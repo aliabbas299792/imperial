@@ -41,13 +41,12 @@ contract HumanResourcesTest is PriceUtilities, Test {
 
     function setUp() public {
         vm.createSelectFork(vm.envString("ETH_RPC_URL"));
-
-        hrManager = msg.sender;
-        humanResources = new HumanResources(hrManager);
+        humanResources = HumanResources(payable(vm.envAddress("HR_CONTRACT")));
 
         (, int256 answer, , , ) = ethUsdFeed.latestRoundData();
         uint256 feedDecimals = ethUsdFeed.decimals();
         ethPrice = uint256(answer) * 10 ** (18 - feedDecimals);
+        hrManager = humanResources.hrManager();
     }
 
     function test_registerEmployee() public {
@@ -311,17 +310,17 @@ contract HumanResourcesTest is PriceUtilities, Test {
     function test_activeEmployeeCount() public {
         assertEq(humanResources.getActiveEmployeeCount(), 0);
 
-        // Register multiple employees
+        // register multiple employees
         _registerEmployee(alice, aliceSalary);
         _registerEmployee(bob, bobSalary);
         assertEq(humanResources.getActiveEmployeeCount(), 2);
 
-        // Terminate one
+        // terminate one
         vm.prank(hrManager);
         humanResources.terminateEmployee(bob);
         assertEq(humanResources.getActiveEmployeeCount(), 1);
 
-        // Re-register terminated employee
+        // re-register terminated employee
         _registerEmployee(bob, bobSalary);
         assertEq(humanResources.getActiveEmployeeCount(), 2);
     }
@@ -349,7 +348,7 @@ contract HumanResourcesTest is PriceUtilities, Test {
         );
 
         vm.prank(alice);
-        humanResources.withdrawSalary(); // Should not revert at 102%
+        humanResources.withdrawSalary(); // should not revert at 102%
     }
 
     function test_withdrawSalary_slippageProtection_aboveLimit() public {
