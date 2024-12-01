@@ -299,7 +299,7 @@ contract HumanResourcesTest is PriceUtilities, Test {
     // --- View Function Tests ---
     //
 
-    function test_getEmployeeInfo_nonexistentEmployee() public view {
+    function test_getEmployeeInfo_nonexistentEmployee() public {
         (uint256 salary, uint256 since, uint256 terminated) = humanResources
             .getEmployeeInfo(address(0xdead));
         assertEq(salary, 0);
