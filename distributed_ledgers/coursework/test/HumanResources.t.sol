@@ -335,6 +335,61 @@ contract HumanResourcesTest is Test {
         assertEq(humanResources.getActiveEmployeeCount(), 2);
     }
 
+    function test_withdrawSalary_slippageProtection_atLimit() public {
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
+        _registerEmployee(alice, 1000e18);
+
+        vm.prank(alice);
+        humanResources.switchCurrency();
+        skip(7 days);
+
+        uint256 salaryInEth = humanResources.salaryAvailable(alice);
+        _mintTokensFor(WETH, address(humanResources), salaryInEth);
+        vm.deal(address(humanResources), salaryInEth);
+
+        (, int256 answer, , , ) = ethUsdFeed.latestRoundData();
+        uint256 usdcAmount = _convertToUsdcDecimals(salaryInEth * uint256(answer));
+        uint256 maxAllowedAmount = _accountForSlippage(usdcAmount);
+
+        vm.mockCall(
+            address(swapRouter),
+            abi.encodeWithSelector(ISwapRouter.exactOutputSingle.selector),
+            abi.encode(maxAllowedAmount)
+        );
+
+        vm.prank(alice);
+        humanResources.withdrawSalary(); // Should not revert at 102%
+    }
+
+    function test_withdrawSalary_slippageProtection_aboveLimit() public {
+        _mintTokensFor(USDC, address(humanResources), 10_000e6);
+        _registerEmployee(alice, 1000e18);
+
+        vm.prank(alice);
+        humanResources.switchCurrency();
+        skip(7 days);
+
+        uint256 salaryInEth = humanResources.salaryAvailable(alice);
+        _mintTokensFor(WETH, address(humanResources), salaryInEth);
+        vm.deal(address(humanResources), salaryInEth);
+
+        (, int256 answer, , , ) = ethUsdFeed.latestRoundData();
+        uint256 usdcAmount = _convertToUsdcDecimals(salaryInEth * uint256(answer));
+
+        // 103% slippage
+        uint256 excessiveAmount = (usdcAmount * 103) / 100;
+
+        vm.mockCall(
+            address(swapRouter),
+            abi.encodeWithSelector(ISwapRouter.exactOutputSingle.selector),
+            abi.encode(excessiveAmount)
+        );
+
+        vm.expectRevert("Excessive slippage");
+        vm.prank(alice);
+        humanResources.withdrawSalary();
+    }
+
     function _registerEmployee(address employeeAddress, uint256 salary) public {
         vm.prank(hrManager);
         humanResources.registerEmployee(employeeAddress, salary);
