@@ -1,0 +1,15 @@
+[submodule "distributed_ledgers/coursework/lib/forge-std"]
+	path = distributed_ledgers/coursework/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "distributed_ledgers/coursework/lib/chainlink"]
+	path = distributed_ledgers/coursework/lib/chainlink
+	url = https://github.com/smartcontractkit/chainlink
+[submodule "distributed_ledgers/coursework/lib/v3-core"]
+	path = distributed_ledgers/coursework/lib/v3-core
+	url = https://github.com/uniswap/v3-core
+[submodule "distributed_ledgers/coursework/lib/v3-periphery"]
+	path = distributed_ledgers/coursework/lib/v3-periphery
+	url = https://github.com/uniswap/v3-periphery
+[submodule "distributed_ledgers/coursework/lib/openzeppelin-contracts"]
+	path = distributed_ledgers/coursework/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
