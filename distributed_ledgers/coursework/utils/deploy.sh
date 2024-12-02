@@ -1,5 +1,5 @@
 #!/bin/bash
-# Deploys a contract to the local fork
+# Deploys a contract to the ETH_RPC_URL and updates the .env file with the new contract address
 
 set -e
 source .env

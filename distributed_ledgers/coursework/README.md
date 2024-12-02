@@ -5,12 +5,28 @@ This repository contains the 70017 Smart Contracts coursework, related to the ma
 ### Overview
 The contract implements a HR payment system that allows for employee registration, salary management, and payment in either USDC or ETH.
 The contract integrates with Chainlink price feeds for ETH/USD pricing and Uniswap V3 for USDC/ETH swaps.
+
+### Minimal Setup
+Run these:
+```sh
+git init # if not in a git repo already
+forge install
+forge install smartcontractkit/chainlink --no-commit
+forge install OpenZeppelin/openzeppelin-contracts --no-commit
+forge install uniswap/v3-periphery --no-commit
+forge install uniswap/v3-core --no-commit
+cp .env.example .env # and fill in any appropriate fields
+# to deploy to optimism just set `ETH_RPC_URL="$OPTIMISM_RPC_URL"` then run the below
+./utils/deploy.sh
+./utils/test.sh # to test the deployed code
+```
+
 ### .env
 Copy `.env.example` to `.env` and fill in the values appropriately to be able to use the scripts in `utils/` properly/deploy the contract properly.
 
 ### Utilities
 The `utils/` directory contains a variety of simple scripts for common `forge` operations.
-- In particular, `local_deploy.sh` is very useful for testing, and substituting in the correct addresss in `.env`
+- In particular, `deploy.sh` is very useful for testing, and substituting in the correct addresss in `.env`
 
 ### Interface Implementation
 

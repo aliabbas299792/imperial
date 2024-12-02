@@ -5,7 +5,7 @@ set -e
 source .env
 
 if [[ -z "$1" ]]; then
-    echo "Usage: ./check_contract.sh <contract-address>"
+    echo "Usage: ./utils/check_contract.sh <contract-address>"
     exit 1
 fi
 
