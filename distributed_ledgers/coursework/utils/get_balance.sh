@@ -5,7 +5,7 @@ set -e
 source .env
 
 if [[ -z "$1" ]]; then
-    echo "Usage: ./get_balance.sh <contract-address>"
+    echo "Usage: ./utils/get_balance.sh <contract-address>"
     exit 1
 fi
 
