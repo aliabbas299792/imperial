@@ -4,6 +4,7 @@ Courseworks and tools related to my time at imperial
 ### Tools
 - [Free Rooms](./freerooms): small site to collect and display information about when rooms are empty at Imperial
 - [Calculators](./imperial_grade_calculators/): some calculators to help calculate my grades
+- [Tunneling Script](./misc/tunnel_to_gpu.sh): helper script to setup a SSH tunnel to a Department of Computing GPU machine
 
 ### Course Projects
 - [Computer Vision](./computer_vision/): computer vision coursework involving filters and CNNs
