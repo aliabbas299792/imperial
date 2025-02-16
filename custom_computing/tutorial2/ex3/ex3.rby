@@ -1,0 +1,14 @@
+INCLUDE "prelude.rby".
+
+vecmul n = fst (mfork n); zip n.
+
+polyeval_line = fst fork; lsh; snd mult.
+
+btree n R = IF (n $eq 1) THEN R
+            ELSE (half (2 $exp (n-1)) ;
+            [btree (n-1) R, btree (n-1) R]; R).
+
+polyeval n = vecmul n; /\ n polyeval_line;
+       map n pi2; btree (n $log 2) add.
+
+ex3 = polyeval 8.

@@ -1,0 +1,5 @@
+INCLUDE "prelude.rby".
+
+ex1b = rsh; fst add; add.
+# the rsh is needed to accurately simulate the wiring pattern in the question
+# i.e. one input wire on the left, two on the top

@@ -1,0 +1,6 @@
+INCLUDE "prelude.rby".
+
+# Type would be <<X,X>,X> ~ <X>
+ex1a = fst mult; add.
+
+# re -r ex1a.rbs "2 3 4" => 10
