@@ -1,0 +1,3 @@
+INCLUDE "prelude.rby".
+
+ex1_1norel = fork ; snd mult.

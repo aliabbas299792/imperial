@@ -1,0 +1,4 @@
+INCLUDE prelude.rby.
+
+ex1_1rel = VAR x y. <x, y>  (< <x, y>,  <x, y>>).
+

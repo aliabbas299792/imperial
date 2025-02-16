@@ -1,0 +1,4 @@
+INCLUDE "prelude.rby".
+
+# ex3b_v0 = <x,<y,z>> $wire <<x,y>,z>
+ex3b = rsh.

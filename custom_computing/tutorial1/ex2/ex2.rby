@@ -1,0 +1,4 @@
+INCLUDE "prelude.rby".
+
+addmult = [add, mult].
+ex2 = addmult ; ex1_1norel^3.

@@ -13,3 +13,4 @@ Courseworks and tools related to my time at imperial
 - [Intro to ML](./intro_to_ml/): courseworks involving decision trees and neural networks
 - [Robotics](./robotics/): robotics coursework, culminating in a Monte Carlo Localisation implementation
 - [Statistical Information Theory](./stat_info/): coursework involving generating and using Hamming codes
+- [Custom Computing](./custom_computing): parametric block design tutorials, using the language Ruby with the simulator called Rebecca

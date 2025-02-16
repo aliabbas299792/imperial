@@ -1,0 +1,3 @@
+INCLUDE "prelude.rby".
+
+ex3a = x $wire <x,<x,x,x>>. 
